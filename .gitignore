@@ -2,3 +2,6 @@
 !.gitignore
 !code/
 !code/**
+
+# Ignore macOS Finder metadata files in all folders
+**/.DS_Store
