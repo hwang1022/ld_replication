@@ -275,119 +275,98 @@
 	}
 	predict resid_day_attendph2 if phase==2, residuals
 
-	reg attend bl_attend i.standid##i.treat if phase<2
-	predict resid_day_attendph3 if phase==2, residuals
+	//reg attend bl_attend bl_earn miss_bl_earn i.standid##i.treatment if phase<2	
+	//predict resid_day_attendph3 if phase==2, residuals
 
-	reg attend bl_attend i.standid##i.phase##i.treat if phase<2
-	predict resid_day_attendph4 if phase==2, residuals
+	//reg attend i.phase if phase<2	
+	//predict resid_day_attendph4 if phase==2, residuals
 
 
-	
+
 ****
-**## 3. Stand Attendance LOO - 
+**## 2. Stand Attendance LOO 
 ****
-// <LC> note: this is more efficient code
 
-* --- Step 1: aggregate daily residuals to worker-week level ---
+	* ORIGINAL CODE FOR LOO 
+	* dont use daily averages for control group - use residuals for everyone to do this
+	* pid's in chronological order
+	local run_original = 0
+	if `run_original' {
+		preserve
+		egen pid2 = group(standid pid)
+		* leave one out means
+			gen avg_wkattend_loo = . 
+			forvalues s=1/11 {
+				* di `s'
+				quietly summ pid2 if standid==`s'
+				forvalues i=`r(min)'/`r(max)' {
+					quietly egen temp1 = mean(resid_day_attendph2) if standid==`s' & pid2!=`i' & phase==2, by(standid calendar_week)
+					quietly egen temp2 = max(temp1) if phase==2, by(standid calendar_week)
+					quietly replace avg_wkattend_loo = temp2 if pid2==`i'
+					drop temp*
+				}
+			}
+		
+		keep if !mi(avg_wkattend_loo)
+		keep pid calendar_week avg_wkattend_loo
+		duplicates drop pid calendar_week, force
+
+		sort pid calendar_week
+		save "$temp/loo_attend_original_code.dta", replace
+		restore
+	}
+
+
+	* More Efficient Version of the LOO Code
+	* Created by LC on April 19 2026
+	* Last edited by HW on April 28 2026
 	preserve
 		
-		keep if phase == 2 & resid_day_attendph2 != .
-		collapse (sum) w_sum = resid_day_attendph2 (count) w_n = resid_day_attendph2, ///
-			by(standid calendar_week pid)
-
-		* --- Step 2: stand-week totals ---
-		bysort standid calendar_week: egen sw_sum = total(w_sum)
-		bysort standid calendar_week: egen sw_n   = total(w_n)
-
-		* --- Step 3: worker-level LOO mean ---
-		gen avg_wkattend_loo = (sw_sum - w_sum) / (sw_n - w_n)
-		* avg_wkattend_loo is now constant within worker x stand x week:
-		* it is the mean of other workers' daily residuals at that stand-week.
-
-		keep standid calendar_week pid avg_wkattend_loo
-		tempfile loo_worker_week
-		save `loo_worker_week'
-
-	restore
-
-	* HW's version
-	preserve
-		
+		* Step 1: aggregate daily residuals to worker-week level
 		keep if phase == 2
-		collapse (sum) w_sum = resid_day_attendph2 (count) w_n = resid_day_attendph2, ///
-			by(standid calendar_week pid)
+		set type double
+		collapse (sum) w_sum = resid_day_attendph2 (count) w_n = resid_day_attendph2 (first) standid , ///
+			by(calendar_week pid)
 
-		* --- Step 2: stand-week totals ---
-		bysort standid calendar_week: egen sw_sum = total(w_sum)
-		bysort standid calendar_week: egen sw_n   = total(w_n)
+		* Step 2: stand-week totals
+		bysort standid calendar_week: egen sw_sum 	= total(w_sum)
+		bysort standid calendar_week: egen sw_n		= total(w_n)
 
-		* --- Step 3: worker-level LOO mean ---
-		gen avg_wkattend_loo = (sw_sum - w_sum) / (sw_n - w_n)
+		* Step 3: worker-level LOO mean
+		gen double avg_wkattend_loo = (sw_sum - w_sum) / (sw_n - w_n)
 		* avg_wkattend_loo is now constant within worker x stand x week:
 		* it is the mean of other workers' daily residuals at that stand-week.
 
-		keep standid calendar_week pid avg_wkattend_loo
+		keep pid calendar_week avg_wkattend_loo
+		gen dow = 2
+
 		tempfile loo_worker_week
 		save `loo_worker_week'
+
+		sum avg_wkattend_loo , d 
+		scalar pct_j_attend = r(p25)
 
 	restore
 
 	* Merge LOO back into the full daily panel
-	merge m:1 standid calendar_week pid using `loo_worker_week', keep(1 3) nogen
+	merge m:1 pid calendar_week dow using `loo_worker_week', keep(1 2 3) nogen
 
-	
-
-
-
-
-
-
-// ****
-// **## 3. Stand Attendance LOO
-// ****
-//
-// 		* LEAVE ONE OUT MEANS FOR STAND ATTENDANCE
-// 	  	  * dont use daily averages for control group - use residuals for everyone to do this
-// 			* pid's in chronological order
-// 			egen pid2 = group(standid pid)
-// 			* leave one out means
-// 				gen avg_wkattend_loo = . 
-// 				forvalues s=1/11 {
-// 					* di `s'
-// 					quietly summ pid2 if standid==`s'
-// 					forvalues i=`r(min)'/`r(max)' {
-// 						quietly egen temp1 = mean(resid_day_attendph2) if standid==`s' & pid2!=`i' & phase==2, by(standid calendar_week)
-// 						quietly egen temp2 = max(temp1) if phase==2, by(standid calendar_week)
-// 						quietly replace avg_wkattend_loo = temp2 if pid2==`i'
-// 						drop temp*
-// 					}
-// 				}
-//
-// 	save "$temp/shocks_dataset_prediction_originaldata.dta" , replace
-
-use "$temp/shocks_dataset_prediction_originaldata.dta", clear
 	* Indicator for Shock
-	_pctile  avg_wkattend_loo if avg_wkattend_loo!=. & dow==2, p(25)
-	scalar pct_j_attend = r(r1)
 	gen wkof_attend_j = (avg_wkattend_loo <= pct_j_attend) if avg_wkattend_loo!=.
-
 
 	* First calendar week of shock (Leave one out, varies by pid)
 	gen calwk_of_shock = stand_ph_calweek if wkof_attend_j==1
 	bys pid : egen firstofshock_calwk_j = min(calwk_of_shock)
 	drop calwk_of_shock
 
-
 	* Weeks since shock
 	gen wks_since_shock_j = stand_ph_calweek - firstofshock_calwk_j
 	replace wks_since_shock_j = . if firstofshock_calwk_j == .
-
 
 	* Dummy for first week in which shock happens (contemporaneous shock)
 	gen firstwk_attend_j = (wks_since_shock_j == 0)
 	gen firstwk_attendloo_b25 = firstwk_attend_j
 	gen treatXfirstwk_attendloo_b25 = treatment*firstwk_attendloo_b25
-
 
 	* Post variable
 	gen post_attend_j = (wks_since_shock_j > 0 & !mi(wks_since_shock_j))
@@ -395,14 +374,12 @@ use "$temp/shocks_dataset_prediction_originaldata.dta", clear
 	gen post_attendloo_b25 = post_attend_j
 	gen treatXpost_attendloo_b25 = treatXpost_attend_j
 	
-
 	* One week post shock
 	gen attend_j_post1 = (wks_since_shock_j==1)
 	gen attendloo25_post1 = attend_j_post1
 	gen treatXattend_j_post1 = treatment*attend_j_post1
 	gen treatXattendloo25_post1 = treatXattend_j_post1
 		
-	
 	* Two+ weeks post shock
 	gen attend_j_post2p = (wks_since_shock_j>=2 & !mi(wks_since_shock_j))
 	gen attendloo25_post2p = attend_j_post2p
@@ -411,7 +388,11 @@ use "$temp/shocks_dataset_prediction_originaldata.dta", clear
 	
 	
 
-**## Columns 1 and 2: Same Spec as in Shocks Analysis
+****
+**## 3. Shocks Regression Analysis
+****
+
+	* Columns 1 and 2: Same Spec as in Shocks Analysis
 
 	eststo clear 
   
@@ -428,7 +409,6 @@ use "$temp/shocks_dataset_prediction_originaldata.dta", clear
 	save_input , number(`treat_pval') filename("shock_col1_pval_treatXweek_in_dm") format("%9.3f")
 	
 
-	
 	* Column 2
 	eststo: reg attend_nadj treat treatXpostweek5 attend_week bl_attend bl_earn miss_bl_earn bl_modalwage week_in_dm i.standid i.strata i.calendar_week if phase==2 , vce(cluster pid)
 	estadd local weekin  "Yes", replace
@@ -442,14 +422,15 @@ use "$temp/shocks_dataset_prediction_originaldata.dta", clear
 	local treat_pval = r(table)[4,2]
 	save_input , number(`treat_pval') filename("shock_col2_pval_treatXpostweek5") format("%9.3f")
   
-  
 
 	* Column 3
+	cap drop ever_post_attendloo_b25
+	bys pid: egen ever_post_attendloo_b25 = max(post_attendloo_b25)
 	eststo: reg attend_nadj treat treatXpost_attendloo_b25 post_attendloo_b25 attend_week bl_attend bl_earn  bl_modalwage week_in_dm i.standid i.strata i.calendar_week if phase==2 & firstwk_attendloo_b25==0, vce(cluster standid)
 	
-	wildbootstrap regress attend_nadj treat treatXpost_attendloo_b25 post_attendloo_b25 attend_week bl_attend bl_earn  bl_modalwage week_in_dm i.standid i.strata i.calendar_week if phase==2 & firstwk_attendloo_b25==0, cluster( standid)
+	wildbootstrap regress attend_nadj treat treatXpost_attendloo_b25 post_attendloo_b25 attend_week bl_attend bl_earn  bl_modalwage week_in_dm i.standid i.strata i.calendar_week if phase==2 & firstwk_attendloo_b25==0, cluster( standid) reps(2048) rseed(123)
 	
-	{treat} {treatXpost_attendloo_b25}
+	//{treat} {treatXpost_attendloo_b25}
 	
 	boottest {treat} {treatXpost_attendloo_b25} //, seed(123) reps(2048) boottype(wild) nograph 
 	matrix pval = J(1,2,.)
@@ -461,8 +442,6 @@ use "$temp/shocks_dataset_prediction_originaldata.dta", clear
 	estadd local calweek "Yes", replace
 	estadd local weekin  "Yes", replace
 	estadd matrix pval 
-	
-	
 	
 	
 	* Column 4 - time trend 
