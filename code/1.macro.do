@@ -375,3 +375,44 @@
 	end
 	
 	
+
+	* Generate baseline covariates for original dataset. New datatsets have these variables already.
+	* For replicating analysis using the original dataset.
+	* Created by HW in April 2026
+	cap program drop gen_bl_cov
+	program define gen_bl_cov
+		preserve
+
+			cap drop bl_attend bl_earn miss_bl_earn bl_modalwage
+
+			keep if phase == 0
+
+			egen temp = mean(attend), by(pid)
+			egen bl_attend = max(temp), by(pid)
+			drop temp
+
+			* earnings 
+			egen temp = mean(earn) , by(pid)
+			egen bl_earn = max(temp), by(pid)
+			gen miss_bl_earn = (bl_earn==.)
+			replace bl_earn = 0 if miss_bl_earn==1
+			drop temp
+			
+			* Modal Work
+			egen temp1 = mode(earn) if earn>0, by(pid)
+			egen bl_modalwage = max(temp1), by(pid)
+			replace bl_modalwage = 0 if bl_modalwage==.
+			drop temp1
+
+			keep pid bl_attend bl_earn miss_bl_earn bl_modalwage
+			duplicates drop pid, force
+
+			tempfile bl_cov
+			save `bl_cov', replace
+
+		restore
+
+		merge m:1 pid using `bl_cov', update replace keep(1 2 3 4 5) nogen
+
+
+	end

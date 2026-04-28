@@ -183,9 +183,9 @@
 
 
 
-********************	
-**# Final Cleaning
-********************
+*********************************
+**# Final Cleaning and Labeling
+*********************************
 	
 	lab var treatment "Treatment"
 	

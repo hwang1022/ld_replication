@@ -25,6 +25,7 @@ global replication_dir "/Users/st2246/Work/labor/new_asks/replication"
 // WARNING: This corresponds to Simon's local setup. Please point to correct data or remove merging logic 
 // if incentive payment data is incorporated into the main data
 global incentives_data      "/Users/st2246/Work/labor/new_asks/replication/code/analysis/simon/extra_data/phase1_incentive_survey_vs_record_makevar.dta"
+global incentives_data      "${replication_dir}/replication/code/analysis/simon/extra_data/phase1_incentive_survey_vs_record_makevar.dta"
 
 global code 				"$replication_dir/code"
 global raw 					"$replication_dir/data/raw"
@@ -64,7 +65,8 @@ keep if treatment == 0 & phase == 1
 **# TEMPORARY -> Remove once incentive data is merged in
 ***********************
 
-merge m:1 pid week_in using "$incentives_data", gen(incentive_merge)
+// merge m:1 pid week_in using "$incentives_data", gen(incentive_merge)
+merge m:1 pid week_in using "${replication_dir}/code/analysis/simon/extra_data/phase1_incentive_survey_vs_record_makevar.dta", gen(incentive_merge)
   // Drop people in incentive data but not in main data (likely treated people we filtered out)
   drop if incentive_merge == 2
   drop incentive_merge 
@@ -76,7 +78,7 @@ merge m:1 pid week_in using "$incentives_data", gen(incentive_merge)
 gen work_reliable = work1
 replace work_reliable = . if work_source_inperson != 1
 
-collapse (firstnm) work1_nadj attend_nadj amount_payed (sum) work_reliable , by(pid stand calendar_week strata week_in)
+collapse (firstnm) work1_nadj attend_nadj amount_payed amount_allotted (sum) work_reliable , by(pid stand calendar_week strata week_in)
 
 **********************
 **# Panel Setup
@@ -89,6 +91,35 @@ xtset pid week_in
 //local controls attend_week bl_attend bl_earn miss_bl_earn bl_modalwage
 local controls i.stand i.strata i.week_in i.calendar_week
 // INFO: Missing baseline controls
+cap drop amount_payed_L1
+bys pid (week_in): gen amount_payed_L1 = amount_payed[_n-1]
+cap drop amount_allotted_L1
+bys pid (week_in): gen amount_allotted_L1 = amount_allotted[_n-1]
+
+ivreg2 work_reliable (amount_payed_L1 = amount_allotted_L1) i.stand i.calendar_week, cluster(pid) first
+ivreg2 work_reliable (amount_payed_L1 = amount_allotted_L1) i.stand i.calendar_week if week_in == 2, cluster(pid) first
+
+xtreg work_reliable amount_allotted_L1 i.calendar_week , fe
+xtivreg work_reliable (amount_payed_L1 = amount_allotted_L1) i.calendar_week , fe
+xtivreg work_reliable (amount_payed_L1 = amount_allotted_L1) , fe first
+
+cap drop allotted_above_median
+qui su amount_allotted_L1, d
+di r(p50)
+gen allotted_above_median = amount_allotted_L1>r(p50) if !mi(amount_allotted_L1)
+gen allotted_above_mean = amount_allotted_L1>r(mean) if !mi(amount_allotted_L1)
+qui su amount_payed_L1, d
+di r(p50)
+gen paid_above_median = amount_payed_L1>r(p50) if !mi(amount_payed_L1)
+
+xtivreg work_reliable (paid_above_median = allotted_above_median) i.calendar_week , fe first
+xtreg work_reliable allotted_above_median i.calendar_week , fe
+xtreg work_reliable allotted_above_mean i.calendar_week , fe
+
+reg work_reliable allotted_above_median i.calendar_week i.stand, cluster(pid)
+
+reg work_reliable allotted_above_mean i.calendar_week i.stand, cluster(pid)
+ivreg2 work_reliable (paid_above_median = allotted_above_median) i.calendar_week i.stand, cluster(pid) first
 
 **********************
 **# Regression: Labor Supply Response to Lagged Payout

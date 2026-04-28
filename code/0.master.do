@@ -17,8 +17,10 @@
 **# Initialize Stata
 **********************
 
-	cap ssc install ietoolkit grstyle, replace
+	cap ssc install ietoolkit, replace
+	cap ssc install grstyle, replace
  	ieboilstart, version(18.0)
+ 	* ieboilstart, version(15.1)
 	`r(version)'
 	
 	set seed 42
@@ -52,7 +54,7 @@
 
 	**# The version of Data to use
 	global data_version "new" // "original" or "new"
-	global data_version_new "prioritize_date" // "prioritize_date" or "prioritize_in_person". If you chose "original", this option is ignored.
+	global data_version_new "prioritize_in_person" // "prioritize_date" or "prioritize_in_person". If you chose "original", this option is ignored.
 
 	* If prioritize in-person recall over recalls made on phone but on a closer date.
 	if "$data_version_new" == "prioritize_in_person" global prioritize_in_person = 1
@@ -78,7 +80,7 @@
 	if 	"`c(username)'" == "hschof"							global db_dir "C:/Users/hschof/Dropbox"
 
 	global ld_dir 				"$db_dir/Labor Discipline"
-	global replication_dir 		"$ld_dir/07. Data/3. Main Study 3.0/replication"
+	global replication_dir 		"$ld_dir/07. Data/3. Main Study 3.0/ld_replication"
 	global code 				"$replication_dir/code"
 	global raw 					"$replication_dir/data/raw"
 	global temp 				"$replication_dir/data/temp"
@@ -152,9 +154,12 @@
 			net install `package', from(https://raw.githubusercontent.com/haowang5/stata/main/) replace
 		}
 
-		ssc install boottest elabel, replace 
+		ssc install boottest, replace 
+		ssc install elabel, replace 
 	}
 	
+// 	local github https://raw.githubusercontent.com
+// 	net install staggered, from(`github'/mcaceresb/stata-staggered/main) replace
 *******************	
 **# Data Creation
 *******************
@@ -458,6 +463,11 @@ include "$code/2_7_incentive/1_clean_incentive_spreadsheet.do"
 	include "$code/5_employer/01_clean_v3.do"
 	include "$code/5_employer/02_append_data.do"
 
+
+
+
+
+	use "$main_data", clear
 }
 
 

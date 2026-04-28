@@ -252,7 +252,9 @@
 
 	// save "$temp/04_phase1_phase2_panel_main.dta", replace
 	
-	
+
+
+	// br pid date mode attend work main_act_work whenfound howfound howfound_notattend
 *****************************	
 **# 3. Comprehensive Recall
 *****************************
@@ -523,7 +525,7 @@
 	
 
 	* <FIXME> LC adds work_source_inperson comp_recall_mode daily_recall_lag comp_recall_lag recall_lag_any
-	keep pid stand date phase mode recall_reliable recall_source attend seen arrival_time_hours work earn work1 work_orig work_type role attend_sr main_act_hh_chores main_act_home_rest main_act_self_employed main_act_work main_act_sick main_act_planned_event main_act_emergency main_act_travel main_act_family_time main_act_friends_time main_act_other multiday_job multiday_job_cond work_source_inperson comp_recall_mode daily_recall_lag comp_recall_lag recall_lag_any
+	keep pid stand date phase mode recall_reliable recall_source attend seen arrival_time_hours work earn work1 work_orig work_type whenfound howfound howfound_notattend role attend_sr main_act_hh_chores main_act_home_rest main_act_self_employed main_act_work main_act_sick main_act_planned_event main_act_emergency main_act_travel main_act_family_time main_act_friends_time main_act_other multiday_job multiday_job_cond work_source_inperson comp_recall_mode daily_recall_lag comp_recall_lag recall_lag_any
 	
 	// keep pid stand date holiday_or_sunday phase mode attend seen arrival_time_hours work work_mean_impute_* work_random_impute_* work_type role attend_sr main_act_hh_chores main_act_home_rest main_act_self_employed main_act_work main_act_sick main_act_planned_event main_act_emergency main_act_travel main_act_family_time main_act_friends_time main_act_other multiday_job multiday_job_cond	
 
