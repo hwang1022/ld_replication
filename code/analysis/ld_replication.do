@@ -242,7 +242,7 @@
 ****
 
 	use "$main_data" , clear
-	gen_bl_cov
+	* gen_bl_cov
 
 	gen treat = treatment
   	egen standid = group(stand)
@@ -275,11 +275,13 @@
 	}
 	predict resid_day_attendph2 if phase==2, residuals
 
-	//reg attend bl_attend bl_earn miss_bl_earn i.standid##i.treatment if phase<2	
-	//predict resid_day_attendph3 if phase==2, residuals
+	reg attend bl_attend bl_earn miss_bl_earn i.standid##i.treatment if phase<2	
+	predict resid_day_attendph3 if phase==2, residuals
 
-	//reg attend i.phase if phase<2	
-	//predict resid_day_attendph4 if phase==2, residuals
+
+
+	reg attend i.phase if phase<2	
+	predict resid_day_attendph4 if phase==2, residuals
 
 
 
@@ -287,53 +289,22 @@
 **## 2. Stand Attendance LOO 
 ****
 
-	* ORIGINAL CODE FOR LOO 
-	* dont use daily averages for control group - use residuals for everyone to do this
-	* pid's in chronological order
-	local run_original = 0
-	if `run_original' {
-		preserve
-		egen pid2 = group(standid pid)
-		* leave one out means
-			gen avg_wkattend_loo = . 
-			forvalues s=1/11 {
-				* di `s'
-				quietly summ pid2 if standid==`s'
-				forvalues i=`r(min)'/`r(max)' {
-					quietly egen temp1 = mean(resid_day_attendph2) if standid==`s' & pid2!=`i' & phase==2, by(standid calendar_week)
-					quietly egen temp2 = max(temp1) if phase==2, by(standid calendar_week)
-					quietly replace avg_wkattend_loo = temp2 if pid2==`i'
-					drop temp*
-				}
-			}
-		
-		keep if !mi(avg_wkattend_loo)
-		keep pid calendar_week avg_wkattend_loo
-		duplicates drop pid calendar_week, force
-
-		sort pid calendar_week
-		save "$temp/loo_attend_original_code.dta", replace
-		restore
-	}
-
-
 	* More Efficient Version of the LOO Code
 	* Created by LC on April 19 2026
-	* Last edited by HW on April 28 2026
+	* Last edited by HW on April 23 2026
 	preserve
 		
 		* Step 1: aggregate daily residuals to worker-week level
 		keep if phase == 2
-		set type double
-		collapse (sum) w_sum = resid_day_attendph2 (count) w_n = resid_day_attendph2 (first) standid , ///
+		collapse (mean) w_mean = resid_day_attendph2 (count) w_n = resid_day_attendph2 (first) standid , ///
 			by(calendar_week pid)
 
 		* Step 2: stand-week totals
-		bysort standid calendar_week: egen sw_sum 	= total(w_sum)
+		bysort standid calendar_week: egen sw_mean 	= total(w_mean)
 		bysort standid calendar_week: egen sw_n		= total(w_n)
 
 		* Step 3: worker-level LOO mean
-		gen double avg_wkattend_loo = (sw_sum - w_sum) / (sw_n - w_n)
+		gen double avg_wkattend_loo = (sw_mean - w_mean) / (sw_n - 1)
 		* avg_wkattend_loo is now constant within worker x stand x week:
 		* it is the mean of other workers' daily residuals at that stand-week.
 
@@ -428,9 +399,9 @@
 	bys pid: egen ever_post_attendloo_b25 = max(post_attendloo_b25)
 	eststo: reg attend_nadj treat treatXpost_attendloo_b25 post_attendloo_b25 attend_week bl_attend bl_earn  bl_modalwage week_in_dm i.standid i.strata i.calendar_week if phase==2 & firstwk_attendloo_b25==0, vce(cluster standid)
 	
-	wildbootstrap regress attend_nadj treat treatXpost_attendloo_b25 post_attendloo_b25 attend_week bl_attend bl_earn  bl_modalwage week_in_dm i.standid i.strata i.calendar_week if phase==2 & firstwk_attendloo_b25==0, cluster( standid) reps(2048) rseed(123)
+	wildbootstrap regress attend_nadj treat treatXpost_attendloo_b25 post_attendloo_b25 attend_week bl_attend bl_earn  bl_modalwage week_in_dm i.standid i.strata i.calendar_week if phase==2 & firstwk_attendloo_b25==0, cluster( standid)
 	
-	//{treat} {treatXpost_attendloo_b25}
+	{treat} {treatXpost_attendloo_b25}
 	
 	boottest {treat} {treatXpost_attendloo_b25} //, seed(123) reps(2048) boottype(wild) nograph 
 	matrix pval = J(1,2,.)

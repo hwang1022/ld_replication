@@ -1,0 +1,823 @@
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/owner/Dropbox/Labor Discipline/07. Data/3. Main Study 3.0/ld_replication/code/analysis/luisa/compare_v0_vs_v0controlonly.log
+  log type:  text
+ opened on:   7 May 2026, 14:30:31
+
+. 
+. ************************************************************
+. * PROGRAM: build_shock — exact copy of LC's pipeline.
+. *  Input  : data already loaded with `resid_day_attendph2` defined for the
+. *           prediction sample of interest (everyone in v0; only treat==0 in v0c).
+. *  Output : same shock vars LC builds (firstwk_attend_j, post_attend_j, etc.)
+. ************************************************************
+. program drop _all
+
+. program define build_shock
+  1.         * Aggregate daily residuals to worker-week level
+.         preserve
+  2.                 keep if phase == 2
+  3.                 set type double
+  4.                 collapse (sum) w_sum = resid_day_attendph2 ///
+>                          (count) w_n = resid_day_attendph2 ///
+>                          (first) standid, by(calendar_week pid treat)
+  5. 
+.                 bys standid calendar_week: egen count_pid = count(pid) if treat == 0
+  6.                 bysort standid calendar_week: egen sw_sum = total(w_sum)
+  7.                 bysort standid calendar_week: egen sw_n   = total(w_n)
+  8.                 sort pid calendar_week
+  9.                 gen double avg_wkattend_loo = (sw_sum - w_sum) / (sw_n - w_n)
+ 10. 
+.                 bys pid calendar_week: keep if _n == 1
+ 11.                 sum avg_wkattend_loo, d
+ 12.                 scalar pct_j_attend = r(p25)
+ 13. 
+.                 keep pid calendar_week avg_wkattend_loo
+ 14.                 gen dow = 2
+ 15.                 tempfile loo_worker_week
+ 16.                 save `loo_worker_week'
+ 17.         restore
+ 18. 
+.         merge m:1 pid calendar_week using `loo_worker_week', keep(1 2 3) nogen
+ 19. 
+.         gen wkof_attend_j = (avg_wkattend_loo <= pct_j_attend) if avg_wkattend_loo!=.
+ 20. 
+.         gen calwk_of_shock = stand_ph_calweek if wkof_attend_j==1
+ 21.         bys pid : egen firstofshock_calwk_j = min(calwk_of_shock)
+ 22.         drop calwk_of_shock
+ 23.         gen calwk_of_shock = calendar_week if wkof_attend_j==1
+ 24.         bys pid : egen firstofshock1_calwk_j = min(calwk_of_shock)
+ 25.         drop calwk_of_shock
+ 26. 
+.         gen wks_since_shock_j = stand_ph_calweek - firstofshock_calwk_j
+ 27.         replace wks_since_shock_j = . if firstofshock_calwk_j == .
+ 28. 
+.         gen firstwk_attend_j     = (wks_since_shock_j == 0)
+ 29.         gen post_attend_j        = (wks_since_shock_j > 0 & !mi(wks_since_shock_j))
+ 30.         gen treatXfirstwk_attend = treat * firstwk_attend_j
+ 31.         gen treatXpost_attend    = treat * post_attend_j
+ 32. end
+
+. 
+. 
+. ************************************************************
+. * SHARED PRELIM (lines 19-42 of LC's script)
+. ************************************************************
+. program define prelim
+  1.         use "$main_data" , clear
+  2.         gen treat = treatment
+  3.         egen standid = group(stand)
+  4.         sort standid phase calendar_week date pid
+  5.         by standid phase calendar_week: gen stand_ph_calweek_id1 = 1 if _n==1
+  6.         egen temp2 = seq() if stand_ph_calweek_id1 == 1, by(standid phase)
+  7.         egen stand_ph_calweek = max(temp2), by(standid phase calendar_week)
+  8.         drop temp*
+  9.         egen temp1 = mean(week_in) if dow==1, by(pid phase)
+ 10.         egen temp2 = max(temp1), by(pid phase)
+ 11.         gen week_in_dm = week_in - temp2
+ 12.         drop temp*
+ 13. end
+
+. 
+. ************************************************************
+. * RUN 1 — V0 (current): predict for everyone
+. ************************************************************
+.         di _n(2) "{hline 80}"
+
+
+--------------------------------------------------------------------------------
+
+.         di "RUN 1: V0 -- predict residuals for ALL workers in phase 2"
+RUN 1: V0 -- predict residuals for ALL workers in phase 2
+
+.         di "{hline 80}"
+--------------------------------------------------------------------------------
+
+. 
+.         prelim
+(75,907 missing values generated)
+(75,907 missing values generated)
+(65,496 missing values generated)
+
+.         cap drop resid_day_attendph2
+
+.         reg attend bl_attend bl_earn miss_bl_earn i.standid##i.phase i.standid##i.treatment if phase<2
+note: miss_bl_earn omitted because of collinearity.
+
+      Source |       SS           df       MS      Number of obs   =    11,147
+-------------+----------------------------------   F(34, 11112)    =     21.28
+       Model |  167.519167        34  4.92703433   Prob > F        =    0.0000
+    Residual |  2573.04744    11,112  .231555745   R-squared       =    0.0611
+-------------+----------------------------------   Adj R-squared   =    0.0583
+       Total |  2740.56661    11,146  .245878935   Root MSE        =     .4812
+
+-----------------------------------------------------------------------------------
+           attend | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+------------------+----------------------------------------------------------------
+        bl_attend |   .2788392   .0352479     7.91   0.000      .209747    .3479315
+          bl_earn |  -.0001136   .0000219    -5.19   0.000    -.0001565   -.0000707
+     miss_bl_earn |          0  (omitted)
+                  |
+          standid |
+               2  |  -.0309676   .0445541    -0.70   0.487    -.1183016    .0563665
+               3  |   .0097213   .0562895     0.17   0.863    -.1006162    .1200588
+               4  |   -.015399   .0475136    -0.32   0.746    -.1085341     .077736
+               5  |  -.0015756   .0493515    -0.03   0.975    -.0983133    .0951622
+               6  |   .0097769    .050151     0.19   0.845     -.088528    .1080818
+               7  |  -.0046863   .0538693    -0.09   0.931    -.1102796     .100907
+               8  |    -.00416    .039385    -0.11   0.916    -.0813615    .0730416
+               9  |  -.1006199   .0374636    -2.69   0.007    -.1740552   -.0271847
+              10  |   .0038419   .0514014     0.07   0.940    -.0969139    .1045977
+              11  |  -.0101139   .0631467    -0.16   0.873    -.1338926    .1136648
+                  |
+          1.phase |   .1351222   .0286201     4.72   0.000     .0790217    .1912228
+                  |
+    standid#phase |
+             2 1  |   .0043532   .0457731     0.10   0.924    -.0853702    .0940766
+             3 1  |   .0106175   .0561272     0.19   0.850    -.0994018    .1206368
+             4 1  |   .1332511    .048618     2.74   0.006     .0379511     .228551
+             5 1  |   .0370877   .0509803     0.73   0.467    -.0628428    .1370181
+             6 1  |   .1717829   .0509743     3.37   0.001     .0718641    .2717016
+             7 1  |   .1468897   .0553246     2.66   0.008     .0384436    .2553357
+             8 1  |   .0064407   .0404676     0.16   0.874     -.072883    .0857644
+             9 1  |   .0970059   .0386635     2.51   0.012     .0212187    .1727932
+            10 1  |   .0120542   .0512442     0.24   0.814    -.0883936     .112502
+            11 1  |  -.1602693   .0648841    -2.47   0.014    -.2874537   -.0330848
+                  |
+        treatment |
+       Treatment  |   .0922248   .0236419     3.90   0.000     .0458825    .1385672
+                  |
+standid#treatment |
+     2#Treatment  |   .0573129   .0377187     1.52   0.129    -.0166223    .1312482
+     3#Treatment  |  -.0191109   .0470722    -0.41   0.685    -.1113806    .0731589
+     4#Treatment  |   .0785274   .0408083     1.92   0.054    -.0014642     .158519
+     5#Treatment  |  -.0295548   .0420812    -0.70   0.482    -.1120414    .0529319
+     6#Treatment  |   -.143626   .0417561    -3.44   0.001    -.2254753   -.0617767
+     7#Treatment  |  -.0595732   .0459065    -1.30   0.194    -.1495581    .0304118
+     8#Treatment  |  -.0517072   .0334214    -1.55   0.122    -.1172191    .0138047
+     9#Treatment  |   .1113597   .0320551     3.47   0.001      .048526    .1741934
+    10#Treatment  |   -.079263   .0437449    -1.81   0.070    -.1650109    .0064848
+    11#Treatment  |   .0033978   .0542665     0.06   0.950    -.1029742    .1097697
+                  |
+            _cons |   .3354438   .0335709     9.99   0.000      .269639    .4012487
+-----------------------------------------------------------------------------------
+
+.         predict resid_day_attendph2 if phase==2, residuals
+(66,065 missing values generated)
+
+. 
+.         * Diagnostics on residuals
+.         di _n "[v0] resid summary by treat (phase 2):"
+
+[v0] resid summary by treat (phase 2):
+
+.         tabstat resid_day_attendph2 if phase==2, by(treat) stats(n mean sd min p25 p50 p75 max)
+
+Summary for variables: resid_day_attendph2
+Group variable: treat 
+
+   treat |         N      Mean        SD       Min       p25       p50       p75       Max
+---------+--------------------------------------------------------------------------------
+       0 |      5211  .0682501  .4903168 -.5029568 -.3772461 -.2778234  .5848865   .839439
+       1 |      5245  .0379605  .4989338 -.6046799 -.4650318  .4025492  .5266404  .7520431
+---------+--------------------------------------------------------------------------------
+   Total |     10456   .053056  .4948662 -.6046799  -.420162 -.2550172  .5598029   .839439
+------------------------------------------------------------------------------------------
+
+. 
+.         build_shock
+(64,146 observations deleted)
+(904 missing values generated)
+(0 observations deleted)
+
+                      avg_wkattend_loo
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%    -.4356907       -.490782
+ 5%    -.2039698      -.4894489
+10%     -.088365      -.4830442       Obs               1,800
+25%    -.0104502      -.4784658       Sum of wgt.       1,800
+
+50%      .067983                      Mean           .0522439
+                        Largest       Std. dev.       .134291
+75%      .138719       .3899649
+90%     .1891972       .3913256       Variance       .0180341
+95%     .2358723       .4204856       Skewness        -1.0757
+99%     .3604045       .4363899       Kurtosis       5.754265
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St23173.000002 saved as .dta format
+(variable dow was float, now double to accommodate using data's values)
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                        64,146
+        from master                    64,146  
+        from using                          0  
+
+    Matched                            12,375  
+    -----------------------------------------
+(64,146 missing values generated)
+(73,496 missing values generated)
+(15,300 missing values generated)
+(73,496 missing values generated)
+(15,300 missing values generated)
+(15,300 missing values generated)
+(0 real changes made)
+
+. 
+.         di _n "[v0] LOO mean summary by treat (one obs per pid-calweek, phase 2 dow==2):"
+
+[v0] LOO mean summary by treat (one obs per pid-calweek, phase 2 dow==2):
+
+.         tabstat avg_wkattend_loo if phase==2 & dow==2, by(treat) stats(n mean sd min p25 p50 p75 max)
+
+Summary for variables: avg_wkattend_loo
+Group variable: treat 
+
+   treat |         N      Mean        SD       Min       p25       p50       p75       Max
+---------+--------------------------------------------------------------------------------
+       0 |       896  .0467031  .1370403  -.490782 -.0158612  .0664404  .1345187  .4363899
+       1 |       904  .0577357  .1313545 -.4784658  -.004705  .0701041  .1417917  .4204856
+---------+--------------------------------------------------------------------------------
+   Total |      1800  .0522439   .134291  -.490782 -.0104502   .067983   .138719  .4363899
+------------------------------------------------------------------------------------------
+
+.         di _n "[v0] 25th pct cutoff (computed across pooled distribution): " pct_j_attend
+
+[v0] 25th pct cutoff (computed across pooled distribution): -.01045022
+
+. 
+.         di _n "[v0] share tagged as shock-week, by treat:"
+
+[v0] share tagged as shock-week, by treat:
+
+.         tab firstwk_attend_j treat if phase==2 & dow==2, col
+
++-------------------+
+| Key               |
+|-------------------|
+|     frequency     |
+| column percentage |
++-------------------+
+
+firstwk_at |         treat
+    tend_j |         0          1 |     Total
+-----------+----------------------+----------
+         0 |       806        814 |     1,620 
+           |     89.96      90.04 |     90.00 
+-----------+----------------------+----------
+         1 |        90         90 |       180 
+           |     10.04       9.96 |     10.00 
+-----------+----------------------+----------
+     Total |       896        904 |     1,800 
+           |    100.00     100.00 |    100.00 
+
+. 
+.         di _n "[v0] N controls who ever experience a shock:"
+
+[v0] N controls who ever experience a shock:
+
+.         count if phase==2 & dow==2 & treat==0 & !mi(firstofshock_calwk_j)
+  720
+
+.         count if phase==2 & dow==2 & treat==0
+  896
+
+. 
+.         di _n "[v0] KEY REGRESSION (controls only, simple OLS):"
+
+[v0] KEY REGRESSION (controls only, simple OLS):
+
+.         di "    reg attend_nadj firstwk_attend_j post_attend_j i.standid if phase==2 & dow==2 & treat==0"
+    reg attend_nadj firstwk_attend_j post_attend_j i.standid if phase==2 & dow==2 & treat==0
+
+.         reg attend_nadj firstwk_attend_j post_attend_j i.standid if phase==2 & dow==2 & treat==0
+
+      Source |       SS           df       MS      Number of obs   =       896
+-------------+----------------------------------   F(12, 883)      =      8.81
+       Model |  445.503562        12  37.1252968   Prob > F        =    0.0000
+    Residual |  3721.18282       883  4.21425008   R-squared       =    0.1069
+-------------+----------------------------------   Adj R-squared   =    0.0948
+       Total |  4166.68638       895  4.65551551   Root MSE        =    2.0529
+
+----------------------------------------------------------------------------------
+     attend_nadj | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+firstwk_attend_j |  -.6537441   .2465803    -2.65   0.008    -1.137696   -.1697923
+   post_attend_j |   -.060066   .2018727    -0.30   0.766    -.4562723    .3361402
+                 |
+         standid |
+              2  |  -.0344798   .3187116    -0.11   0.914    -.6600005    .5910409
+              3  |   .5456019   .3649505     1.50   0.135    -.1706698    1.261874
+              4  |   1.659433   .3362448     4.94   0.000     .9995006    2.319365
+              5  |   .8552203   .3074184     2.78   0.006     .2518642    1.458576
+              6  |   .2770658    .342842     0.81   0.419    -.3958145     .949946
+              7  |   .7427153   .3670935     2.02   0.043     .0222377    1.463193
+              8  |  -.1030938   .2672354    -0.39   0.700    -.6275846    .4213969
+              9  |  -.7404338   .2590028    -2.86   0.004    -1.248767    -.232101
+             10  |    .629789   .3790356     1.66   0.097    -.1141268    1.373705
+             11  |  -.5553923    .399342    -1.39   0.165    -1.339163    .2283778
+                 |
+           _cons |   2.529664   .2382154    10.62   0.000      2.06213    2.997198
+----------------------------------------------------------------------------------
+
+. 
+.         di _n "[v0] KEY REGRESSION (full DiD with treat interaction):"
+
+[v0] KEY REGRESSION (full DiD with treat interaction):
+
+.         reghdfe attend_nadj firstwk_attend_j##treat post_attend_j##treat if phase==2 & dow==2, absorb(standid)
+(MWFE estimator converged in 1 iterations)
+
+HDFE Linear regression                            Number of obs   =      1,800
+Absorbing 1 HDFE group                            F(   5,   1784) =       7.60
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.0653
+                                                  Adj R-squared   =     0.0575
+                                                  Within R-sq.    =     0.0209
+                                                  Root MSE        =     2.1408
+
+----------------------------------------------------------------------------------------
+           attend_nadj | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-----------------------+----------------------------------------------------------------
+    1.firstwk_attend_j |  -.6565299   .2504673    -2.62   0.009     -1.14777   -.1652898
+               1.treat |   .5604777    .132993     4.21   0.000     .2996392    .8213162
+                       |
+firstwk_attend_j#treat |
+                  1 1  |  -.2545583   .3460461    -0.74   0.462    -.9332568    .4241401
+                       |
+       1.post_attend_j |   .0693441   .1836077     0.38   0.706    -.2907646    .4294528
+                       |
+   post_attend_j#treat |
+                  1 1  |  -.5323137    .224073    -2.38   0.018    -.9717868   -.0928406
+                       |
+                 _cons |   2.622511   .1011627    25.92   0.000     2.424101    2.820921
+----------------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+     standid |        11           0          11     |
+-----------------------------------------------------+
+
+. 
+.         * Save residuals + key vars for later side-by-side merge
+.         preserve
+
+.                 keep if phase==2 & dow==2
+(74,721 observations deleted)
+
+.                 keep pid calendar_week stand_ph_calweek treat standid attend_nadj ///
+>                      resid_day_attendph2 avg_wkattend_loo wkof_attend_j ///
+>                      firstwk_attend_j post_attend_j firstofshock_calwk_j wks_since_shock_j
+
+.                 rename (resid_day_attendph2 avg_wkattend_loo wkof_attend_j ///
+>                         firstwk_attend_j post_attend_j firstofshock_calwk_j wks_since_shock_j) ///
+>                        (resid_v0 loo_v0 wkofshock_v0 firstwk_v0 post_v0 firstshockcalwk_v0 wks_since_v0)
+
+.                 tempfile v0_panel
+
+.                 save `v0_panel'
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St23173.000002 saved as .dta format
+
+.         restore
+
+. 
+. 
+. ************************************************************
+. * RUN 2 — V0-control-only: same model, predict only for treat==0
+. ************************************************************
+.         di _n(2) "{hline 80}"
+
+
+--------------------------------------------------------------------------------
+
+.         di "RUN 2: V0c -- SAME model, predict residuals ONLY for treat==0 in phase 2"
+RUN 2: V0c -- SAME model, predict residuals ONLY for treat==0 in phase 2
+
+.         di "{hline 80}"
+--------------------------------------------------------------------------------
+
+. 
+.         prelim
+(75,907 missing values generated)
+(75,907 missing values generated)
+(65,496 missing values generated)
+
+.         cap drop resid_day_attendph2
+
+.         reg attend bl_attend bl_earn miss_bl_earn i.standid##i.phase i.standid##i.treatment if phase<2
+note: miss_bl_earn omitted because of collinearity.
+
+      Source |       SS           df       MS      Number of obs   =    11,147
+-------------+----------------------------------   F(34, 11112)    =     21.28
+       Model |  167.519167        34  4.92703433   Prob > F        =    0.0000
+    Residual |  2573.04744    11,112  .231555745   R-squared       =    0.0611
+-------------+----------------------------------   Adj R-squared   =    0.0583
+       Total |  2740.56661    11,146  .245878935   Root MSE        =     .4812
+
+-----------------------------------------------------------------------------------
+           attend | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+------------------+----------------------------------------------------------------
+        bl_attend |   .2788392   .0352479     7.91   0.000      .209747    .3479315
+          bl_earn |  -.0001136   .0000219    -5.19   0.000    -.0001565   -.0000707
+     miss_bl_earn |          0  (omitted)
+                  |
+          standid |
+               2  |  -.0309676   .0445541    -0.70   0.487    -.1183016    .0563665
+               3  |   .0097213   .0562895     0.17   0.863    -.1006162    .1200588
+               4  |   -.015399   .0475136    -0.32   0.746    -.1085341     .077736
+               5  |  -.0015756   .0493515    -0.03   0.975    -.0983133    .0951622
+               6  |   .0097769    .050151     0.19   0.845     -.088528    .1080818
+               7  |  -.0046863   .0538693    -0.09   0.931    -.1102796     .100907
+               8  |    -.00416    .039385    -0.11   0.916    -.0813615    .0730416
+               9  |  -.1006199   .0374636    -2.69   0.007    -.1740552   -.0271847
+              10  |   .0038419   .0514014     0.07   0.940    -.0969139    .1045977
+              11  |  -.0101139   .0631467    -0.16   0.873    -.1338926    .1136648
+                  |
+          1.phase |   .1351222   .0286201     4.72   0.000     .0790217    .1912228
+                  |
+    standid#phase |
+             2 1  |   .0043532   .0457731     0.10   0.924    -.0853702    .0940766
+             3 1  |   .0106175   .0561272     0.19   0.850    -.0994018    .1206368
+             4 1  |   .1332511    .048618     2.74   0.006     .0379511     .228551
+             5 1  |   .0370877   .0509803     0.73   0.467    -.0628428    .1370181
+             6 1  |   .1717829   .0509743     3.37   0.001     .0718641    .2717016
+             7 1  |   .1468897   .0553246     2.66   0.008     .0384436    .2553357
+             8 1  |   .0064407   .0404676     0.16   0.874     -.072883    .0857644
+             9 1  |   .0970059   .0386635     2.51   0.012     .0212187    .1727932
+            10 1  |   .0120542   .0512442     0.24   0.814    -.0883936     .112502
+            11 1  |  -.1602693   .0648841    -2.47   0.014    -.2874537   -.0330848
+                  |
+        treatment |
+       Treatment  |   .0922248   .0236419     3.90   0.000     .0458825    .1385672
+                  |
+standid#treatment |
+     2#Treatment  |   .0573129   .0377187     1.52   0.129    -.0166223    .1312482
+     3#Treatment  |  -.0191109   .0470722    -0.41   0.685    -.1113806    .0731589
+     4#Treatment  |   .0785274   .0408083     1.92   0.054    -.0014642     .158519
+     5#Treatment  |  -.0295548   .0420812    -0.70   0.482    -.1120414    .0529319
+     6#Treatment  |   -.143626   .0417561    -3.44   0.001    -.2254753   -.0617767
+     7#Treatment  |  -.0595732   .0459065    -1.30   0.194    -.1495581    .0304118
+     8#Treatment  |  -.0517072   .0334214    -1.55   0.122    -.1172191    .0138047
+     9#Treatment  |   .1113597   .0320551     3.47   0.001      .048526    .1741934
+    10#Treatment  |   -.079263   .0437449    -1.81   0.070    -.1650109    .0064848
+    11#Treatment  |   .0033978   .0542665     0.06   0.950    -.1029742    .1097697
+                  |
+            _cons |   .3354438   .0335709     9.99   0.000      .269639    .4012487
+-----------------------------------------------------------------------------------
+
+.         predict resid_day_attendph2 if phase==2 & treat == 0, residuals
+(71,310 missing values generated)
+
+. 
+.         di _n "[v0c] resid summary by treat (phase 2):"
+
+[v0c] resid summary by treat (phase 2):
+
+.         tabstat resid_day_attendph2 if phase==2, by(treat) stats(n mean sd min p25 p50 p75 max)
+
+Summary for variables: resid_day_attendph2
+Group variable: treat 
+
+   treat |         N      Mean        SD       Min       p25       p50       p75       Max
+---------+--------------------------------------------------------------------------------
+       0 |      5211  .0682501  .4903168 -.5029568 -.3772461 -.2778234  .5848865   .839439
+       1 |         0         .         .         .         .         .         .         .
+---------+--------------------------------------------------------------------------------
+   Total |      5211  .0682501  .4903168 -.5029568 -.3772461 -.2778234  .5848865   .839439
+------------------------------------------------------------------------------------------
+
+. 
+.         build_shock
+(64,146 observations deleted)
+(904 missing values generated)
+(1 missing value generated)
+(0 observations deleted)
+
+                      avg_wkattend_loo
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%    -.4034369       -.480583
+ 5%    -.2108869      -.4602295
+10%    -.0808448      -.4602295       Obs               1,799
+25%    -.0102999      -.4602295       Sum of wgt.       1,799
+
+50%     .0698122                      Mean           .0723858
+                        Largest       Std. dev.      .1541867
+75%      .167729       .5125043
+90%     .2592666       .5125043       Variance       .0237735
+95%     .3148222       .5373127       Skewness      -.3903636
+99%     .4259333       .6047254       Kurtosis       4.206216
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St23173.000004 saved as .dta format
+(variable dow was float, now double to accommodate using data's values)
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                        64,146
+        from master                    64,146  
+        from using                          0  
+
+    Matched                            12,375  
+    -----------------------------------------
+(64,152 missing values generated)
+(73,480 missing values generated)
+(10,880 missing values generated)
+(73,480 missing values generated)
+(10,880 missing values generated)
+(10,880 missing values generated)
+(0 real changes made)
+
+. 
+.         di _n "[v0c] LOO mean summary by treat (one obs per pid-calweek, phase 2 dow==2):"
+
+[v0c] LOO mean summary by treat (one obs per pid-calweek, phase 2 dow==2):
+
+.         tabstat avg_wkattend_loo if phase==2 & dow==2, by(treat) stats(n mean sd min p25 p50 p75 max)
+
+Summary for variables: avg_wkattend_loo
+Group variable: treat 
+
+   treat |         N      Mean        SD       Min       p25       p50       p75       Max
+---------+--------------------------------------------------------------------------------
+       0 |       895  .0679899  .1567585  -.480583  -.019748  .0622795   .167415  .6047254
+       1 |       904  .0767379  .1515586 -.4602295 -.0084615  .0699489   .167729  .5125043
+---------+--------------------------------------------------------------------------------
+   Total |      1799  .0723858  .1541867  -.480583 -.0102999  .0698122   .167729  .6047254
+------------------------------------------------------------------------------------------
+
+.         di _n "[v0c] 25th pct cutoff: " pct_j_attend
+
+[v0c] 25th pct cutoff: -.01029987
+
+. 
+.         di _n "[v0c] share tagged as shock-week, by treat:"
+
+[v0c] share tagged as shock-week, by treat:
+
+.         tab firstwk_attend_j treat if phase==2 & dow==2, col
+
++-------------------+
+| Key               |
+|-------------------|
+|     frequency     |
+| column percentage |
++-------------------+
+
+firstwk_at |         treat
+    tend_j |         0          1 |     Total
+-----------+----------------------+----------
+         0 |       801        806 |     1,607 
+           |     89.40      89.16 |     89.28 
+-----------+----------------------+----------
+         1 |        95         98 |       193 
+           |     10.60      10.84 |     10.72 
+-----------+----------------------+----------
+     Total |       896        904 |     1,800 
+           |    100.00     100.00 |    100.00 
+
+. 
+.         di _n "[v0c] N controls who ever experience a shock:"
+
+[v0c] N controls who ever experience a shock:
+
+.         count if phase==2 & dow==2 & treat==0 & !mi(firstofshock_calwk_j)
+  760
+
+.         count if phase==2 & dow==2 & treat==0
+  896
+
+. 
+.         di _n "[v0c] KEY REGRESSION (controls only, simple OLS):"
+
+[v0c] KEY REGRESSION (controls only, simple OLS):
+
+.         di "    reg attend_nadj firstwk_attend_j post_attend_j i.standid if phase==2 & dow==2 & treat==0"
+    reg attend_nadj firstwk_attend_j post_attend_j i.standid if phase==2 & dow==2 & treat==0
+
+.         reg attend_nadj firstwk_attend_j post_attend_j i.standid if phase==2 & dow==2 & treat==0
+
+      Source |       SS           df       MS      Number of obs   =       896
+-------------+----------------------------------   F(12, 883)      =      8.55
+       Model |  433.722744        12   36.143562   Prob > F        =    0.0000
+    Residual |  3732.96364       883  4.22759189   R-squared       =    0.1041
+-------------+----------------------------------   Adj R-squared   =    0.0919
+       Total |  4166.68638       895  4.65551551   Root MSE        =    2.0561
+
+----------------------------------------------------------------------------------
+     attend_nadj | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+firstwk_attend_j |  -.1287617   .2500683    -0.51   0.607    -.6195593    .3620359
+   post_attend_j |   .3136211   .1882584     1.67   0.096    -.0558651    .6831072
+                 |
+         standid |
+              2  |   .0949864   .2775213     0.34   0.732     -.449692    .6396648
+              3  |   .7215885   .3798358     1.90   0.058    -.0238979    1.467075
+              4  |   1.985989   .3323252     5.98   0.000      1.33375    2.638229
+              5  |    1.05764   .3310165     3.20   0.001     .4079685    1.707311
+              6  |   .4589332   .3340639     1.37   0.170    -.1967187    1.114585
+              7  |   1.033004    .365233     2.83   0.005      .316178     1.74983
+              8  |  -.0811647   .2470665    -0.33   0.743    -.5660708    .4037413
+              9  |  -.5584914   .2463733    -2.27   0.024    -1.042037   -.0749458
+             10  |   .8584798   .3489825     2.46   0.014     .1735479    1.543412
+             11  |  -.5689139   .3999647    -1.42   0.155    -1.353906    .2160785
+                 |
+           _cons |   2.173942   .2328062     9.34   0.000     1.717024     2.63086
+----------------------------------------------------------------------------------
+
+. 
+.         di _n "[v0c] KEY REGRESSION (full DiD with treat interaction):"
+
+[v0c] KEY REGRESSION (full DiD with treat interaction):
+
+.         reghdfe attend_nadj firstwk_attend_j##treat post_attend_j##treat if phase==2 & dow==2, absorb(standid)
+(MWFE estimator converged in 1 iterations)
+
+HDFE Linear regression                            Number of obs   =      1,800
+Absorbing 1 HDFE group                            F(   5,   1784) =       3.95
+                                                  Prob > F        =     0.0014
+                                                  R-squared       =     0.0559
+                                                  Adj R-squared   =     0.0479
+                                                  Within R-sq.    =     0.0110
+                                                  Root MSE        =     2.1516
+
+----------------------------------------------------------------------------------------
+           attend_nadj | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-----------------------+----------------------------------------------------------------
+    1.firstwk_attend_j |  -.4146868   .2542366    -1.63   0.103    -.9133195     .083946
+               1.treat |   .4515975   .1526879     2.96   0.003     .1521316    .7510635
+                       |
+firstwk_attend_j#treat |
+                  1 1  |  -.0653641   .3458347    -0.19   0.850    -.7436479    .6129196
+                       |
+       1.post_attend_j |  -.0459201   .1765198    -0.26   0.795    -.3921275    .3002872
+                       |
+   post_attend_j#treat |
+                  1 1  |  -.1864305   .2172014    -0.86   0.391    -.6124265    .2395655
+                       |
+                 _cons |   2.646219   .1199958    22.05   0.000     2.410872    2.881566
+----------------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+     standid |        11           0          11     |
+-----------------------------------------------------+
+
+. 
+.         preserve
+
+.                 keep if phase==2 & dow==2
+(74,721 observations deleted)
+
+.                 keep pid calendar_week stand_ph_calweek treat standid attend_nadj ///
+>                      resid_day_attendph2 avg_wkattend_loo wkof_attend_j ///
+>                      firstwk_attend_j post_attend_j firstofshock_calwk_j wks_since_shock_j
+
+.                 rename (resid_day_attendph2 avg_wkattend_loo wkof_attend_j ///
+>                         firstwk_attend_j post_attend_j firstofshock_calwk_j wks_since_shock_j) ///
+>                        (resid_v0c loo_v0c wkofshock_v0c firstwk_v0c post_v0c firstshockcalwk_v0c wks_since_v0c)
+
+.                 tempfile v0c_panel
+
+.                 save `v0c_panel'
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St23173.000004 saved as .dta format
+
+.         restore
+
+. 
+. 
+. ************************************************************
+. * RUN 3 — Side-by-side comparison of the two shock indicators
+. ************************************************************
+.         di _n(2) "{hline 80}"
+
+
+--------------------------------------------------------------------------------
+
+.         di "RUN 3: Side-by-side comparison"
+RUN 3: Side-by-side comparison
+
+.         di "{hline 80}"
+--------------------------------------------------------------------------------
+
+. 
+.         use `v0_panel', clear
+
+.         merge 1:1 pid calendar_week using `v0c_panel', keep(3) nogen
+(variable treat was float, now double to accommodate using data's values)
+(variable standid was float, now double to accommodate using data's values)
+(variable stand_ph_calweek was float, now double to accommodate using data's values)
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                             0
+    Matched                             1,800  
+    -----------------------------------------
+
+. 
+.         di _n "[cmp] correlation of LOO means (controls only):"
+
+[cmp] correlation of LOO means (controls only):
+
+.         corr loo_v0 loo_v0c if treat==0
+(obs=895)
+
+             |   loo_v0  loo_v0c
+-------------+------------------
+      loo_v0 |   1.0000
+     loo_v0c |   0.8252   1.0000
+
+
+. 
+.         di _n "[cmp] cross-tab of shock-week tag (controls only):"
+
+[cmp] cross-tab of shock-week tag (controls only):
+
+.         tab firstwk_v0 firstwk_v0c if treat==0
+
+           |      firstwk_v0c
+firstwk_v0 |         0          1 |     Total
+-----------+----------------------+----------
+         0 |       758         48 |       806 
+         1 |        43         47 |        90 
+-----------+----------------------+----------
+     Total |       801         95 |       896 
+
+. 
+.         di _n "[cmp] cross-tab of post-shock indicator (controls only):"
+
+[cmp] cross-tab of post-shock indicator (controls only):
+
+.         tab post_v0 post_v0c if treat==0
+
+           |       post_v0c
+   post_v0 |         0          1 |     Total
+-----------+----------------------+----------
+         0 |       421        179 |       600 
+         1 |        56        240 |       296 
+-----------+----------------------+----------
+     Total |       477        419 |       896 
+
+. 
+.         di _n "[cmp] cross-tab of FIRST shock calendar week (controls only):"
+
+[cmp] cross-tab of FIRST shock calendar week (controls only):
+
+.         tab firstshockcalwk_v0 firstshockcalwk_v0c if treat==0, m
+
+firstshock |                                        firstshockcalwk_v0c
+  calwk_v0 |         1          2          3          4          5          7          8          9          . |     Total
+-----------+---------------------------------------------------------------------------------------------------+----------
+         1 |         8          0          0          8          0          0          0          0         24 |        40 
+         2 |         0         32          0          0          8          0          0          0          0 |        40 
+         3 |         0          0        152          0          8          0         24          0          0 |       184 
+         4 |         0          0          0          8          0          0          0          8          0 |        16 
+         5 |        48          8          0          0         16          0          0          0          0 |        72 
+         7 |        16          0          0          0          0         16          0         24          8 |        64 
+         8 |        16          0         24          0          0         48         96          0          0 |       184 
+         9 |         0          8         48          0          8          0          0         48          0 |       112 
+        10 |         0          0          0          0          8          0          0          0          0 |         8 
+         . |        32         16         16          0          0          8          0          0        104 |       176 
+-----------+---------------------------------------------------------------------------------------------------+----------
+     Total |       120         64        240         16         48         72        120         80        136 |       896 
+
+. 
+.         di _n "[cmp] mean attend_nadj by shock indicator (control workers):"
+
+[cmp] mean attend_nadj by shock indicator (control workers):
+
+.         tabstat attend_nadj if treat==0, by(firstwk_v0)  stats(n mean sd)
+
+Summary for variables: attend_nadj
+Group variable: firstwk_v0 
+
+firstwk_v0 |         N      Mean        SD
+-----------+------------------------------
+         0 |       806  2.655087  2.172703
+         1 |        90  1.877778  1.889223
+-----------+------------------------------
+     Total |       896  2.577009  2.157664
+------------------------------------------
+
+.         tabstat attend_nadj if treat==0, by(firstwk_v0c) stats(n mean sd)
+
+Summary for variables: attend_nadj
+Group variable: firstwk_v0c 
+
+firstwk_v0c |         N      Mean        SD
+------------+------------------------------
+          0 |       801  2.627965  2.174032
+          1 |        95  2.147368  1.973055
+------------+------------------------------
+      Total |       896  2.577009  2.157664
+-------------------------------------------
+
+. 
+.         log close
+      name:  <unnamed>
+       log:  /Users/owner/Dropbox/Labor Discipline/07. Data/3. Main Study 3.0/ld_replication/code/analysis/luisa/compare_v0_vs_v0controlonly.log
+  log type:  text
+ closed on:   7 May 2026, 14:30:34
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

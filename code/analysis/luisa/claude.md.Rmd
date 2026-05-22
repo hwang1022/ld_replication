@@ -1,0 +1,107 @@
+---
+title: "claude.md"
+output: html_document
+date: "2026-05-07"
+---
+# Claude.md
+
+## Purpose
+This document guides implementation of robustness checks for the "Disruptions to Labor Supply" analysis from Cefala, Kaur, Schofield & Shamdasani. The checks address concerns from the recent difference-in-differences (DiD) and two-way fixed effects (TWFE) literature.
+
+---
+
+## 0. Philosophy
+
+Claude Code should never...
+- Go ahead of what's been told to do
+- Express concern or enthusiasm about certain point estimates
+- Interpret results as "good" or "bad" until the design is intentional
+
+Claude Code should...
+- Focus entirely on whether the specification is correct
+- Ask questions and clarification when in doubt, don't make assumption
+- _If_ an assumption is made, he should make it very explicit
+- Always summarize the results and add them to the progress.md before completing a session and when instructed.
+- Keep track of the key decisions made in the progress.md file.
+
+Other specific instructions:
+- We start coding in Stata, but I will ask another Claude agent to audit the Stata code in R and make sure that the results are consistent.
+- **Code readability**: Scripts must be commented so that someone not deeply familiar with this project can understand what each section does and why. Explain the logic behind sample restrictions, variable choices, and specification decisions — not just the mechanics.
+
+---
+
+## 1. Analysis Context
+
+### 1.1 Research Question
+Do external disruptions (shocks that temporarily pull workers out of the labor market) erode the "habit stock" accumulated through treatment, thereby eliminating the persistence of treatment effects on labor supply?
+
+### 1.2 Key Finding to Validate
+Treatment effects of approximately 0.8 additional days/week **completely dissipate** after a stand-level disruption occurs. The coefficient on `Treatment × PostShock ≈ -0.79` almost exactly offsets the main treatment effect.
+
+### 1.3 Study and Data structure
+
+#### 1.3a Original study
+
+We randomize 225 workers (across 11 labor market stands in India) to one of two treatment arms.
+
+Treatment arms:
+- `treatment=1` during `phase = 1` of the study, they receive incentives payment _conditional_ on attendance for attending before 8 am.
+- `treatment=0` during `phase = 1` of the study, they receive incentives payment _unconditional_ on attendance. Their payment is calibrated so that, on average, their incentive payment is the same as incentives to treated workers.
+
+Study phases:
+- ` phase = 0`: baseline period, no incentives. 11 days
+- ` phase = 1`: incentive period (see treatment arms). 7 weeks
+- ` phase = 2`: no incentives. measure outcomes (attendance, earnings, ...) at the daily level. 8 weeks
+- ` phase = 3`: no incentives. measure attendance sporadically. duration varies by stand.
+
+_Note_: in a few stands, phase 1 was prolonged, so there are more than 7 weeks of phase 1 attendance. We will deal with them at due time.
+
+Outcomes & measurement:
+- attendance (labor supply): measured daily via observations. Showing up to the stand means that the individual attended. Never missing except for Sundays and holidays.
+- work, earnings, other labor market variables: measured through retrospective surveys to create a balance panel. Can be missing if we weren't able to survey a participant.
+
+
+#### 1.3.b Data Structure
+Below the variables more relevant for the DiD study.
+
+**Important**: The dataset is stored at the daily level (worker × day), but the outcome variable `attend_nadj` is a weekly measure (non-missing for only one day per worker-week). Regressions effectively run at the weekly level (N ≈ 1,611 worker-weeks in Phase 2, excl. shock week). The shock construction, however, uses daily-level data for residualization before aggregating to weekly LOO means.
+
+```
+Dataset: 05_bs_phase1_phase2_makevar_combined_daily_weekly.dta
+Unit of observation: worker × day (daily panel)
+
+Key variables (actual names from do-file):
+- `pid`: Individual worker identifier
+- `standid`: Stand identifier (1–11), created via egen standid = group(stand)
+- `stand`: Original stand variable
+- `calendar_week`: Calendar week
+- `stand_ph_calweek`: Calendar week counter within stand × phase (constructed in code)
+- `week_in` / `week_in_dm`: Week in phase (demeaned version)
+- `treat` / `treatment`: Binary treatment indicator (0/1), randomly assigned within strata
+- `phase`: 0 = baseline, 1 = treatment (incentive), 2 = post-treatment, 3 = follow-up
+- `attend_nadj`: Outcome variable — attendance (not adjusted)
+- `attend_adj`: Adjusted attendance (used in some figures)
+- `strata`: Stratification cell (stand × baseline attendance bin × baseline wage bin)
+
+Other covariates:
+- `bl_attend`: Baseline attendance rate
+- `bl_sum_wages`: Baseline earnings
+- `bl_avg_wage`: Baseline modal wage
+- `dow`: Day of week
+
+Shock-related variables (constructed in code — see Section 1.4a):
+- `resid_day_attendph2`: Residualized daily attendance for Phase 2
+- `avg_wkattend_loo`: Leave-one-out mean of residualized attendance at stand × week level
+- `wkof_attendloo_b25`: = 1 if avg_wkattend_loo < 25th percentile in that week
+- `firstpostshockl_calwk25`: First stand_ph_calweek where shock occurred (varies by pid due to LOO)
+- `wks_since_shock25`: stand_ph_calweek − firstpostshockl_calwk25
+- `firstwk_attendloo_b25`: = 1 in contemporaneous shock week (wks_since_shock25 == 0)
+- `post_attendloo_b25`: = 1 for all weeks AFTER first shock (wks_since_shock25 > 0)
+- `treatXpost_attendloo_b25`: treat × post_attendloo_b25
+
+Sample:
+- 225 workers across 11 stands
+- ~1,612 worker-weeks in Phase 2 (excluding shock week itself)
+- Phase 2 duration: 8 weeks
+- ~16% of workers never experience a shock
+```

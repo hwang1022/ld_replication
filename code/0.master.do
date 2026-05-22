@@ -54,7 +54,7 @@
 
 	**# The version of Data to use
 	global data_version "new" // "original" or "new"
-	global data_version_new "prioritize_in_person" // "prioritize_date" or "prioritize_in_person". If you chose "original", this option is ignored.
+	global data_version_new "prioritize_date" // "prioritize_date" or "prioritize_in_person". If you chose "original", this option is ignored.
 
 	* If prioritize in-person recall over recalls made on phone but on a closer date.
 	if "$data_version_new" == "prioritize_in_person" global prioritize_in_person = 1

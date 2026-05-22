@@ -1,0 +1,978 @@
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/owner/Dropbox/Labor Discipline/07. Data/3. Main Study 3.0/ld_replication/code/analysis/luisa/compare_bystand.log
+  log type:  text
+ opened on:   7 May 2026, 15:54:15
+
+. 
+. 
+. program drop _all
+
+. program define build_shock
+  1.         preserve
+  2.                 keep if phase == 2
+  3.                 set type double
+  4.                 collapse (sum) w_sum = resid_day_attendph2 ///
+>                          (count) w_n = resid_day_attendph2 ///
+>                          (first) standid, by(calendar_week pid treat)
+  5.                 bysort standid calendar_week: egen sw_sum = total(w_sum)
+  6.                 bysort standid calendar_week: egen sw_n   = total(w_n)
+  7.                 sort pid calendar_week
+  8.                 gen double avg_wkattend_loo = (sw_sum - w_sum) / (sw_n - w_n)
+  9.                 bys pid calendar_week: keep if _n == 1
+ 10.                 sum avg_wkattend_loo, d
+ 11.                 scalar pct_j_attend = r(p25)
+ 12.                 keep pid calendar_week avg_wkattend_loo
+ 13.                 gen dow = 2
+ 14.                 tempfile loo
+ 15.                 save `loo'
+ 16.         restore
+ 17.         merge m:1 pid calendar_week using `loo', keep(1 2 3) nogen
+ 18.         gen wkof_attend_j = (avg_wkattend_loo <= pct_j_attend) if avg_wkattend_loo!=.
+ 19.         gen calwk_of_shock = stand_ph_calweek if wkof_attend_j==1
+ 20.         bys pid : egen firstofshock_calwk_j = min(calwk_of_shock)
+ 21.         drop calwk_of_shock
+ 22.         gen wks_since_shock_j = stand_ph_calweek - firstofshock_calwk_j
+ 23.         replace wks_since_shock_j = . if firstofshock_calwk_j == .
+ 24.         gen firstwk_attend_j = (wks_since_shock_j == 0)
+ 25.         gen post_attend_j    = (wks_since_shock_j > 0 & !mi(wks_since_shock_j))
+ 26. end
+
+. 
+. 
+. program define prelim
+  1.         use "$main_data" , clear
+  2.         gen treat = treatment
+  3.         egen standid = group(stand)
+  4.         sort standid phase calendar_week date pid
+  5.         by standid phase calendar_week: gen stand_ph_calweek_id1 = 1 if _n==1
+  6.         egen temp2 = seq() if stand_ph_calweek_id1 == 1, by(standid phase)
+  7.         egen stand_ph_calweek = max(temp2), by(standid phase calendar_week)
+  8.         drop temp*
+  9. 
+.         * Number of unique control workers per stand (constant within stand)
+.         preserve
+ 10.                 keep if phase==2 & treat==0
+ 11.                 bys standid pid: keep if _n==1
+ 12.                 bys standid: gen n_controls_stand = _N
+ 13.                 bys standid: keep if _n==1
+ 14.                 keep standid n_controls_stand
+ 15.                 tempfile sizes
+ 16.                 save `sizes'
+ 17.         restore
+ 18.         merge m:1 standid using `sizes', nogen
+ 19. 
+.         * Same for treated, for context
+.         preserve
+ 20.                 keep if phase==2 & treat==1
+ 21.                 bys standid pid: keep if _n==1
+ 22.                 bys standid: gen n_treated_stand = _N
+ 23.                 bys standid: keep if _n==1
+ 24.                 keep standid n_treated_stand
+ 25.                 tempfile szT
+ 26.                 save `szT'
+ 27.         restore
+ 28.         merge m:1 standid using `szT', nogen
+ 29. end
+
+. 
+. 
+. ************************************************************
+. * RUN 1 — V0 (predict for everyone)
+. ************************************************************
+.         prelim
+(75,907 missing values generated)
+(75,907 missing values generated)
+(70,361 observations deleted)
+(6,048 observations deleted)
+(101 observations deleted)
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St24485.000002 saved as .dta format
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                             0
+    Matched                            76,521  
+    -----------------------------------------
+(70,306 observations deleted)
+(6,102 observations deleted)
+(102 observations deleted)
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St24485.000004 saved as .dta format
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                             0
+    Matched                            76,521  
+    -----------------------------------------
+
+.         di _n "[setup] stand sizes (controls and treated, phase 2):"
+
+[setup] stand sizes (controls and treated, phase 2):
+
+.         preserve
+
+.                 bys standid: keep if _n==1
+(76,510 observations deleted)
+
+.                 list standid n_controls_stand n_treated_stand, sepby(standid) noobs
+
+  +-------------------------------+
+  | standid   n_cont~d   n_trea~d |
+  |-------------------------------|
+  |       1         19         16 |
+  |-------------------------------|
+  |       2         11         11 |
+  |-------------------------------|
+  |       3          5          7 |
+  |-------------------------------|
+  |       4          9          9 |
+  |-------------------------------|
+  |       5          8          7 |
+  |-------------------------------|
+  |       6          7          8 |
+  |-------------------------------|
+  |       7          6          6 |
+  |-------------------------------|
+  |       8         16         17 |
+  |-------------------------------|
+  |       9         21         19 |
+  |-------------------------------|
+  |      10          6          9 |
+  |-------------------------------|
+  |      11          4          4 |
+  +-------------------------------+
+
+.         restore
+
+. 
+.         cap drop resid_day_attendph2
+
+.         reg attend bl_attend bl_earn miss_bl_earn i.standid##i.phase i.standid##i.treatment if phase<2
+note: miss_bl_earn omitted because of collinearity.
+
+      Source |       SS           df       MS      Number of obs   =    11,147
+-------------+----------------------------------   F(34, 11112)    =     21.28
+       Model |  167.519167        34  4.92703433   Prob > F        =    0.0000
+    Residual |  2573.04744    11,112  .231555745   R-squared       =    0.0611
+-------------+----------------------------------   Adj R-squared   =    0.0583
+       Total |  2740.56661    11,146  .245878935   Root MSE        =     .4812
+
+-----------------------------------------------------------------------------------
+           attend | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+------------------+----------------------------------------------------------------
+        bl_attend |   .2788392   .0352479     7.91   0.000      .209747    .3479315
+          bl_earn |  -.0001136   .0000219    -5.19   0.000    -.0001565   -.0000707
+     miss_bl_earn |          0  (omitted)
+                  |
+          standid |
+               2  |  -.0309676   .0445541    -0.70   0.487    -.1183016    .0563665
+               3  |   .0097213   .0562895     0.17   0.863    -.1006162    .1200588
+               4  |   -.015399   .0475136    -0.32   0.746    -.1085341     .077736
+               5  |  -.0015756   .0493515    -0.03   0.975    -.0983133    .0951622
+               6  |   .0097769    .050151     0.19   0.845     -.088528    .1080818
+               7  |  -.0046863   .0538693    -0.09   0.931    -.1102796     .100907
+               8  |    -.00416    .039385    -0.11   0.916    -.0813615    .0730416
+               9  |  -.1006199   .0374636    -2.69   0.007    -.1740552   -.0271847
+              10  |   .0038419   .0514014     0.07   0.940    -.0969139    .1045977
+              11  |  -.0101139   .0631467    -0.16   0.873    -.1338926    .1136648
+                  |
+          1.phase |   .1351222   .0286201     4.72   0.000     .0790217    .1912228
+                  |
+    standid#phase |
+             2 1  |   .0043532   .0457731     0.10   0.924    -.0853702    .0940766
+             3 1  |   .0106175   .0561272     0.19   0.850    -.0994018    .1206368
+             4 1  |   .1332511    .048618     2.74   0.006     .0379511     .228551
+             5 1  |   .0370877   .0509803     0.73   0.467    -.0628428    .1370181
+             6 1  |   .1717829   .0509743     3.37   0.001     .0718641    .2717016
+             7 1  |   .1468897   .0553246     2.66   0.008     .0384436    .2553357
+             8 1  |   .0064407   .0404676     0.16   0.874     -.072883    .0857644
+             9 1  |   .0970059   .0386635     2.51   0.012     .0212187    .1727932
+            10 1  |   .0120542   .0512442     0.24   0.814    -.0883936     .112502
+            11 1  |  -.1602693   .0648841    -2.47   0.014    -.2874537   -.0330848
+                  |
+        treatment |
+       Treatment  |   .0922248   .0236419     3.90   0.000     .0458825    .1385672
+                  |
+standid#treatment |
+     2#Treatment  |   .0573129   .0377187     1.52   0.129    -.0166223    .1312482
+     3#Treatment  |  -.0191109   .0470722    -0.41   0.685    -.1113806    .0731589
+     4#Treatment  |   .0785274   .0408083     1.92   0.054    -.0014642     .158519
+     5#Treatment  |  -.0295548   .0420812    -0.70   0.482    -.1120414    .0529319
+     6#Treatment  |   -.143626   .0417561    -3.44   0.001    -.2254753   -.0617767
+     7#Treatment  |  -.0595732   .0459065    -1.30   0.194    -.1495581    .0304118
+     8#Treatment  |  -.0517072   .0334214    -1.55   0.122    -.1172191    .0138047
+     9#Treatment  |   .1113597   .0320551     3.47   0.001      .048526    .1741934
+    10#Treatment  |   -.079263   .0437449    -1.81   0.070    -.1650109    .0064848
+    11#Treatment  |   .0033978   .0542665     0.06   0.950    -.1029742    .1097697
+                  |
+            _cons |   .3354438   .0335709     9.99   0.000      .269639    .4012487
+-----------------------------------------------------------------------------------
+
+.         predict resid_day_attendph2 if phase==2, residuals
+(66,065 missing values generated)
+
+.         build_shock
+(64,146 observations deleted)
+(0 observations deleted)
+
+                      avg_wkattend_loo
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%    -.4356907       -.490782
+ 5%    -.2039698      -.4894489
+10%     -.088365      -.4830442       Obs               1,800
+25%    -.0104502      -.4784658       Sum of wgt.       1,800
+
+50%      .067983                      Mean           .0522439
+                        Largest       Std. dev.       .134291
+75%      .138719       .3899649
+90%     .1891972       .3913256       Variance       .0180341
+95%     .2358723       .4204856       Skewness        -1.0757
+99%     .3604045       .4363899       Kurtosis       5.754265
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St24485.000003 saved as .dta format
+(variable dow was float, now double to accommodate using data's values)
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                        64,146
+        from master                    64,146  
+        from using                          0  
+
+    Matched                            12,375  
+    -----------------------------------------
+(64,146 missing values generated)
+(73,496 missing values generated)
+(15,300 missing values generated)
+(15,300 missing values generated)
+(0 real changes made)
+
+. 
+.         di _n "[v0] LOO SD by stand:"
+
+[v0] LOO SD by stand:
+
+.         preserve
+
+.                 keep if phase==2 & dow==2
+(74,721 observations deleted)
+
+.                 statsby sd_loo=r(sd) n=r(N), by(standid n_controls_stand n_treated_stand) clear : sum avg_wkattend_loo
+(running summarize on estimation sample)
+
+      Command: summarize avg_wkattend_loo
+       sd_loo: r(sd)
+            n: r(N)
+           By: standid n_controls_stand n_treated_stand
+
+Statsby groups:
+...........
+
+.                 list, sepby(standid)
+
+     +------------------------------------------------+
+     | standid   n_cont~d   n_trea~d     sd_loo     n |
+     |------------------------------------------------|
+  1. |       1         19         16   .1259155   280 |
+     |------------------------------------------------|
+  2. |       2         11         11    .139193   176 |
+     |------------------------------------------------|
+  3. |       3          5          7   .1590449    96 |
+     |------------------------------------------------|
+  4. |       4          9          9   .1739532   144 |
+     |------------------------------------------------|
+  5. |       5          8          7   .0888534   120 |
+     |------------------------------------------------|
+  6. |       6          7          8   .1252849   120 |
+     |------------------------------------------------|
+  7. |       7          6          6   .0885714    96 |
+     |------------------------------------------------|
+  8. |       8         16         17   .0603238   264 |
+     |------------------------------------------------|
+  9. |       9         21         19   .0848252   320 |
+     |------------------------------------------------|
+ 10. |      10          6          9   .0815422   120 |
+     |------------------------------------------------|
+ 11. |      11          4          4   .1557766    64 |
+     +------------------------------------------------+
+
+.         restore
+
+. 
+.         preserve
+
+.                 keep if phase==2 & dow==2
+(74,721 observations deleted)
+
+.                 keep pid calendar_week standid n_controls_stand n_treated_stand treat attend_nadj ///
+>                      avg_wkattend_loo firstwk_attend_j post_attend_j
+
+.                 rename (avg_wkattend_loo firstwk_attend_j post_attend_j) (loo_v0 firstwk_v0 post_v0)
+
+.                 tempfile v0
+
+.                 save `v0'
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St24485.000004 saved as .dta format
+
+.         restore
+
+. 
+. 
+. ************************************************************
+. * RUN 2 — V0c (predict only for treat==0)
+. ************************************************************
+.         prelim
+(75,907 missing values generated)
+(75,907 missing values generated)
+(70,361 observations deleted)
+(6,048 observations deleted)
+(101 observations deleted)
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St24485.000006 saved as .dta format
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                             0
+    Matched                            76,521  
+    -----------------------------------------
+(70,306 observations deleted)
+(6,102 observations deleted)
+(102 observations deleted)
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St24485.000008 saved as .dta format
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                             0
+    Matched                            76,521  
+    -----------------------------------------
+
+.         cap drop resid_day_attendph2
+
+.         reg attend bl_attend bl_earn miss_bl_earn i.standid##i.phase i.standid##i.treatment if phase<2
+note: miss_bl_earn omitted because of collinearity.
+
+      Source |       SS           df       MS      Number of obs   =    11,147
+-------------+----------------------------------   F(34, 11112)    =     21.28
+       Model |  167.519167        34  4.92703433   Prob > F        =    0.0000
+    Residual |  2573.04744    11,112  .231555745   R-squared       =    0.0611
+-------------+----------------------------------   Adj R-squared   =    0.0583
+       Total |  2740.56661    11,146  .245878935   Root MSE        =     .4812
+
+-----------------------------------------------------------------------------------
+           attend | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+------------------+----------------------------------------------------------------
+        bl_attend |   .2788392   .0352479     7.91   0.000      .209747    .3479315
+          bl_earn |  -.0001136   .0000219    -5.19   0.000    -.0001565   -.0000707
+     miss_bl_earn |          0  (omitted)
+                  |
+          standid |
+               2  |  -.0309676   .0445541    -0.70   0.487    -.1183016    .0563665
+               3  |   .0097213   .0562895     0.17   0.863    -.1006162    .1200588
+               4  |   -.015399   .0475136    -0.32   0.746    -.1085341     .077736
+               5  |  -.0015756   .0493515    -0.03   0.975    -.0983133    .0951622
+               6  |   .0097769    .050151     0.19   0.845     -.088528    .1080818
+               7  |  -.0046863   .0538693    -0.09   0.931    -.1102796     .100907
+               8  |    -.00416    .039385    -0.11   0.916    -.0813615    .0730416
+               9  |  -.1006199   .0374636    -2.69   0.007    -.1740552   -.0271847
+              10  |   .0038419   .0514014     0.07   0.940    -.0969139    .1045977
+              11  |  -.0101139   .0631467    -0.16   0.873    -.1338926    .1136648
+                  |
+          1.phase |   .1351222   .0286201     4.72   0.000     .0790217    .1912228
+                  |
+    standid#phase |
+             2 1  |   .0043532   .0457731     0.10   0.924    -.0853702    .0940766
+             3 1  |   .0106175   .0561272     0.19   0.850    -.0994018    .1206368
+             4 1  |   .1332511    .048618     2.74   0.006     .0379511     .228551
+             5 1  |   .0370877   .0509803     0.73   0.467    -.0628428    .1370181
+             6 1  |   .1717829   .0509743     3.37   0.001     .0718641    .2717016
+             7 1  |   .1468897   .0553246     2.66   0.008     .0384436    .2553357
+             8 1  |   .0064407   .0404676     0.16   0.874     -.072883    .0857644
+             9 1  |   .0970059   .0386635     2.51   0.012     .0212187    .1727932
+            10 1  |   .0120542   .0512442     0.24   0.814    -.0883936     .112502
+            11 1  |  -.1602693   .0648841    -2.47   0.014    -.2874537   -.0330848
+                  |
+        treatment |
+       Treatment  |   .0922248   .0236419     3.90   0.000     .0458825    .1385672
+                  |
+standid#treatment |
+     2#Treatment  |   .0573129   .0377187     1.52   0.129    -.0166223    .1312482
+     3#Treatment  |  -.0191109   .0470722    -0.41   0.685    -.1113806    .0731589
+     4#Treatment  |   .0785274   .0408083     1.92   0.054    -.0014642     .158519
+     5#Treatment  |  -.0295548   .0420812    -0.70   0.482    -.1120414    .0529319
+     6#Treatment  |   -.143626   .0417561    -3.44   0.001    -.2254753   -.0617767
+     7#Treatment  |  -.0595732   .0459065    -1.30   0.194    -.1495581    .0304118
+     8#Treatment  |  -.0517072   .0334214    -1.55   0.122    -.1172191    .0138047
+     9#Treatment  |   .1113597   .0320551     3.47   0.001      .048526    .1741934
+    10#Treatment  |   -.079263   .0437449    -1.81   0.070    -.1650109    .0064848
+    11#Treatment  |   .0033978   .0542665     0.06   0.950    -.1029742    .1097697
+                  |
+            _cons |   .3354438   .0335709     9.99   0.000      .269639    .4012487
+-----------------------------------------------------------------------------------
+
+.         predict resid_day_attendph2 if phase==2 & treat == 0, residuals
+(71,310 missing values generated)
+
+.         build_shock
+(64,146 observations deleted)
+(1 missing value generated)
+(0 observations deleted)
+
+                      avg_wkattend_loo
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%    -.4034369       -.480583
+ 5%    -.2108869      -.4602295
+10%    -.0808448      -.4602295       Obs               1,799
+25%    -.0102999      -.4602295       Sum of wgt.       1,799
+
+50%     .0698122                      Mean           .0723858
+                        Largest       Std. dev.      .1541867
+75%      .167729       .5125043
+90%     .2592666       .5125043       Variance       .0237735
+95%     .3148222       .5373127       Skewness      -.3903636
+99%     .4259333       .6047254       Kurtosis       4.206216
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St24485.000006 saved as .dta format
+(variable dow was float, now double to accommodate using data's values)
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                        64,146
+        from master                    64,146  
+        from using                          0  
+
+    Matched                            12,375  
+    -----------------------------------------
+(64,152 missing values generated)
+(73,480 missing values generated)
+(10,880 missing values generated)
+(10,880 missing values generated)
+(0 real changes made)
+
+. 
+.         di _n "[v0c] LOO SD by stand:"
+
+[v0c] LOO SD by stand:
+
+.         preserve
+
+.                 keep if phase==2 & dow==2
+(74,721 observations deleted)
+
+.                 statsby sd_loo=r(sd) n=r(N), by(standid n_controls_stand n_treated_stand) clear : sum avg_wkattend_loo
+(running summarize on estimation sample)
+
+      Command: summarize avg_wkattend_loo
+       sd_loo: r(sd)
+            n: r(N)
+           By: standid n_controls_stand n_treated_stand
+
+Statsby groups:
+...........
+
+.                 list, sepby(standid)
+
+     +------------------------------------------------+
+     | standid   n_cont~d   n_trea~d     sd_loo     n |
+     |------------------------------------------------|
+  1. |       1         19         16   .1329849   280 |
+     |------------------------------------------------|
+  2. |       2         11         11   .1351616   176 |
+     |------------------------------------------------|
+  3. |       3          5          7   .1999738    96 |
+     |------------------------------------------------|
+  4. |       4          9          9   .1769517   144 |
+     |------------------------------------------------|
+  5. |       5          8          7   .0985828   120 |
+     |------------------------------------------------|
+  6. |       6          7          8   .1057243   120 |
+     |------------------------------------------------|
+  7. |       7          6          6   .1056672    96 |
+     |------------------------------------------------|
+  8. |       8         16         17   .0964798   264 |
+     |------------------------------------------------|
+  9. |       9         21         19   .0836972   320 |
+     |------------------------------------------------|
+ 10. |      10          6          9   .1578434   119 |
+     |------------------------------------------------|
+ 11. |      11          4          4   .2460307    64 |
+     +------------------------------------------------+
+
+.         restore
+
+. 
+.         preserve
+
+.                 keep if phase==2 & dow==2
+(74,721 observations deleted)
+
+.                 keep pid calendar_week standid n_controls_stand treat attend_nadj ///
+>                      avg_wkattend_loo firstwk_attend_j post_attend_j
+
+.                 rename (avg_wkattend_loo firstwk_attend_j post_attend_j) (loo_v0c firstwk_v0c post_v0c)
+
+.                 tempfile v0c
+
+.                 save `v0c'
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St24485.000007 saved as .dta format
+
+.         restore
+
+. 
+. 
+. ************************************************************
+. * COMPARE — stratify regressions by stand size
+. ************************************************************
+.         use `v0', clear
+
+.         merge 1:1 pid calendar_week using `v0c', keep(3) nogen
+(variable treat was float, now double to accommodate using data's values)
+(variable standid was float, now double to accommodate using data's values)
+(variable n_controls_stand was float, now double to accommodate using data's values)
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                             0
+    Matched                             1,800  
+    -----------------------------------------
+
+. 
+.         * Distribution of stand size
+.         di _n "[cmp] stand sizes (controls per stand):"
+
+[cmp] stand sizes (controls per stand):
+
+.         preserve
+
+.                 bys standid: keep if _n==1
+(1,789 observations deleted)
+
+.                 list standid n_controls_stand n_treated_stand, sepby(standid) noobs
+
+  +-------------------------------+
+  | standid   n_cont~d   n_trea~d |
+  |-------------------------------|
+  |       1         19         16 |
+  |-------------------------------|
+  |       2         11         11 |
+  |-------------------------------|
+  |       3          5          7 |
+  |-------------------------------|
+  |       4          9          9 |
+  |-------------------------------|
+  |       5          8          7 |
+  |-------------------------------|
+  |       6          7          8 |
+  |-------------------------------|
+  |       7          6          6 |
+  |-------------------------------|
+  |       8         16         17 |
+  |-------------------------------|
+  |       9         21         19 |
+  |-------------------------------|
+  |      10          6          9 |
+  |-------------------------------|
+  |      11          4          4 |
+  +-------------------------------+
+
+.                 sum n_controls_stand, d
+
+                      n_controls_stand
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            4              4
+ 5%            4              5
+10%            5              6       Obs                  11
+25%            6              6       Sum of wgt.          11
+
+50%            8                      Mean           10.18182
+                        Largest       Std. dev.      5.879085
+75%           16             11
+90%           19             16       Variance       34.56364
+95%           21             19       Skewness        .817258
+99%           21             21       Kurtosis       2.192354
+
+.         restore
+
+. 
+.         * Median split by control count
+.         su n_controls_stand if treat==0, d
+
+                      n_controls_stand
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            4              4
+ 5%            5              4
+10%            6              4       Obs                 896
+25%          7.5              4       Sum of wgt.         896
+
+50%         13.5                      Mean           13.26786
+                        Largest       Std. dev.      6.006302
+75%           19             21
+90%           21             21       Variance       36.07566
+95%           21             21       Skewness      -.0299384
+99%           21             21       Kurtosis       1.396222
+
+.         scalar med_size = r(p50)
+
+.         di _n "[cmp] median controls per stand = " med_size
+
+[cmp] median controls per stand = 13.5
+
+. 
+.         gen byte large_stand = (n_controls_stand >= med_size)
+
+. 
+.         * Tabulate: how many shock-week tags by stand size, by spec
+.         di _n "[cmp] V0 shock-week share by stand size (controls only):"
+
+[cmp] V0 shock-week share by stand size (controls only):
+
+.         tab firstwk_v0 large_stand if treat==0, col
+
++-------------------+
+| Key               |
+|-------------------|
+|     frequency     |
+| column percentage |
++-------------------+
+
+           |      large_stand
+firstwk_v0 |         0          1 |     Total
+-----------+----------------------+----------
+         0 |       411        395 |       806 
+           |     91.74      88.17 |     89.96 
+-----------+----------------------+----------
+         1 |        37         53 |        90 
+           |      8.26      11.83 |     10.04 
+-----------+----------------------+----------
+     Total |       448        448 |       896 
+           |    100.00     100.00 |    100.00 
+
+.         di _n "[cmp] V0c shock-week share by stand size (controls only):"
+
+[cmp] V0c shock-week share by stand size (controls only):
+
+.         tab firstwk_v0c large_stand if treat==0, col
+
++-------------------+
+| Key               |
+|-------------------|
+|     frequency     |
+| column percentage |
++-------------------+
+
+firstwk_v0 |      large_stand
+         c |         0          1 |     Total
+-----------+----------------------+----------
+         0 |       409        392 |       801 
+           |     91.29      87.50 |     89.40 
+-----------+----------------------+----------
+         1 |        39         56 |        95 
+           |      8.71      12.50 |     10.60 
+-----------+----------------------+----------
+     Total |       448        448 |       896 
+           |    100.00     100.00 |    100.00 
+
+. 
+.         * Regression: V0 vs V0c, on full sample, large stands, small stands
+.         * (data already filtered to phase==2 & dow==2 in tempfile)
+.         foreach spec in v0 v0c {
+  2.                 foreach samp in all large small {
+  3.                         local cond "treat==0"
+  4.                         if "`samp'" == "all"   local more ""
+  5.                         if "`samp'" == "large" local more "& large_stand==1"
+  6.                         if "`samp'" == "small" local more "& large_stand==0"
+  7. 
+.                         local lhs "attend_nadj"
+  8.                         local rhs "firstwk_`spec' post_`spec' i.standid"
+  9. 
+.                         di _n(2) "----- spec=`spec' sample=`samp' -----"
+ 10.                         reg `lhs' `rhs' if `cond' `more'
+ 11.                 }
+ 12.         }
+
+
+----- spec=v0 sample=all -----
+
+      Source |       SS           df       MS      Number of obs   =       896
+-------------+----------------------------------   F(12, 883)      =      8.81
+       Model |  445.503562        12  37.1252968   Prob > F        =    0.0000
+    Residual |  3721.18282       883  4.21425008   R-squared       =    0.1069
+-------------+----------------------------------   Adj R-squared   =    0.0948
+       Total |  4166.68638       895  4.65551551   Root MSE        =    2.0529
+
+------------------------------------------------------------------------------
+ attend_nadj | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+  firstwk_v0 |  -.6537441   .2465803    -2.65   0.008    -1.137696   -.1697923
+     post_v0 |   -.060066   .2018727    -0.30   0.766    -.4562723    .3361402
+             |
+     standid |
+          2  |  -.0344798   .3187116    -0.11   0.914    -.6600005    .5910409
+          3  |   .5456019   .3649505     1.50   0.135    -.1706698    1.261874
+          4  |   1.659433   .3362448     4.94   0.000     .9995006    2.319365
+          5  |   .8552203   .3074184     2.78   0.006     .2518642    1.458576
+          6  |   .2770658    .342842     0.81   0.419    -.3958145     .949946
+          7  |   .7427153   .3670935     2.02   0.043     .0222377    1.463193
+          8  |  -.1030938   .2672354    -0.39   0.700    -.6275846    .4213969
+          9  |  -.7404338   .2590028    -2.86   0.004    -1.248767    -.232101
+         10  |    .629789   .3790356     1.66   0.097    -.1141268    1.373705
+         11  |  -.5553923    .399342    -1.39   0.165    -1.339163    .2283778
+             |
+       _cons |   2.529664   .2382154    10.62   0.000      2.06213    2.997198
+------------------------------------------------------------------------------
+
+
+----- spec=v0 sample=large -----
+
+      Source |       SS           df       MS      Number of obs   =       448
+-------------+----------------------------------   F(4, 443)       =      3.18
+       Model |   51.967633         4  12.9919083   Prob > F        =    0.0137
+    Residual |  1811.52344       443  4.08921769   R-squared       =    0.0279
+-------------+----------------------------------   Adj R-squared   =    0.0191
+       Total |  1863.49107       447  4.16888383   Root MSE        =    2.0222
+
+------------------------------------------------------------------------------
+ attend_nadj | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+  firstwk_v0 |  -.2121004   .3185446    -0.67   0.506    -.8381468    .4139459
+     post_v0 |   .0819655   .2478536     0.33   0.741    -.4051495    .5690804
+             |
+     standid |
+          8  |  -.0213182   .2740962    -0.08   0.938    -.5600087    .5173722
+          9  |  -.6563807   .2697364    -2.43   0.015    -1.186503   -.1262589
+             |
+       _cons |   2.364197    .266788     8.86   0.000      1.83987    2.888525
+------------------------------------------------------------------------------
+
+
+----- spec=v0 sample=small -----
+
+      Source |       SS           df       MS      Number of obs   =       448
+-------------+----------------------------------   F(9, 438)       =      5.81
+       Model |  225.714315         9  25.0793683   Prob > F        =    0.0000
+    Residual |  1890.78345       438   4.3168572   R-squared       =    0.1066
+-------------+----------------------------------   Adj R-squared   =    0.0883
+       Total |  2116.49777       447  4.73489434   Root MSE        =    2.0777
+
+------------------------------------------------------------------------------
+ attend_nadj | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+  firstwk_v0 |  -1.268788   .3858839    -3.29   0.001    -2.027202   -.5103735
+     post_v0 |  -.2816902   .3428002    -0.82   0.412    -.9554279    .3920475
+             |
+     standid |
+          3  |   .7687157   .4713272     1.63   0.104    -.1576283     1.69506
+          4  |   1.679158   .3302987     5.08   0.000      1.02999    2.328325
+          5  |   1.056172   .4066785     2.60   0.010     .2568879    1.855456
+          6  |   .3790779   .3618837     1.05   0.295    -.3321664    1.090322
+          7  |   .7734048   .3757623     2.06   0.040     .0348835    1.511926
+         10  |   .6281583    .373501     1.68   0.093    -.1059187    1.362235
+         11  |  -.3128864    .515085    -0.61   0.544    -1.325232    .6994591
+             |
+       _cons |   2.544108    .223601    11.38   0.000     2.104644    2.983572
+------------------------------------------------------------------------------
+
+
+----- spec=v0c sample=all -----
+
+      Source |       SS           df       MS      Number of obs   =       896
+-------------+----------------------------------   F(12, 883)      =      8.55
+       Model |  433.722744        12   36.143562   Prob > F        =    0.0000
+    Residual |  3732.96364       883  4.22759189   R-squared       =    0.1041
+-------------+----------------------------------   Adj R-squared   =    0.0919
+       Total |  4166.68638       895  4.65551551   Root MSE        =    2.0561
+
+------------------------------------------------------------------------------
+ attend_nadj | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+ firstwk_v0c |  -.1287617   .2500683    -0.51   0.607    -.6195593    .3620359
+    post_v0c |   .3136211   .1882584     1.67   0.096    -.0558651    .6831072
+             |
+     standid |
+          2  |   .0949864   .2775213     0.34   0.732     -.449692    .6396648
+          3  |   .7215885   .3798358     1.90   0.058    -.0238979    1.467075
+          4  |   1.985989   .3323252     5.98   0.000      1.33375    2.638229
+          5  |    1.05764   .3310165     3.20   0.001     .4079685    1.707311
+          6  |   .4589332   .3340639     1.37   0.170    -.1967187    1.114585
+          7  |   1.033004    .365233     2.83   0.005      .316178     1.74983
+          8  |  -.0811647   .2470665    -0.33   0.743    -.5660708    .4037413
+          9  |  -.5584914   .2463733    -2.27   0.024    -1.042037   -.0749458
+         10  |   .8584798   .3489825     2.46   0.014     .1735479    1.543412
+         11  |  -.5689139   .3999647    -1.42   0.155    -1.353906    .2160785
+             |
+       _cons |   2.173942   .2328062     9.34   0.000     1.717024     2.63086
+------------------------------------------------------------------------------
+
+
+----- spec=v0c sample=large -----
+
+      Source |       SS           df       MS      Number of obs   =       448
+-------------+----------------------------------   F(4, 443)       =      3.29
+       Model |  53.8376004         4  13.4594001   Prob > F        =    0.0112
+    Residual |  1809.65347       443  4.08499655   R-squared       =    0.0289
+-------------+----------------------------------   Adj R-squared   =    0.0201
+       Total |  1863.49107       447  4.16888383   Root MSE        =    2.0211
+
+------------------------------------------------------------------------------
+ attend_nadj | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+ firstwk_v0c |   -.364513   .3491886    -1.04   0.297    -1.050785    .3217591
+    post_v0c |  -.0605344   .2759185    -0.22   0.826    -.6028063    .4817375
+             |
+     standid |
+          8  |  -.0530108   .2433517    -0.22   0.828    -.5312781    .4252565
+          9  |  -.7331442    .260344    -2.82   0.005    -1.244807   -.2214815
+             |
+       _cons |   2.493874   .2918526     8.54   0.000     1.920286    3.067461
+------------------------------------------------------------------------------
+
+
+----- spec=v0c sample=small -----
+
+      Source |       SS           df       MS      Number of obs   =       448
+-------------+----------------------------------   F(9, 438)       =      5.29
+       Model |  207.401594         9  23.0446216   Prob > F        =    0.0000
+    Residual |  1909.09617       438  4.35866706   R-squared       =    0.0980
+-------------+----------------------------------   Adj R-squared   =    0.0795
+       Total |  2116.49777       447  4.73489434   Root MSE        =    2.0877
+
+------------------------------------------------------------------------------
+ attend_nadj | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+ firstwk_v0c |  -.0373518   .3687161    -0.10   0.919    -.7620245     .687321
+    post_v0c |    .634953   .2612726     2.43   0.015     .1214492    1.148457
+             |
+     standid |
+          3  |   .7467931   .4098618     1.82   0.069    -.0587471    1.552333
+          4  |   2.089841   .3705121     5.64   0.000     1.361639    2.818044
+          5  |   1.114241   .3650858     3.05   0.002     .3967037    1.831779
+          6  |   .4605226   .3654729     1.26   0.208     -.257776    1.178821
+          7  |   1.093169   .3976689     2.75   0.006      .311593    1.874746
+         10  |    .832599   .3791123     2.20   0.029     .0874936    1.577704
+         11  |  -.7324918   .4346368    -1.69   0.093    -1.586725    .1217412
+             |
+       _cons |   2.065011   .2827443     7.30   0.000     1.509307    2.620716
+------------------------------------------------------------------------------
+
+. 
+.         * Same regressions but dropping each stand one at a time, V0c only,
+.         * to see which stand(s) drive the null
+.         di _n(2) "{hline 80}"
+
+
+--------------------------------------------------------------------------------
+
+.         di "[cmp] V0c shock coef leave-one-stand-out (controls-only OLS)"
+[cmp] V0c shock coef leave-one-stand-out (controls-only OLS)
+
+.         di "{hline 80}"
+--------------------------------------------------------------------------------
+
+.         levelsof standid if treat==0, local(stands)
+1 2 3 4 5 6 7 8 9 10 11
+
+.         foreach s of local stands {
+  2.                 qui reg attend_nadj firstwk_v0c post_v0c i.standid ///
+>                         if treat==0 & standid != `s'
+  3.                 local b = _b[firstwk_v0c]
+  4.                 local se = _se[firstwk_v0c]
+  5.                 local n = e(N)
+  6.                 di "  drop standid==`s' (n_ctrl=" n_controls_stand[`s'] "):  coef = " %7.3f `b' "   SE = " %6.3f `se' "   N = " `n'
+  7.         }
+  drop standid==1 (n_ctrl=19):  coef =  -0.025   SE =  0.265   N = 744
+  drop standid==2 (n_ctrl=19):  coef =  -0.189   SE =  0.263   N = 808
+  drop standid==3 (n_ctrl=19):  coef =  -0.148   SE =  0.258   N = 856
+  drop standid==4 (n_ctrl=19):  coef =   0.124   SE =  0.256   N = 824
+  drop standid==5 (n_ctrl=19):  coef =  -0.170   SE =  0.260   N = 832
+  drop standid==6 (n_ctrl=19):  coef =  -0.223   SE =  0.261   N = 840
+  drop standid==7 (n_ctrl=19):  coef =  -0.170   SE =  0.253   N = 848
+  drop standid==8 (n_ctrl=19):  coef =  -0.075   SE =  0.266   N = 768
+  drop standid==9 (n_ctrl=19):  coef =  -0.223   SE =  0.300   N = 728
+  drop standid==10 (n_ctrl=19):  coef =  -0.297   SE =  0.258   N = 848
+  drop standid==11 (n_ctrl=19):  coef =  -0.061   SE =  0.253   N = 864
+
+. 
+.         di _n(2) "[cmp] V0  shock coef leave-one-stand-out (controls-only OLS)"
+
+
+[cmp] V0  shock coef leave-one-stand-out (controls-only OLS)
+
+.         foreach s of local stands {
+  2.                 qui reg attend_nadj firstwk_v0 post_v0 i.standid ///
+>                         if treat==0 & standid != `s'
+  3.                 local b = _b[firstwk_v0]
+  4.                 local se = _se[firstwk_v0]
+  5.                 local n = e(N)
+  6.                 di "  drop standid==`s':  coef = " %7.3f `b' "   SE = " %6.3f `se' "   N = " `n'
+  7.         }
+  drop standid==1:  coef =  -0.637   SE =  0.263   N = 744
+  drop standid==2:  coef =  -0.449   SE =  0.258   N = 808
+  drop standid==3:  coef =  -0.697   SE =  0.251   N = 856
+  drop standid==4:  coef =  -0.438   SE =  0.253   N = 824
+  drop standid==5:  coef =  -0.859   SE =  0.256   N = 832
+  drop standid==6:  coef =  -0.585   SE =  0.259   N = 840
+  drop standid==7:  coef =  -0.710   SE =  0.249   N = 848
+  drop standid==8:  coef =  -1.140   SE =  0.271   N = 768
+  drop standid==9:  coef =  -0.521   SE =  0.296   N = 728
+  drop standid==10:  coef =  -0.617   SE =  0.249   N = 848
+  drop standid==11:  coef =  -0.600   SE =  0.250   N = 864
+
+. 
+.         * Also: per-stand correlation between V0 and V0c shock indicator
+.         di _n(2) "[cmp] per-stand pct of V0 shocks that survive in V0c (control workers):"
+
+
+[cmp] per-stand pct of V0 shocks that survive in V0c (control workers):
+
+.         bys standid: gen v0_then_v0c = (firstwk_v0==1 & firstwk_v0c==1) if treat==0 & firstwk_v0==1
+(1,710 missing values generated)
+
+.         bys standid: egen pct_survive = mean(v0_then_v0c) if firstwk_v0==1 & treat==0
+(1,710 missing values generated)
+
+.         bys standid: egen n_v0_shocks = total(firstwk_v0) if treat==0
+(904 missing values generated)
+
+.         preserve
+
+.                 keep if treat==0
+(904 observations deleted)
+
+.                 bys standid: keep if _n==1
+(885 observations deleted)
+
+.                 list standid n_controls_stand n_v0_shocks pct_survive, sepby(standid) noobs
+
+  +------------------------------------------+
+  | standid   n_cont~d   n_v0_s~s   pct_su~e |
+  |------------------------------------------|
+  |       1         19         19          . |
+  |------------------------------------------|
+  |       2         11          7          . |
+  |------------------------------------------|
+  |       3          5          5          . |
+  |------------------------------------------|
+  |       4          9          4          . |
+  |------------------------------------------|
+  |       5          8          8          . |
+  |------------------------------------------|
+  |       6          7          7          . |
+  |------------------------------------------|
+  |       7          6          1          . |
+  |------------------------------------------|
+  |       8         16         13          . |
+  |------------------------------------------|
+  |       9         21         21          . |
+  |------------------------------------------|
+  |      10          6          1          . |
+  |------------------------------------------|
+  |      11          4          4          . |
+  +------------------------------------------+
+
+.         restore
+
+. 
+.         log close
+      name:  <unnamed>
+       log:  /Users/owner/Dropbox/Labor Discipline/07. Data/3. Main Study 3.0/ld_replication/code/analysis/luisa/compare_bystand.log
+  log type:  text
+ closed on:   7 May 2026, 15:54:16
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

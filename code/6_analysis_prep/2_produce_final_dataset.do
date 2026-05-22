@@ -188,12 +188,29 @@
 *********************************
 	
 	lab var treatment "Treatment"
+
+
+	* Labels for Where and How Found Job 
+	lab var whenfound "When Found (Cond. SR Attend)"
+	lab var howfound "How Found (Cond. SR Attend)"
+	lab var howfound_notattend "How Found (Cond. SR Not Attend)"
+
+	lab def whenfound 1 "I already had a job before coming to the stand" 2 "While at the stand (friend gave me a job, met recruiter, recruiter phone called me, etc.)" 3 "After I left the stand without finding a job" , replace
+	lab val whenfound whenfound
+
+	/*
+	lab def howfound 1 "Phone- An employer/owner called me/I called the employer" 2 "Phone- A recruiter/contractor contacted me/I called the recruiter" 3 "Phone- A friend or family member offered me work/I called them" 4 "Self Employed- I worked for myself (self-owned business and earned an income)" 5 "Multi-day job with the same employer" 6 "Stand- recruiter/contractor called/ I called the recruiter/contractor" 7 "Stand- A friend or family member offered me job when I was at the stand" 8 "Stand- A recruiter offered me job when I was at the stand" , replace
+	lab val howfound howfound
+
+	lab def howfound_notattend 1 "Phone- An employer/owner called me/I called the employer" 2 "Phone- A recruiter/contractor contacted me/I called the recruiter" 3 "Phone- A friend or family member offered me work/I called them" 4 "Self Employed- I worked for myself (self-owned business and earned an income)" 5 "Multi-day job with the same employer" , replace
+	lab val howfound_notattend howfound_notattend
+	*/
+	drop howfound howfound_notattend 
 	
-	
+
 ****************************
 **# 4.  Save Final Dataset
 ****************************
 	
 	merge m:1 pid using "$temp/00_mainstudy_master.dta", keep(3) keepusing(pid) nogen 
 	save "$final/final_data_$data_version_new.dta", replace
-	
