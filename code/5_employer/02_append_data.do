@@ -21,8 +21,11 @@
 	duplicates drop recruiter_id , force
 
 	
-	merge 1:1 recruiter_id using "$temp/ls_employers_survey_avadi_v1_renamed.dta" , keep(1 3 4 5) update replace nogen
-	merge 1:1 recruiter_id using "$temp/ls_employers_survey_avadi_v2_renamed.dta" , keep(1 3 4 5) update replace nogen
+	//merge 1:1 recruiter_id using "$temp/ls_employers_survey_avadi_v1_renamed.dta" , keep(1 3 4 5) update replace nogen
+	//merge 1:1 recruiter_id using "$temp/ls_employers_survey_avadi_v2_renamed.dta" , keep(1 3 4 5) update replace nogen
+
+	merge 1:1 recruiter_id using "$temp/ls_employers_survey_avadi_v1_renamed.dta" , keep(1 3 4 5) update nogen
+	merge 1:1 recruiter_id using "$temp/ls_employers_survey_avadi_v2_renamed.dta" , keep(1 3 4 5) update nogen
 	
 	
 	
@@ -32,22 +35,22 @@
 **# Combine Rec Em
 ********************
 
-	clonevar comb_how_find_worker 			= rec_how_find_worker
-	clonevar comb_how_find_stand 			= rec_how_find_stand
-	clonevar comb_how_find_call 			= rec_how_find_call
-	clonevar comb_how_find_frnd 			= rec_how_find_frnd
-	clonevar comb_how_find_migrant 			= rec_how_find_migrant
-	clonevar comb_how_find_contractor 		= rec_how_find_contractor
-	clonevar comb_how_find_others 			= rec_how_find_others
+	clonevar comb_how_find_worker 			= rec_how_find_worker		if role == 1
+	clonevar comb_how_find_stand 			= rec_how_find_stand		if role == 1
+	clonevar comb_how_find_call 			= rec_how_find_call			if role == 1
+	clonevar comb_how_find_frnd 			= rec_how_find_frnd			if role == 1
+	clonevar comb_how_find_migrant 			= rec_how_find_migrant		if role == 1
+	clonevar comb_how_find_contractor 		= rec_how_find_contractor	if role == 1
+	clonevar comb_how_find_others 			= rec_how_find_others		if role == 1
 	
 	
-	replace comb_how_find_worker 			= em_how_find_worker			if mi(comb_how_find_worker)
-	replace comb_how_find_stand 			= em_how_find_stand				if mi(comb_how_find_stand)
-	replace comb_how_find_call 				= em_how_find_call				if mi(comb_how_find_call)
-	replace comb_how_find_frnd 				= em_how_find_frnd				if mi(comb_how_find_frnd)
-	replace comb_how_find_migrant 			= em_how_find_migrant			if mi(comb_how_find_migrant)
-	replace comb_how_find_contractor 		= em_how_find_contractor		if mi(comb_how_find_contractor)
-	replace comb_how_find_others 			= em_how_find_others			if mi(comb_how_find_others)
+	replace comb_how_find_worker 			= em_how_find_worker			if role == 2
+	replace comb_how_find_stand 			= em_how_find_stand				if role == 2
+	replace comb_how_find_call 				= em_how_find_call				if role == 2
+	replace comb_how_find_frnd 				= em_how_find_frnd				if role == 2
+	replace comb_how_find_migrant 			= em_how_find_migrant			if role == 2
+	replace comb_how_find_contractor 		= em_how_find_contractor		if role == 2
+	replace comb_how_find_others 			= em_how_find_others			if role == 2
 	
 
 	

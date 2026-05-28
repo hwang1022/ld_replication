@@ -1,0 +1,13 @@
+metric,value
+MOD  pid-week_in cells (phase 2),1800
+ORIG pid-week_in cells (phase 2),1800
+cells in both,1800
+cells only in MOD,0
+cells only in ORIG,0
+"diff_outcome (work1_wkly2, canonical per ld_replication.do)",95
+diff_outcome (naive sum(work1) on both),112
+diff_sample (e(sample) membership),33
+# unique pids in MOD  phase-2 e(sample),205
+# unique pids in ORIG phase-2 e(sample),200
+# worker-weeks in MOD  phase-2 e(sample),1381
+# worker-weeks in ORIG phase-2 e(sample),1348

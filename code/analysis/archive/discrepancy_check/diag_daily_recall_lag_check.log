@@ -1,0 +1,173 @@
+
+  ___  ____  ____  ____  ____ ®
+ /__    /   ____/   /   ____/      Stata 18.0
+___/   /   /___/   /   /___/       MP—Parallel Edition
+
+ Statistics and Data Science       Copyright 1985-2023 StataCorp LLC
+                                   StataCorp
+                                   4905 Lakeway Drive
+                                   College Station, Texas 77845 USA
+                                   800-782-8272        https://www.stata.com
+                                   979-696-4600        service@stata.com
+
+Stata license: Single-user 2-core  perpetual
+Serial number: 501806323791
+  Licensed to: Luisa Cefala
+               
+
+Notes:
+      1. Stata is running in batch mode.
+      2. Unicode is supported; see help unicode_advice.
+      3. More than 2 billion observations are allowed; see help obs_advice.
+      4. Maximum number of variables is set to 5,000 but can be increased;
+          see help set_maxvar.
+
+. do diag_daily_recall_lag_check.do 
+
+. *************************************************
+. *   Diagnostic: why does daily_recall_lag get set on rows where
+. *   recall_reliable is missing? (146 rows in the current build)
+. *
+. *   Runs read-only on $temp/05_phase1_phase2_makepanel_unrestricted.dta
+. *   which contains daily_recall_lag, recall_reliable, and the post-
+. *   replace `mode` variable (1=in-person survey, 2=phone survey,
+. *   3=row filled by recall but no original survey, .=nothing).
+. *
+. *   Hypotheses:
+. *     A: source row had mode ∈ {1,2} (real daily survey) but no d_work /
+. *        d_main_act_work recorded.
+. *     B: source row had mode == 3 or . — i.e., no actual daily survey,
+. *        data came from comp-recall or other upstream imputation.
+. *************************************************
+. 
+. * <FIXME> LC 2026-04-20 — bootstrap paths so this can run standalone
+. if mi("$replication_dir") {
+.     global db_dir "~/Dropbox"
+.     global replication_dir "$db_dir/Labor Discipline/07. Data/3. Main Study 3
+> .0/replication"
+.     global temp "$replication_dir/data/temp"
+. }
+
+. 
+. use "$temp/05_phase1_phase2_makepanel_unrestricted.dta", clear
+
+. 
+. di _newline as text ">>> Shape of the problem:"
+
+>>> Shape of the problem:
+
+. count
+  24,381
+
+. count if !mi(daily_recall_lag) & mi(recall_reliable)
+  146
+
+. 
+. * For each of the "daily_recall_lag set but recall_reliable missing" rows,
+. * look up the source row's mode (mode[_n+daily_recall_lag] within same pid).
+. gen source_row_mode = .
+(24,381 missing values generated)
+
+. forvalues z = 1/7 {
+  2.     bys pid (date): replace source_row_mode = mode[_n+`z'] ///
+>         if daily_recall_lag == `z' & pid == pid[_n+`z']
+  3. }
+(11095 real changes made)
+(4283 real changes made)
+(2186 real changes made)
+(1150 real changes made)
+(755 real changes made)
+(496 real changes made)
+(356 real changes made)
+
+. lab var source_row_mode "Mode on the source row (D + daily_recall_lag days ah
+> ead)"
+
+. 
+. di _newline as text ">>> Distribution of source_row_mode on the 146 rows (dai
+> ly_recall_lag set, recall_reliable missing):"
+
+>>> Distribution of source_row_mode on the 146 rows (daily_recall_lag set, reca
+> ll_reliable missing):
+
+. tab source_row_mode if !mi(daily_recall_lag) & mi(recall_reliable), m
+
+Mode on the |
+ source row |
+       (D + |
+daily_recal |
+ l_lag days |
+     ahead) |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |         70       47.95       47.95
+          2 |         65       44.52       92.47
+          . |         11        7.53      100.00
+------------+-----------------------------------
+      Total |        146      100.00
+
+. 
+. di _newline as text ">>> For reference: source_row_mode distribution on rows 
+> where BOTH daily_recall_lag and recall_reliable are set (expected mostly 1/2)
+> :"
+
+>>> For reference: source_row_mode distribution on rows where BOTH daily_recall
+> _lag and recall_reliable are set (expected mostly 1/2):
+
+. tab source_row_mode if !mi(daily_recall_lag) & !mi(recall_reliable), m
+
+Mode on the |
+ source row |
+       (D + |
+daily_recal |
+ l_lag days |
+     ahead) |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |     17,140       84.51       84.51
+          2 |      3,046       15.02       99.53
+          . |         96        0.47      100.00
+------------+-----------------------------------
+      Total |     20,282      100.00
+
+. 
+. di _newline as text ">>> Cross-tab: source_row_mode by recall_reliable-missin
+> gness, among daily_recall_lag set:"
+
+>>> Cross-tab: source_row_mode by recall_reliable-missingness, among daily_reca
+> ll_lag set:
+
+. gen recall_reliable_missing = mi(recall_reliable)
+
+. tab source_row_mode recall_reliable_missing if !mi(daily_recall_lag), m
+
+   Mode on |
+the source |
+  row (D + |
+daily_reca |
+    ll_lag | recall_reliable_missi
+      days |          ng
+    ahead) |         0          1 |     Total
+-----------+----------------------+----------
+         1 |    17,140         70 |    17,210 
+         2 |     3,046         65 |     3,111 
+         . |        96         11 |       107 
+-----------+----------------------+----------
+     Total |    20,282        146 |    20,428 
+
+. 
+. di _newline as text ">>> Sample of 10 rows from the 146:"
+
+>>> Sample of 10 rows from the 146:
+
+. gsort -daily_recall_lag pid date
+
+. list pid date phase mode daily_recall_lag source_row_mode recall_reliable wor
+> k work_orig if !mi(daily_recall_lag) & mi(recall_reliable) in 1/10, sep(0) no
+> obs abbrev(16)
+
+. 
+. di _newline as text ">>> Done."
+
+>>> Done.
+
+. 
+end of do-file

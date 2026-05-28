@@ -1,0 +1,3 @@
+dataset,N,clusters,coef,se,p
+MOD (final_data_prioritize_in_person.dta),1381,205,0.25683150273700467,0.15125335278017105,0.08950363194933995
+ORIG (05_bs_phase1_phase2_makevar_combined_daily_weekly.dta),1348,200,0.3183353081223571,0.14925491442240696,0.032938702351822766
