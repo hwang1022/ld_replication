@@ -5,31 +5,41 @@
 clear all
 set more off
 
-if "$analysis_code" == "" {
+if "$MasterRunning" != "" {
+	// Path to this file's location
+	global analysis_code "$code/tables_and_figures"
+}
+else {
+	// For running locally without full repo; set below to where the code is located
 	global analysis_code "/Users/st2246/Work/labor/new_asks/table_code"
+	// Defines globals needed by table / figure code below if this is not running through main
+	global data "$analysis_code/data"
+	global final "$data/final"
+	global temp "$data/temp"
+	global external "$data/external"
+
+	// NOTE: change this to '1' use the "in-person" data
+	global prioritize_in_person = 0
+
+	global main_data "$final/final_data_prioritize_date.dta"
+	if $prioritize_in_person == 1 {
+		global main_data "$final/final_data_prioritize_in_person.dta"
+	}
+
+	global output "$analysis_code/output/prioritize_date"
+	if $prioritize_in_person == 1 {
+		global output "$analysis_code/output/prioritize_in_person"
+	}
+
+	global tables "$output/tables"
+	global figures "$output/figures"
+	global stats "$output/stats"
 }
-
-global data "$analysis_code/data"
-global data_final "${data}/final"
-global data_temp "${data}/temp"
-
-global external "$data/external"
-global tables "$output/tables"
-global figures "$output/figures"
-global stats "$output/stats"
-
-// NOTE: change this to '1' use the "in-person" data
-global prioritize_in_person = 0
-
-global output "${analysis_code}/output/prioritize_date"
-if $prioritize_in_person  == 1 {
-	global output "${analysis_code}/output/prioritize_in_person"
-}
-
 
 capture mkdir "$output"
-capture mkdir "$output/tables"
-capture mkdir "$output/figures"
+capture mkdir "$tables"
+capture mkdir "$figures"
+capture mkdir "$stats"
 
 do "$analysis_code/shock_data_processing.do"
 

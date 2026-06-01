@@ -1,0 +1,129 @@
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/owner/Library/CloudStorage/Dropbox/Labor Discipline/07. Data/3. Main Study 3.0/ld_replication/data/temp/../../code/analysis/luisa/diag_spell
+> _spansun.log
+  log type:  text
+ opened on:  30 May 2026, 14:58:24
+
+. use "$temp/05_phase1_phase2_makepanel.dta", clear
+
+. sort pid date
+
+. gen byte multiday_work = (work==1 & multiday_job==1)
+
+. gen byte mwflag = multiday_work if work==1
+(13,263 missing values generated)
+
+. * Definition A spells (skip non-work) over WORK days
+. preserve
+
+.     keep if work==1
+(13,263 observations deleted)
+
+.     sort pid date
+
+.     by pid: gen byte lag_mw = mwflag[_n-1]
+(219 missing values generated)
+
+.     by pid: gen long spellstart = (mwflag==1 & (lag_mw!=1 | mi(lag_mw)))
+
+.     by pid: gen long spell_id = sum(spellstart) if mwflag==1
+(7,831 missing values generated)
+
+.     bys pid spell_id (date): gen long lenA = _N if !mi(spell_id)
+(7,831 missing values generated)
+
+.     keep pid date spell_id spellstart lenA
+
+.     tempfile A
+
+.     save `A'
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St16498.000002 saved as .dta format
+
+. restore
+
+. merge 1:1 pid date using `A', nogen
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                        13,263
+        from master                    13,263  
+        from using                          0  
+
+    Matched                            11,118  
+    -----------------------------------------
+
+. * find an A-spell whose interior contains a non-work day (calendar span > work-day count)
+. gen int dow = dow(date)   // 0=Sunday
+
+. preserve
+
+.     keep if !mi(spell_id)
+(21,094 observations deleted)
+
+.     bys pid spell_id (date): gen long span_cal = date[_N]-date[1]+1
+
+.     bys pid spell_id (date): gen byte hasgap = (span_cal > lenA)
+
+.     bys pid spell_id (date): keep if _n==1
+(2,314 observations deleted)
+
+.     keep if hasgap==1 & lenA>=3
+(795 observations deleted)
+
+.     sort pid spell_id
+
+.     di "  example spells that span a non-work day (cal span > #work days):"
+  example spells that span a non-work day (cal span > #work days):
+
+.     list pid spell_id lenA span_cal in 1/5, clean noobs
+
+    pid   spell_id   lenA   span_cal  
+    110          6      4          6  
+    116          3      8         17  
+    137          2     13         18  
+    137          3     10         11  
+    137          5      5          6  
+
+.     local egpid  = pid[1]
+
+.     global egpid = `egpid'
+
+. restore
+
+. di "==== day-by-day for example worker (one spell straddling a non-work day) ===="
+==== day-by-day for example worker (one spell straddling a non-work day) ====
+
+. sort pid date
+
+. list date dow work multiday_job spell_id lenA if pid==$egpid & !mi(spell_id), clean noobs
+
+         date   dow   work   multid~b   spell_id   lenA  
+    23mar2022     3      1          1          1      1  
+    08apr2022     5      1          1          2      1  
+    18may2022     3      1          1          3      1  
+    27may2022     5      1          1          4      1  
+    02jun2022     4      1          1          5      1  
+    04jun2022     6      1          1          6      4  
+    07jun2022     2      1          1          6      4  
+    08jun2022     3      1          1          6      4  
+    09jun2022     4      1          1          6      4  
+    15jun2022     3      1          1          7      2  
+    16jun2022     4      1          1          7      2  
+    21jun2022     2      1          1          8      1  
+    25jun2022     6      1          1          9      7  
+    26jun2022     0      1          1          9      7  
+    27jun2022     1      1          1          9      7  
+    28jun2022     2      1          1          9      7  
+    29jun2022     3      1          1          9      7  
+    30jun2022     4      1          1          9      7  
+    01jul2022     5      1          1          9      7  
+
+. * also list a couple surrounding days for context
+. log close
+      name:  <unnamed>
+       log:  /Users/owner/Library/CloudStorage/Dropbox/Labor Discipline/07. Data/3. Main Study 3.0/ld_replication/data/temp/../../code/analysis/luisa/diag_spell
+> _spansun.log
+  log type:  text
+ closed on:  30 May 2026, 14:58:24
+----------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -6,19 +6,7 @@ version 17
 clear all
 set more off
 
-if "$data" == "" {
-	global data "`c(pwd)'/data"
-}
-if "$data_final" == "" {
-	global data_final "${data}/final"
-}
-if "$data_temp" == "" {
-	global data_temp "${data}/temp"
-}
-if "$output" == "" {
-	global output "${data}/output"
-}
-local employer_activity_cleaned "$data_temp/employer_activity_mainstudy_cleaned.dta"
+local employer_activity_cleaned "$temp/employer_activity_mainstudy_cleaned.dta"
 
 local outdir "$output/tables"
 capture mkdir "$output"

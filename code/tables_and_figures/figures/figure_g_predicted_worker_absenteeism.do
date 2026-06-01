@@ -1,16 +1,4 @@
-if "$data" == "" {
-	global data "`c(pwd)'/data"
-}
-if "$data_final" == "" {
-	global data_final "${data}/final"
-}
-if "$data_temp" == "" {
-	global data_temp "${data}/temp"
-}
-if "$output" == "" {
-	global output "${data}/output"
-}
-local employers_survey "$data_final/ls_employers_survey_combined.dta"
+local employers_survey "$final/ls_employers_survey_combined.dta"
 
 cap mkdir "$output"
 cap mkdir "$output/figures"

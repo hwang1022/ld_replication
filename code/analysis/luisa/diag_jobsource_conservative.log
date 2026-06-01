@@ -1,0 +1,299 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/owner/Library/CloudStorage/Dropbox/Labor Discipline/07. Dat
+> a/3. Main Study 3.0/ld_replication/data/temp/../../code/analysis/luisa/diag_j
+> obsource_conservative.log
+  log type:  text
+ opened on:  29 May 2026, 19:00:38
+
+. 
+. use "$temp/05_phase1_phase2_makepanel.dta", clear
+
+. keep pid date phase attend work multiday_job whenfound howfound howfound_nota
+> ttend daily_recall_lag recall_source mode
+
+. sort pid date
+
+. isid pid date
+
+. 
+. *--- recall-grid indicator: day was filled by the 7-day daily grid (lag 1-7) 
+> ---
+. gen byte grid = !mi(daily_recall_lag)
+
+. 
+. di "==== work-day universe ===="
+==== work-day universe ====
+
+. count if work==1
+  11,118
+
+. gen byte workday = (work==1)
+
+. di "==== multiday_job status among work days (note any missing) ===="
+==== multiday_job status among work days (note any missing) ====
+
+. tab multiday_job grid if workday==1, missing
+
+multiday_j |         grid
+        ob |         0          1 |     Total
+-----------+----------------------+----------
+         0 |         0      7,567 |     7,567 
+         1 |         0      3,287 |     3,287 
+         . |       255          9 |       264 
+-----------+----------------------+----------
+     Total |       255     10,863 |    11,118 
+
+. 
+. *===============================================================*
+. * 1. CLEAN SOURCE on non-multiday work days  (stand=1 / not=0)
+. *===============================================================*
+. local howfound_stand 6,7,8,9,10,11
+
+. gen byte clean_stand = .
+(24,381 missing values generated)
+
+. replace clean_stand = 1 if whenfound==2
+(5,896 real changes made)
+
+. replace clean_stand = 0 if inlist(whenfound,1,3)
+(2,523 real changes made)
+
+. replace clean_stand = 0 if mi(clean_stand) & !mi(howfound_notattend) & howfou
+> nd_notattend!=5
+(985 real changes made)
+
+. replace clean_stand = 1 if mi(clean_stand) & inlist(howfound,`howfound_stand'
+> )
+(1 real change made)
+
+. replace clean_stand = 0 if mi(clean_stand) & inlist(howfound,1,2,3,4,998)
+(0 real changes made)
+
+. 
+. gen byte has_clean = (work==1 & multiday_job==0 & !mi(clean_stand))
+
+. replace clean_stand = . if has_clean==0
+(1,865 real changes made, 1,865 to missing)
+
+. 
+. *===============================================================*
+. * 2. MULTIDAY SPELLS (consecutive multiday work days)
+. *===============================================================*
+. gen byte multiday_work = (work==1 & multiday_job==1)
+
+. gen byte mwflag = multiday_work if work==1
+(13,263 missing values generated)
+
+. preserve
+
+.     keep if work==1
+(13,263 observations deleted)
+
+.     sort pid date
+
+.     by pid: gen byte lag_mw     = mwflag[_n-1]
+(219 missing values generated)
+
+.     by pid: gen byte lag_clean  = .          // will fill below
+(11,118 missing values generated)
+
+.     by pid: gen long spellstart = (mwflag==1 & (lag_mw!=1 | mi(lag_mw)))
+
+.     by pid: gen long spell_id   = sum(spellstart) if mwflag==1
+(7,831 missing values generated)
+
+.     keep pid date spell_id spellstart
+
+.     tempfile spells
+
+.     save `spells'
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St13891.000002 saved
+    as .dta format
+
+. restore
+
+. merge 1:1 pid date using `spells', nogen
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                        13,263
+        from master                    13,263  
+        from using                          0  
+
+    Matched                            11,118  
+    -----------------------------------------
+
+. 
+. *===============================================================*
+. * 3. CONSERVATIVE ANCHOR = clean source of the immediately
+. *    preceding WORK DAY (1 work-day lookback)
+. *===============================================================*
+. preserve
+
+.     keep if work==1
+(13,263 observations deleted)
+
+.     sort pid date
+
+.     by pid: gen byte prevwork_clean = clean_stand[_n-1]   // prior work day's
+>  clean source
+(3,712 missing values generated)
+
+.     keep if spellstart==1
+(10,145 observations deleted)
+
+.     keep pid spell_id prevwork_clean
+
+.     tempfile anc
+
+.     save `anc'
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St13891.000004 saved
+    as .dta format
+
+. restore
+
+. merge m:1 pid spell_id using `anc', nogen keep(1 3)
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                        21,094
+        from master                    21,094  
+        from using                          0  
+
+    Matched                             3,287  
+    -----------------------------------------
+
+. 
+. gen byte job_at_stand = clean_stand                          // direct on non
+> -multiday clean days
+(16,841 missing values generated)
+
+. replace job_at_stand = prevwork_clean if multiday_work==1 & !mi(prevwork_clea
+> n)
+(2,916 real changes made)
+
+. 
+. *===============================================================*
+. * 4. COVERAGE / UNLABELED among ALL work days
+. *===============================================================*
+. di "==== OVERALL: labeled vs unlabeled among all work days ===="
+==== OVERALL: labeled vs unlabeled among all work days ====
+
+. gen byte labeled = (work==1 & !mi(job_at_stand))
+
+. count if work==1
+  11,118
+
+. local totwork = r(N)
+
+. count if labeled==1
+  10,456
+
+. local lab = r(N)
+
+. di "  total work days = `totwork'; labeled = `lab' (" %4.1f 100*`lab'/`totwor
+> k' "%); UNLABELED = " `totwork'-`lab' " (" %4.1f 100*(`totwork'-`lab')/`totwo
+> rk' "%)"
+  total work days = 11118; labeled = 10456 (94.0%); UNLABELED = 662 ( 6.0%)
+
+. 
+. di "==== breakdown of UNLABELED work days by type ===="
+==== breakdown of UNLABELED work days by type ====
+
+. gen str20 unlab_reason = ""
+(24,381 missing values generated)
+
+. replace unlab_reason = "multiday-noorigin" if work==1 & mi(job_at_stand) & mu
+> ltiday_job==1
+(371 real changes made)
+
+. replace unlab_reason = "nonmulti-nosource" if work==1 & mi(job_at_stand) & mu
+> ltiday_job==0
+(27 real changes made)
+
+. replace unlab_reason = "multiday_job missing" if work==1 & mi(job_at_stand) &
+>  mi(multiday_job)
+(264 real changes made)
+
+. tab unlab_reason if work==1 & labeled==0, missing
+
+        unlab_reason |      Freq.     Percent        Cum.
+---------------------+-----------------------------------
+   multiday-noorigin |        371       56.04       56.04
+multiday_job missing |        264       39.88       95.92
+   nonmulti-nosource |         27        4.08      100.00
+---------------------+-----------------------------------
+               Total |        662      100.00
+
+. 
+. di "==== job_at_stand distribution (all work days) ===="
+==== job_at_stand distribution (all work days) ====
+
+. tab job_at_stand if work==1, missing
+
+job_at_stan |
+          d |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      3,251       29.24       29.24
+          1 |      7,205       64.80       94.05
+          . |        662        5.95      100.00
+------------+-----------------------------------
+      Total |     11,118      100.00
+
+. 
+. *===============================================================*
+. * 5. SAME but restricted to 7-DAY DAILY RECALL GRID days
+. *===============================================================*
+. di "==== GRID-ONLY: labeled vs unlabeled among work days filled by 7-day grid
+>  ===="
+==== GRID-ONLY: labeled vs unlabeled among work days filled by 7-day grid ====
+
+. count if work==1 & grid==1
+  10,863
+
+. local gw = r(N)
+
+. count if work==1 & grid==1 & labeled==1
+  10,456
+
+. local gl = r(N)
+
+. di "  grid work days = `gw'; labeled = `gl' (" %4.1f 100*`gl'/`gw' "%); UNLAB
+> ELED = " `gw'-`gl' " (" %4.1f 100*(`gw'-`gl')/`gw' "%)"
+  grid work days = 10863; labeled = 10456 (96.3%); UNLABELED = 407 ( 3.7%)
+
+. tab unlab_reason if work==1 & grid==1 & labeled==0, missing
+
+        unlab_reason |      Freq.     Percent        Cum.
+---------------------+-----------------------------------
+   multiday-noorigin |        371       91.15       91.15
+multiday_job missing |          9        2.21       93.37
+   nonmulti-nosource |         27        6.63      100.00
+---------------------+-----------------------------------
+               Total |        407      100.00
+
+. di "==== how many NON-grid work days exist (comprehensive recall etc.) ===="
+==== how many NON-grid work days exist (comprehensive recall etc.) ====
+
+. count if work==1 & grid==0
+  255
+
+. tab multiday_job if work==1 & grid==0, missing
+
+multiday_jo |
+          b |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          . |        255      100.00      100.00
+------------+-----------------------------------
+      Total |        255      100.00
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/owner/Library/CloudStorage/Dropbox/Labor Discipline/07. Dat
+> a/3. Main Study 3.0/ld_replication/data/temp/../../code/analysis/luisa/diag_j
+> obsource_conservative.log
+  log type:  text
+ closed on:  29 May 2026, 19:00:38
+-------------------------------------------------------------------------------

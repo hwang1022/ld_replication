@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/owner/Library/CloudStorage/Dropbox/Labor Discipline/07. Data/3. Main Study 3.0/ld_replication/**)",
+      "Bash(grep -rln \"recall_reliable\\\\|work_source_inperson\\\\|prioritize_date\" --include=*.do)"
+    ]
+  }
+}

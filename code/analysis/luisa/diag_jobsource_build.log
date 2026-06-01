@@ -1,0 +1,437 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/owner/Library/CloudStorage/Dropbox/Labor Discipline/07. Dat
+> a/3. Main Study 3.0/ld_replication/data/temp/../../code/analysis/luisa/diag_j
+> obsource_build.log
+  log type:  text
+ opened on:  29 May 2026, 18:54:23
+
+. 
+. use "$temp/05_phase1_phase2_makepanel.dta", clear
+
+. keep pid date phase attend work multiday_job multiday_job_cond whenfound howf
+> ound howfound_notattend
+
+. sort pid date
+
+. isid pid date
+
+. 
+. *===============================================================*
+. * 1. CLEAN SOURCE on non-multiday work days
+. *    stand (1) vs not-stand (0). Missing if no source info.
+. *===============================================================*
+. * stand codes in howfound: v1 stand={6,7,8}; v2 stand={8,9,10,11}; union:
+. local howfound_stand 6 7 8 9 10 11
+
+. 
+. gen byte clean_stand = .
+(24,381 missing values generated)
+
+. * primary: whenfound (attend-survey days), no version conflict
+. replace clean_stand = 1 if whenfound==2
+(5,896 real changes made)
+
+. replace clean_stand = 0 if inlist(whenfound,1,3)
+(2,523 real changes made)
+
+. * secondary: non-attend days -> howfound_notattend has NO stand option
+. *   any non-missing, non-multiday(5), counts as NOT-stand (0)
+. replace clean_stand = 0 if mi(clean_stand) & !mi(howfound_notattend) & howfou
+> nd_notattend!=5
+(985 real changes made)
+
+. * tertiary: howfound channel where whenfound missing (rare)
+. replace clean_stand = 1 if mi(clean_stand) & inlist(howfound, `=subinstr("`ho
+> wfound_stand'"," ",",",.)')
+(1 real change made)
+
+. replace clean_stand = 0 if mi(clean_stand) & inlist(howfound,1,2,3,4,998)
+(0 real changes made)
+
+. * NOTE: howfound==5 left missing here (ambiguous: v1 multiday vs v2 phone-fri
+> end)
+. 
+. * "clean source" only meaningful on non-multiday WORK days
+. gen byte has_clean = (work==1 & multiday_job==0 & !mi(clean_stand))
+
+. replace clean_stand = . if has_clean==0   // restrict clean_stand to clean-so
+> urce days
+(1,865 real changes made, 1,865 to missing)
+
+. 
+. di "==== distribution of clean_stand on clean-source non-multiday work days =
+> ==="
+==== distribution of clean_stand on clean-source non-multiday work days ====
+
+. tab clean_stand if has_clean==1, missing
+
+clean_stand |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      1,884       24.99       24.99
+          1 |      5,656       75.01      100.00
+------------+-----------------------------------
+      Total |      7,540      100.00
+
+. 
+. di "==== how many non-multiday work days LACK a clean source ===="
+==== how many non-multiday work days LACK a clean source ====
+
+. count if work==1 & multiday_job==0
+  7,567
+
+. count if work==1 & multiday_job==0 & has_clean==0
+  27
+
+. 
+. *===============================================================*
+. * 2. MULTIDAY SPELLS = maximal consecutive run of multiday
+. *    work days within pid (restrict to work==1, order by date,
+. *    non-work days are skipped -> don't break a spell)
+. *===============================================================*
+. gen byte multiday_work = (work==1 & multiday_job==1)
+
+. 
+. * sequence among work days only
+. gen long wseq = .
+(24,381 missing values generated)
+
+. bys pid (date): replace wseq = sum(work==1)        // running count of work d
+> ays
+(24,381 real changes made)
+
+. * spell id: new spell when current work day is multiday but previous WORK day
+>  was not multiday
+. gen byte prev_multi = .
+(24,381 missing values generated)
+
+. bys pid (date): gen long wsofar = sum(work==1)
+
+. * build previous-work-day multiday flag
+. gen byte mwflag = multiday_work if work==1
+(13,263 missing values generated)
+
+. sort pid date
+
+. by pid: gen long _wn = sum(work==1)
+
+. * lag of mwflag over work days
+. tempvar lagmw
+
+. gen byte `lagmw' = .
+(24,381 missing values generated)
+
+. bys pid (date): replace `lagmw' = mwflag[_n-1] if work==1  // NOTE: previous 
+> CALENDAR row; fix below
+(7,637 real changes made)
+
+. 
+. * Proper: collapse to work days to get true previous-work-day flag
+. preserve
+
+.     keep if work==1
+(13,263 observations deleted)
+
+.     sort pid date
+
+.     by pid: gen byte lag_mw = mwflag[_n-1]
+(219 missing values generated)
+
+.     by pid: gen long spellstart = (mwflag==1 & (lag_mw!=1 | mi(lag_mw)))
+
+.     by pid: gen long spell_id = sum(spellstart) if mwflag==1
+(7,831 missing values generated)
+
+.     keep pid date spell_id spellstart lag_mw
+
+.     tempfile spells
+
+.     save `spells'
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St13755.000002 saved
+    as .dta format
+
+. restore
+
+. merge 1:1 pid date using `spells', nogen
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                        13,263
+        from master                    13,263  
+        from using                          0  
+
+    Matched                            11,118  
+    -----------------------------------------
+
+. 
+. di "==== number of multiday spells & their lengths ===="
+==== number of multiday spells & their lengths ====
+
+. preserve
+
+.     keep if multiday_work==1
+(21,094 observations deleted)
+
+.     bys pid spell_id: gen long len = _N
+
+.     by pid spell_id: keep if _n==1
+(2,314 observations deleted)
+
+.     sum len, detail
+
+                             len
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs                 973
+25%            1              1       Sum of wgt.         973
+
+50%            2                      Mean           3.378212
+                        Largest       Std. dev.      3.932666
+75%            4             25
+90%            7             27       Variance       15.46586
+95%           11             28       Skewness       3.163527
+99%           22             37       Kurtosis       16.75315
+
+.     tab len if len<=15
+
+        len |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |        406       42.69       42.69
+          2 |        172       18.09       60.78
+          3 |        118       12.41       73.19
+          4 |         66        6.94       80.13
+          5 |         46        4.84       84.96
+          6 |         33        3.47       88.43
+          7 |         35        3.68       92.11
+          8 |         20        2.10       94.22
+          9 |         14        1.47       95.69
+         10 |          8        0.84       96.53
+         11 |          8        0.84       97.37
+         12 |         10        1.05       98.42
+         13 |          7        0.74       99.16
+         14 |          6        0.63       99.79
+         15 |          2        0.21      100.00
+------------+-----------------------------------
+      Total |        951      100.00
+
+. restore
+
+. 
+. *===============================================================*
+. * 3. ANCHOR: nearest prior clean source within window W
+. *    (search backward in CALENDAR days from spell start)
+. *===============================================================*
+. * date of spell start per spell
+. gen double spellstart_date = date if spellstart==1
+(23,408 missing values generated)
+
+. bys pid spell_id (date): egen double sstart = min(spellstart_date) if !mi(spe
+> ll_id)
+(21,094 missing values generated)
+
+. 
+. foreach W in 1 3 7 14 9999 {
+  2.     di "================ WINDOW W=`W' calendar days ================"
+  3.     * for each multiday-work day, we want anchor at spell level:
+.     * find nearest prior clean-source day before sstart within W days
+.     gen byte anchor_stand_`W' = .
+  4. 
+.     * candidate clean days: has_clean==1
+.     * We'll loop over spells via a join trick:
+.     preserve
+  5.         keep if has_clean==1
+  6.         keep pid date clean_stand
+  7.         rename date cdate
+  8.         rename clean_stand csrc
+  9.         tempfile clean
+ 10.         save `clean'
+ 11.     restore
+ 12. 
+.     * spell-start rows
+.     preserve
+ 13.         keep if spellstart==1
+ 14.         keep pid spell_id sstart
+ 15.         joinby pid using `clean'
+ 16.         keep if cdate < sstart & (sstart - cdate) <= `W'
+ 17.         * nearest prior: max cdate per spell
+.         bys pid spell_id (cdate): keep if _n==_N
+ 18.         keep pid spell_id csrc
+ 19.         rename csrc anchor_val_`W'
+ 20.         tempfile anc
+ 21.         save `anc'
+ 22.     restore
+ 23.     merge m:1 pid spell_id using `anc', nogen keep(1 3)
+ 24.     replace anchor_stand_`W' = anchor_val_`W' if multiday_work==1 & !mi(sp
+> ell_id)
+ 25.     cap drop anchor_val_`W'
+ 26. 
+.     qui count if multiday_work==1
+ 27.     local denom = r(N)
+ 28.     qui count if multiday_work==1 & !mi(anchor_stand_`W')
+ 29.     local num = r(N)
+ 30.     di "  multiday work days = `denom'; attributed = `num' (" %4.1f 100*`n
+> um'/`denom' "%)"
+ 31.     tab anchor_stand_`W' if multiday_work==1, missing
+ 32. }
+================ WINDOW W=1 calendar days ================
+(24,381 missing values generated)
+(16,841 observations deleted)
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St13755.000005 saved
+    as .dta format
+(23,408 observations deleted)
+(33,352 observations deleted)
+(0 observations deleted)
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St13755.000007 saved
+    as .dta format
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                        22,294
+        from master                    22,294  
+        from using                          0  
+
+    Matched                             2,087  
+    -----------------------------------------
+(2,087 real changes made)
+  multiday work days = 3287; attributed = 2087 (63.5%)
+
+anchor_stan |
+        d_1 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      1,028       31.27       31.27
+          1 |      1,059       32.22       63.49
+          . |      1,200       36.51      100.00
+------------+-----------------------------------
+      Total |      3,287      100.00
+================ WINDOW W=3 calendar days ================
+(24,381 missing values generated)
+(16,841 observations deleted)
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St13755.000009 saved
+    as .dta format
+(23,408 observations deleted)
+(32,563 observations deleted)
+(626 observations deleted)
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St13755.00000b saved
+    as .dta format
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                        21,723
+        from master                    21,723  
+        from using                          0  
+
+    Matched                             2,658  
+    -----------------------------------------
+(2,658 real changes made)
+  multiday work days = 3287; attributed = 2658 (80.9%)
+
+anchor_stan |
+        d_3 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      1,274       38.76       38.76
+          1 |      1,384       42.11       80.86
+          . |        629       19.14      100.00
+------------+-----------------------------------
+      Total |      3,287      100.00
+================ WINDOW W=7 calendar days ================
+(24,381 missing values generated)
+(16,841 observations deleted)
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St13755.00000d saved
+    as .dta format
+(23,408 observations deleted)
+(31,216 observations deleted)
+(1,913 observations deleted)
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St13755.00000f saved
+    as .dta format
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                        21,517
+        from master                    21,517  
+        from using                          0  
+
+    Matched                             2,864  
+    -----------------------------------------
+(2,864 real changes made)
+  multiday work days = 3287; attributed = 2864 (87.1%)
+
+anchor_stan |
+        d_7 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      1,334       40.58       40.58
+          1 |      1,530       46.55       87.13
+          . |        423       12.87      100.00
+------------+-----------------------------------
+      Total |      3,287      100.00
+================ WINDOW W=14 calendar days ================
+(24,381 missing values generated)
+(16,841 observations deleted)
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St13755.00000h saved
+    as .dta format
+(23,408 observations deleted)
+(29,120 observations deleted)
+(3,988 observations deleted)
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St13755.00000j saved
+    as .dta format
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                        21,444
+        from master                    21,444  
+        from using                          0  
+
+    Matched                             2,937  
+    -----------------------------------------
+(2,937 real changes made)
+  multiday work days = 3287; attributed = 2937 (89.4%)
+
+anchor_stan |
+       d_14 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      1,379       41.95       41.95
+          1 |      1,558       47.40       89.35
+          . |        350       10.65      100.00
+------------+-----------------------------------
+      Total |      3,287      100.00
+================ WINDOW W=9999 calendar days ================
+(24,381 missing values generated)
+(16,841 observations deleted)
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St13755.00000l saved
+    as .dta format
+(23,408 observations deleted)
+(13,038 observations deleted)
+(20,039 observations deleted)
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St13755.00000n saved
+    as .dta format
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                        21,216
+        from master                    21,216  
+        from using                          0  
+
+    Matched                             3,165  
+    -----------------------------------------
+(3,165 real changes made)
+  multiday work days = 3287; attributed = 3165 (96.3%)
+
+anchor_stan |
+     d_9999 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      1,518       46.18       46.18
+          1 |      1,647       50.11       96.29
+          . |        122        3.71      100.00
+------------+-----------------------------------
+      Total |      3,287      100.00
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/owner/Library/CloudStorage/Dropbox/Labor Discipline/07. Dat
+> a/3. Main Study 3.0/ld_replication/data/temp/../../code/analysis/luisa/diag_j
+> obsource_build.log
+  log type:  text
+ closed on:  29 May 2026, 18:54:23
+-------------------------------------------------------------------------------

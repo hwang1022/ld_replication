@@ -6,19 +6,7 @@ version 17
 clear all
 set more off
 
-if "$data" == "" {
-	global data "`c(pwd)'/data"
-}
-if "$data_final" == "" {
-	global data_final "${data}/final"
-}
-if "$data_temp" == "" {
-	global data_temp "${data}/temp"
-}
-if "$output" == "" {
-	global output "${data}/output"
-}
-local stand_size_studysample "$data_temp/stand_size_intensity_studysample.dta"
+local stand_size_studysample "$temp/stand_size_intensity_studysample.dta"
 
 local tables "$output/tables"
 local verified_tex "`tables'/stand_size_tex_compact_studysample.tex"

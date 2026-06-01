@@ -1,0 +1,175 @@
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/owner/Library/CloudStorage/Dropbox/Labor Discipline/07. Data/3. Main Study 3.0/ld_replication/data/temp/../../code/analysis/luisa/diag_verif
+> y_recode.log
+  log type:  text
+ opened on:  30 May 2026, 16:38:55
+
+. use "$temp/03_phase2_completed_cleaned.dta", clear
+
+. 
+. di "==== (A) Do all 7 slots share the SAME value labels? (so one crosswalk fits all) ===="
+==== (A) Do all 7 slots share the SAME value labels? (so one crosswalk fits all) ====
+
+. forval i = 1/7 {
+  2.     local v1 : value label f_howfound_`i'
+  3.     local v2 : value label f_howfound_v2_`i'
+  4.     di "  slot `i':  v1 label = `v1'   |   v2 label = `v2'"
+  5. }
+  slot 1:  v1 label = rf4_1   |   v2 label = rf4_v2_1
+  slot 2:  v1 label =    |   v2 label = rf4_v2_2
+  slot 3:  v1 label =    |   v2 label = rf4_v2_3
+  slot 4:  v1 label =    |   v2 label = rf4_v2_4
+  slot 5:  v1 label =    |   v2 label = rf4_v2_5
+  slot 6:  v1 label =    |   v2 label = rf4_v2_6
+  slot 7:  v1 label =    |   v2 label = rf4_v2_7
+
+. 
+. di ""
+
+
+. di "==== (B) Side-by-side: each v2 code, its meaning, the target v1 code, its meaning ===="
+==== (B) Side-by-side: each v2 code, its meaning, the target v1 code, its meaning ====
+
+. di "  v2 -> v1   | v2 label  ||  v1 label"
+  v2 -> v1   | v2 label  ||  v1 label
+
+. di "  ------------------------------------------------------------------"
+  ------------------------------------------------------------------
+
+. * hardcode the intended map and print labels from the data to confirm meaning
+. foreach pair in "1 1" "2 1" "3 2" "4 2" "5 3" "6 3" "7 4" "8 6" "9 6" "10 7" "11 8" {
+  2.     tokenize "`pair'"
+  3.     local from `1'
+  4.     local to   `2'
+  5.     local lv2 : label (f_howfound_v2_1) `from'
+  6.     local lv1 : label (f_howfound_1)    `to'
+  7.     di "  v2 `from' -> v1 `to'"
+  8.     di "       v2: `lv2'"
+  9.     di "       v1: `lv1'"
+ 10. }
+  v2 1 -> v1 1
+       v2: 1. Phone- An employer/owner called me
+       v1: 1. Phone- An employer/owner called me/I called the employer
+  v2 2 -> v1 1
+       v2: 2. Phone - I called the employer
+       v1: 1. Phone- An employer/owner called me/I called the employer
+  v2 3 -> v1 2
+       v2: 3. Phone- A recruiter/contractor contacted me
+       v1: 2. Phone- A recruiter/contractor contacted me/I called the recruiter
+  v2 4 -> v1 2
+       v2: 4. Phone- I called the recruiter
+       v1: 2. Phone- A recruiter/contractor contacted me/I called the recruiter
+  v2 5 -> v1 3
+       v2: 5. Phone- A friend or family member offered me work
+       v1: 3. Phone- A friend or family member offered me work/I called them
+  v2 6 -> v1 3
+       v2: 6. Phone - I called my friend or family member
+       v1: 3. Phone- A friend or family member offered me work/I called them
+  v2 7 -> v1 4
+       v2: 7. Self Employed- I worked for myself (self-owned business and earned an income)
+       v1: 4. Self Employed- I worked for myself (self-owned business and earned an income)
+  v2 8 -> v1 6
+       v2: 8. Stand- recruiter/contractor called/ I called the recruiter/contractor
+       v1: 6. Stand- recruiter/contractor called/ I called the recruiter/contractor
+  v2 9 -> v1 6
+       v2: 9. Stand - I called a recruiter while I was at the stand
+       v1: 6. Stand- recruiter/contractor called/ I called the recruiter/contractor
+  v2 10 -> v1 7
+       v2: 9. Stand- A friend or family member offered me job when I was at the stand.
+       v1: 7. Stand- A friend or family member offered me job when I was at the stand.
+  v2 11 -> v1 8
+       v2: 10. Stand- A reccruiter offered me job when I was at the stand.
+       v1: 8. Stand- A reccruiter offered me job when I was at the stand.
+
+. 
+. di ""
+
+
+. di "==== (C) EMPIRICAL: run the recode, cross-tab raw v2 vs recoded (all 7 slots stacked) ===="
+==== (C) EMPIRICAL: run the recode, cross-tab raw v2 vs recoded (all 7 slots stacked) ====
+
+. * stack the 7 v2 slots into one long var so we see the full mapping in one table
+. preserve
+
+.     keep f_howfound_v2_*
+
+.     gen long _id = _n
+
+.     reshape long f_howfound_v2_, i(_id) j(slot)
+(j = 1 2 3 4 5 6 7)
+
+Data                               Wide   ->   Long
+-----------------------------------------------------------------------------
+Number of observations            7,124   ->   49,868      
+Number of variables                   8   ->   3           
+j variable (7 values)                     ->   slot
+xij variables:
+f_howfound_v2_1 f_howfound_v2_2 ... f_howfound_v2_7->f_howfound_v2_
+-----------------------------------------------------------------------------
+
+.     rename f_howfound_v2_ v2raw
+
+.     gen v2map = v2raw
+(48,873 missing values generated)
+
+.     recode v2map (1 2=1)(3 4=2)(5 6=3)(7=4)(8 9=6)(10=7)(11=8)
+(778 changes made to v2map)
+
+.     di "  rows of raw v2 (any slot) by mapped value:"
+  rows of raw v2 (any slot) by mapped value:
+
+.     tab v2raw v2map, missing
+
+                      |                                               v2map
+                v2raw |         1          2          3          4          6          7          8        998          . |     Total
+----------------------+---------------------------------------------------------------------------------------------------+----------
+1. Phone- An employer |       215          0          0          0          0          0          0          0          0 |       215 
+2. Phone - I called t |        10          0          0          0          0          0          0          0          0 |        10 
+3. Phone- A recruiter |         0         71          0          0          0          0          0          0          0 |        71 
+4. Phone- I called th |         0          5          0          0          0          0          0          0          0 |         5 
+5. Phone- A friend or |         0          0         51          0          0          0          0          0          0 |        51 
+6. Phone - I called m |         0          0         14          0          0          0          0          0          0 |        14 
+7. Self Employed- I w |         0          0          0         16          0          0          0          0          0 |        16 
+8. Stand- recruiter/c |         0          0          0          0          4          0          0          0          0 |         4 
+9. Stand - I called a |         0          0          0          0         46          0          0          0          0 |        46 
+9. Stand- A friend or |         0          0          0          0          0        246          0          0          0 |       246 
+10. Stand- A reccruit |         0          0          0          0          0          0        315          0          0 |       315 
+998. Others, specify  |         0          0          0          0          0          0          0          2          0 |         2 
+                    . |         0          0          0          0          0          0          0          0     48,873 |    48,873 
+----------------------+---------------------------------------------------------------------------------------------------+----------
+                Total |       225         76         65         16         50        246        315          2     48,873 |    49,868 
+
+.     di "  --- confirm 998/999/missing pass through unchanged ---"
+  --- confirm 998/999/missing pass through unchanged ---
+
+.     count if v2raw==998 & v2map!=998
+  0
+
+.     count if v2raw==999 & v2map!=999
+  0
+
+.     count if mi(v2raw) & !mi(v2map)
+  0
+
+.     di "  (all three counts should be 0)"
+  (all three counts should be 0)
+
+.     di "  --- confirm no mapped value falls outside the v1 scheme {1,2,3,4,6,7,8,998,999} ---"
+  --- confirm no mapped value falls outside the v1 scheme {1,2,3,4,6,7,8,998,999} ---
+
+.     count if !mi(v2map) & !inlist(v2map,1,2,3,4,6,7,8,998,999)
+  0
+
+.     di "  (should be 0; note 5=Multi-day is intentionally never produced from v2)"
+  (should be 0; note 5=Multi-day is intentionally never produced from v2)
+
+. restore
+
+. log close
+      name:  <unnamed>
+       log:  /Users/owner/Library/CloudStorage/Dropbox/Labor Discipline/07. Data/3. Main Study 3.0/ld_replication/data/temp/../../code/analysis/luisa/diag_verif
+> y_recode.log
+  log type:  text
+ closed on:  30 May 2026, 16:38:55
+----------------------------------------------------------------------------------------------------------------------------------------------------------------

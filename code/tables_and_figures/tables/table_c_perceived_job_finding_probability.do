@@ -1,19 +1,8 @@
 clear all
 set more off
 
-if "$data" == "" {
-	global data "`c(pwd)'/data"
-}
-if "$data_final" == "" {
-	global data_final "${data}/final"
-}
-if "$data_temp" == "" {
-	global data_temp "${data}/temp"
-}
-if "$output" == "" {
-	global output "${data}/output"
-}
-local time_use_makepanel "$data_temp/03-time-use-makepanel.dta"
+// Using OLD data fuild for this since new one is missing the phase variable 
+local time_use_makepanel "$temp/03-time-use-makepanel.dta"
 
 local outdir "$output/tables"
 capture mkdir "$output"

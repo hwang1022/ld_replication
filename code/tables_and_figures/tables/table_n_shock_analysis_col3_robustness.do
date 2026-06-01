@@ -5,25 +5,13 @@
 clear all
 set more off
 
-if "$data" == "" {
-	global data "`c(pwd)'/data"
-}
-if "$data_final" == "" {
-	global data_final "${data}/final"
-}
-if "$data_temp" == "" {
-	global data_temp "${data}/temp"
-}
-if "$output" == "" {
-	global output "${data}/output"
-}
-local shocks_original_25 "$data_temp/shocks_dataset_originaldata_25.dta"
-local shocks_altspec "$data_temp/shocks_dataset_originaldata_25_altspec.dta"
-local shocks_original_20 "$data_temp/shocks_dataset_originaldata_20.dta"
-local shocks_original_30 "$data_temp/shocks_dataset_originaldata_30.dta"
-local shocks_baseline_25 "$data_temp/shocks_dataset_originaldata_25_baseline.dta"
-local shocks_rolling_4 "$data_temp/shocks_dataset_originaldata_rolling_4.dta"
-local shocks_rolling_7 "$data_temp/shocks_dataset_originaldata_rolling_7.dta"
+local shocks_original_25 "$temp/shocks_dataset_originaldata_25.dta"
+local shocks_altspec "$temp/shocks_dataset_originaldata_25_altspec.dta"
+local shocks_original_20 "$temp/shocks_dataset_originaldata_20.dta"
+local shocks_original_30 "$temp/shocks_dataset_originaldata_30.dta"
+local shocks_baseline_25 "$temp/shocks_dataset_originaldata_25_baseline.dta"
+local shocks_rolling_4 "$temp/shocks_dataset_originaldata_rolling_4.dta"
+local shocks_rolling_7 "$temp/shocks_dataset_originaldata_rolling_7.dta"
 
 local outdir "$output/tables"
 local verified_tex "`outdir'/shocks_analysis_col_3_robustness_originaldata.tex"

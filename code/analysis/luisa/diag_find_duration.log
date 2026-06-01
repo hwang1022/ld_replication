@@ -1,0 +1,441 @@
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/owner/Library/CloudStorage/Dropbox/Labor Discipline/07. Data/3. Main Study 3.0/ld_replication/data/temp/../../code/analysis/luisa/diag_find_
+> duration.log
+  log type:  text
+ opened on:  30 May 2026, 15:00:42
+
+. 
+. * keyword patterns in NAME or LABEL that would signal a duration/length/sequence/start
+. local kw "durat length howlong long days dias day spell multiday multi_day multi day_ ndays numday weeks week month start begin since until end finish consecu
+> t sequence seq period span tenure how_many howmany lasted last_"
+
+. 
+. foreach f in 03_phase1_completed_cleaned 03_phase2_completed_cleaned 05_phase1_phase2_makepanel {
+  2.     di "============================================================"
+  3.     di "FILE: `f'.dta"
+  4.     di "============================================================"
+  5.     use "$temp/`f'.dta", clear
+  6.     di "  (n vars = " c(k) ")"
+  7.     foreach v of varlist _all {
+  8.         local lab : variable label `v'
+  9.         local lname = lower("`v'")
+ 10.         local llab  = lower("`lab'")
+ 11.         foreach k of local kw {
+ 12.             if strpos("`lname'","`k'") | strpos("`llab'","`k'") {
+ 13.                 di "  `v'  |  `lab'"
+ 14.                 continue, break
+ 15.             }
+ 16.         }
+ 17.     }
+ 18. }
+============================================================
+FILE: 03_phase1_completed_cleaned.dta
+============================================================
+  (n vars = 409)
+  batch  |  P1_1. Which batch does the PID belong to?
+  d_firstday  |  
+  today  |  
+  recall_days_cp  |  
+  recall_days_st  |  
+  recall_days_mp  |  
+  recall_days_mpc  |  
+  recall_days  |  
+  recall_days_ind  |  
+  d_sttime  |  Interview Start Time
+  d_sttime_text  |  Interview Start Time- Check
+  d_paid_filt_1  |  d1_A. How much did you earn  days ago?
+  d_notpaid_amt_due_1  |  d1_A. How much did you earn  days ago?
+  d_attend_1  |  d2. Did you come to this labor stand  days ago?
+  d_why_attend_1  |  Reason attending stand
+  d_why_attend_others_1  |  Reason attending stand - Others
+  d_howfound_notattend_1  |  How they found work wothout attendning the stand
+  d_howfound_notattend_others_1  |  How they found work wothout attendning the stand - Others
+  d_firsttime_emp_1  |  First time employer in the week
+  d_why_notattend_1  |  If tried, why they did not attend stand
+  d_why_notattend_others_1  |  If tried, why they did not attend stand - Others
+  d_spend_day_1  |  How do they spend the rest of the day
+  d_spend_day_others_1  |  How do they spend the rest of the day - Others
+  d_paid_filt_2  |  d1_A. How much did you earn  days ago?
+  d_notpaid_amt_due_2  |  d1_A. How much did you earn  days ago?
+  d_attend_2  |  
+  d_why_attend_2  |  Reason attending stand
+  d_why_attend_others_2  |  Reason attending stand - Others
+  d_howfound_notattend_2  |  How they found work wothout attendning the stand
+  d_howfound_notattend_others_2  |  How they found work wothout attendning the stand - Others
+  d_firsttime_emp_2  |  First time employer in the week
+  d_why_notattend_2  |  If tried, why they did not attend stand
+  d_why_notattend_others_2  |  If tried, why they did not attend stand - Others
+  d_spend_day_2  |  How do they spend the rest of the day
+  d_spend_day_others_2  |  How do they spend the rest of the day - Others
+  d_paid_filt_3  |  d1_A. How much did you earn  days ago?
+  d_notpaid_amt_due_3  |  d1_A. How much did you earn  days ago?
+  d_attend_3  |  
+  d_why_attend_3  |  Reason attending stand
+  d_why_attend_others_3  |  Reason attending stand - Others
+  d_howfound_notattend_3  |  How they found work wothout attendning the stand
+  d_howfound_notattend_others_3  |  How they found work wothout attendning the stand - Others
+  d_firsttime_emp_3  |  First time employer in the week
+  d_why_notattend_3  |  If tried, why they did not attend stand
+  d_why_notattend_others_3  |  If tried, why they did not attend stand - Others
+  d_spend_day_3  |  How do they spend the rest of the day
+  d_spend_day_others_3  |  How do they spend the rest of the day - Others
+  d_paid_filt_4  |  d1_A. How much did you earn  days ago?
+  d_notpaid_amt_due_4  |  d1_A. How much did you earn  days ago?
+  d_attend_4  |  
+  d_why_attend_4  |  Reason attending stand
+  d_why_attend_others_4  |  Reason attending stand - Others
+  d_howfound_notattend_4  |  How they found work wothout attendning the stand
+  d_howfound_notattend_others_4  |  How they found work wothout attendning the stand - Others
+  d_firsttime_emp_4  |  First time employer in the week
+  d_why_notattend_4  |  If tried, why they did not attend stand
+  d_why_notattend_others_4  |  If tried, why they did not attend stand - Others
+  d_spend_day_4  |  How do they spend the rest of the day
+  d_spend_day_others_4  |  How do they spend the rest of the day - Others
+  d_paid_filt_5  |  d1_A. How much did you earn  days ago?
+  d_notpaid_amt_due_5  |  d1_A. How much did you earn  days ago?
+  d_attend_5  |  
+  d_why_attend_5  |  Reason attending stand
+  d_why_attend_others_5  |  Reason attending stand - Others
+  d_howfound_notattend_5  |  How they found work wothout attendning the stand
+  d_howfound_notattend_others_5  |  How they found work wothout attendning the stand - Others
+  d_firsttime_emp_5  |  First time employer in the week
+  d_why_notattend_5  |  If tried, why they did not attend stand
+  d_why_notattend_others_5  |  If tried, why they did not attend stand - Others
+  d_spend_day_5  |  How do they spend the rest of the day
+  d_spend_day_others_5  |  How do they spend the rest of the day - Others
+  d_paid_filt_6  |  d1_A. How much did you earn  days ago?
+  d_notpaid_amt_due_6  |  d1_A. How much did you earn  days ago?
+  d_attend_6  |  
+  d_why_attend_6  |  Reason attending stand
+  d_why_attend_others_6  |  Reason attending stand - Others
+  d_howfound_notattend_6  |  How they found work wothout attendning the stand
+  d_howfound_notattend_others_6  |  How they found work wothout attendning the stand - Others
+  d_firsttime_emp_6  |  First time employer in the week
+  d_why_notattend_6  |  If tried, why they did not attend stand
+  d_why_notattend_others_6  |  If tried, why they did not attend stand - Others
+  d_spend_day_6  |  How do they spend the rest of the day
+  d_spend_day_others_6  |  How do they spend the rest of the day - Others
+  d_paid_filt_7  |  d1_A. How much did you earn  days ago?
+  d_notpaid_amt_due_7  |  d1_A. How much did you earn  days ago?
+  d_attend_7  |  
+  d_why_attend_7  |  Reason attending stand
+  d_why_attend_others_7  |  Reason attending stand - Others
+  d_howfound_notattend_7  |  How they found work wothout attendning the stand
+  d_howfound_notattend_others_7  |  How they found work wothout attendning the stand - Others
+  d_firsttime_emp_7  |  First time employer in the week
+  d_why_notattend_7  |  If tried, why they did not attend stand
+  d_why_notattend_others_7  |  If tried, why they did not attend stand - Others
+  d_spend_day_7  |  How do they spend the rest of the day
+  d_spend_day_others_7  |  How do they spend the rest of the day - Others
+  d14  |  d14. Can you tell me average number of days you attended since  ?
+  d_comp_worked  |  Average number of days worked
+  d_comp_reason_friends  |  
+  d_comp_reason_longterm_job  |  
+  d_endtime  |  Interview End Time
+  starttime  |  
+  endtime  |  
+  d_main_activity_1  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_hh_chores_1  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_home_rest_1  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_self_employed_1  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_work_1  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_sick_1  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_planned_event_1  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_emergency_1  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_travel_1  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_family_time_1  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_friends_time_1  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_998_1  |  d1. What was the main activity you engaged in  days ago?
+  d_main_activity_2  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_hh_chores_2  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_home_rest_2  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_self_employed_2  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_work_2  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_sick_2  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_planned_event_2  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_emergency_2  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_travel_2  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_family_time_2  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_friends_time_2  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_998_2  |  d1. What was the main activity you engaged in  days ago?
+  d_main_activity_3  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_hh_chores_3  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_home_rest_3  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_self_employed_3  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_work_3  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_sick_3  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_planned_event_3  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_emergency_3  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_travel_3  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_family_time_3  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_friends_time_3  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_998_3  |  d1. What was the main activity you engaged in  days ago?
+  d_main_activity_4  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_hh_chores_4  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_home_rest_4  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_self_employed_4  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_work_4  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_sick_4  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_planned_event_4  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_emergency_4  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_travel_4  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_family_time_4  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_friends_time_4  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_998_4  |  d1. What was the main activity you engaged in  days ago?
+  d_main_activity_5  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_hh_chores_5  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_home_rest_5  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_self_employed_5  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_work_5  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_sick_5  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_planned_event_5  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_emergency_5  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_travel_5  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_family_time_5  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_friends_time_5  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_998_5  |  d1. What was the main activity you engaged in  days ago?
+  d_main_activity_6  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_hh_chores_6  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_home_rest_6  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_self_employed_6  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_work_6  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_sick_6  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_planned_event_6  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_emergency_6  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_travel_6  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_family_time_6  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_friends_time_6  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_998_6  |  d1. What was the main activity you engaged in  days ago?
+  d_main_activity_7  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_hh_chores_7  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_home_rest_7  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_self_employed_7  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_work_7  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_sick_7  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_planned_event_7  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_emergency_7  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_travel_7  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_family_time_7  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_friends_time_7  |  d1. What was the main activity you engaged in  days ago?
+  d_main_act_998_7  |  d1. What was the main activity you engaged in  days ago?
+  d_comp_where_v2  |  d18. Finally, we would like to know where you spend the time since ${recent_dat
+============================================================
+FILE: 03_phase2_completed_cleaned.dta
+============================================================
+  (n vars = 458)
+  batch  |  P1_1. Which batch does the PID belong to?
+  f_firstday  |  
+  today  |  
+  recall_days_cp  |  
+  recall_days_st  |  
+  recall_days_mp  |  
+  recall_days_mpc  |  
+  recall_days  |  
+  recall_days_ind  |  
+  f_sttime  |  Interview Start Time
+  f_sttime_text  |  Interview Start Time- Check
+  f_attend_1  |  f2. Did you come to this labor stand  days ago?
+  f_why_attend_1  |  Reason attending stand
+  f_why_attend_others_1  |  Reason attending stand - Others
+  f_howfound_notattend_1  |  How they found work wothout attendning the stand
+  f_howfound_notattend_others_1  |  How they found work wothout attendning the stand - Others
+  f_firsttime_emp_1  |  First time employer in the week
+  f_why_notattend_1  |  If tried, why they did not attend stand
+  f_why_notattend_others_1  |  If tried, why they did not attend stand - Others
+  f_spend_day_1  |  How do they spend the rest of the day
+  f_spend_day_others_1  |  How do they spend the rest of the day - Others
+  f_attend_2  |  
+  f_why_attend_2  |  Reason attending stand
+  f_why_attend_others_2  |  Reason attending stand - Others
+  f_howfound_notattend_2  |  How they found work wothout attendning the stand
+  f_howfound_notattend_others_2  |  How they found work wothout attendning the stand - Others
+  f_firsttime_emp_2  |  First time employer in the week
+  f_why_notattend_2  |  If tried, why they did not attend stand
+  f_why_notattend_others_2  |  If tried, why they did not attend stand - Others
+  f_spend_day_2  |  How do they spend the rest of the day
+  f_spend_day_others_2  |  How do they spend the rest of the day - Others
+  f_attend_3  |  
+  f_why_attend_3  |  Reason attending stand
+  f_why_attend_others_3  |  Reason attending stand - Others
+  f_howfound_notattend_3  |  How they found work wothout attendning the stand
+  f_howfound_notattend_others_3  |  How they found work wothout attendning the stand - Others
+  f_firsttime_emp_3  |  First time employer in the week
+  f_why_notattend_3  |  If tried, why they did not attend stand
+  f_why_notattend_others_3  |  If tried, why they did not attend stand - Others
+  f_spend_day_3  |  How do they spend the rest of the day
+  f_spend_day_others_3  |  How do they spend the rest of the day - Others
+  f_attend_4  |  
+  f_why_attend_4  |  Reason attending stand
+  f_why_attend_others_4  |  Reason attending stand - Others
+  f_howfound_notattend_4  |  How they found work wothout attendning the stand
+  f_howfound_notattend_others_4  |  How they found work wothout attendning the stand - Others
+  f_firsttime_emp_4  |  First time employer in the week
+  f_why_notattend_4  |  If tried, why they did not attend stand
+  f_why_notattend_others_4  |  If tried, why they did not attend stand - Others
+  f_spend_day_4  |  How do they spend the rest of the day
+  f_spend_day_others_4  |  How do they spend the rest of the day - Others
+  f_attend_5  |  
+  f_why_attend_5  |  Reason attending stand
+  f_why_attend_others_5  |  Reason attending stand - Others
+  f_howfound_notattend_5  |  How they found work wothout attendning the stand
+  f_howfound_notattend_others_5  |  How they found work wothout attendning the stand - Others
+  f_firsttime_emp_5  |  First time employer in the week
+  f_why_notattend_5  |  If tried, why they did not attend stand
+  f_why_notattend_others_5  |  If tried, why they did not attend stand - Others
+  f_spend_day_5  |  How do they spend the rest of the day
+  f_spend_day_others_5  |  How do they spend the rest of the day - Others
+  f_attend_6  |  
+  f_why_attend_6  |  Reason attending stand
+  f_why_attend_others_6  |  Reason attending stand - Others
+  f_howfound_notattend_6  |  How they found work wothout attendning the stand
+  f_howfound_notattend_others_6  |  How they found work wothout attendning the stand - Others
+  f_firsttime_emp_6  |  First time employer in the week
+  f_why_notattend_6  |  If tried, why they did not attend stand
+  f_why_notattend_others_6  |  If tried, why they did not attend stand - Others
+  f_spend_day_6  |  How do they spend the rest of the day
+  f_spend_day_others_6  |  How do they spend the rest of the day - Others
+  f_attend_7  |  
+  f_why_attend_7  |  Reason attending stand
+  f_why_attend_others_7  |  Reason attending stand - Others
+  f_howfound_notattend_7  |  How they found work wothout attendning the stand
+  f_howfound_notattend_others_7  |  How they found work wothout attendning the stand - Others
+  f_firsttime_emp_7  |  First time employer in the week
+  f_why_notattend_7  |  If tried, why they did not attend stand
+  f_why_notattend_others_7  |  If tried, why they did not attend stand - Others
+  f_spend_day_7  |  How do they spend the rest of the day
+  f_spend_day_others_7  |  How do they spend the rest of the day - Others
+  f_comp_worked  |  Average number of days worked
+  f_comp_reason_friends  |  
+  f_comp_reason_longterm_job  |  
+  f_endtime  |  Interview End Time
+  starttime  |  
+  endtime  |  
+  f_main_activity_1  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_hh_chores_1  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_home_rest_1  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_self_employed_1  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_work_1  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_sick_1  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_planned_event_1  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_emergency_1  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_travel_1  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_family_time_1  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_friends_time1  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_998_1  |  f1. What was the main activity you engaged in  days ago?
+  f_why_notattend_v2_1  |  Not attend reason
+  f_main_activity_2  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_hh_chores_2  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_home_rest_2  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_self_employed_2  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_work_2  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_sick_2  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_planned_event_2  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_emergency_2  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_travel_2  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_family_time_2  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_friends_time2  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_998_2  |  f1. What was the main activity you engaged in  days ago?
+  f_why_notattend_v2_2  |  Not attend reason
+  f_main_activity_3  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_hh_chores_3  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_home_rest_3  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_self_employed_3  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_work_3  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_sick_3  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_planned_event_3  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_emergency_3  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_travel_3  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_family_time_3  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_friends_time3  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_998_3  |  f1. What was the main activity you engaged in  days ago?
+  f_why_notattend_v2_3  |  Not attend reason
+  f_main_activity_4  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_hh_chores_4  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_home_rest_4  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_self_employed_4  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_work_4  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_sick_4  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_planned_event_4  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_emergency_4  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_travel_4  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_family_time_4  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_friends_time4  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_998_4  |  f1. What was the main activity you engaged in  days ago?
+  f_why_notattend_v2_4  |  Not attend reason
+  f_main_activity_5  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_hh_chores_5  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_home_rest_5  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_self_employed_5  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_work_5  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_sick_5  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_planned_event_5  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_emergency_5  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_travel_5  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_family_time_5  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_friends_time5  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_998_5  |  f1. What was the main activity you engaged in  days ago?
+  f_why_notattend_v2_5  |  Not attend reason
+  f_main_activity_6  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_hh_chores_6  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_home_rest_6  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_self_employed_6  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_work_6  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_sick_6  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_planned_event_6  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_emergency_6  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_travel_6  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_family_time_6  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_friends_time6  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_998_6  |  f1. What was the main activity you engaged in  days ago?
+  f_why_notattend_v2_6  |  Not attend reason
+  f_main_activity_7  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_hh_chores_7  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_home_rest_7  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_self_employed_7  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_work_7  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_sick_7  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_planned_event_7  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_emergency_7  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_travel_7  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_family_time_7  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_friends_time7  |  f1. What was the main activity you engaged in  days ago?
+  f_main_act_998_7  |  f1. What was the main activity you engaged in  days ago?
+  f_why_notattend_v2_7  |  Not attend reason
+  f_comp_where_v2  |  f18. Finally, we would like to know where you spend the time since ${recent_dat
+  f_multiday_job_1  |  rf4_1. Was this is a multi-day job?
+  f_multiday_job_2  |  rf4_1. Was this is a multi-day job?
+  f_multiday_job_3  |  rf4_1. Was this is a multi-day job?
+  f_multiday_job_4  |  rf4_1. Was this is a multi-day job?
+  f_multiday_job_5  |  rf4_1. Was this is a multi-day job?
+  f_multiday_job_6  |  rf4_1. Was this is a multi-day job?
+  f_multiday_job_7  |  rf4_1. Was this is a multi-day job?
+  f_multidayjob_notattend_1  |  rf4_1. Was this is a multi-day job?
+  f_multidayjob_notattend_2  |  rf4_1. Was this is a multi-day job?
+  f_multidayjob_notattend_3  |  rf4_1. Was this is a multi-day job?
+  f_multidayjob_notattend_4  |  rf4_1. Was this is a multi-day job?
+  f_multidayjob_notattend_5  |  rf4_1. Was this is a multi-day job?
+  f_multidayjob_notattend_6  |  rf4_1. Was this is a multi-day job?
+  f_multidayjob_notattend_7  |  rf4_1. Was this is a multi-day job?
+============================================================
+FILE: 05_phase1_phase2_makepanel.dta
+============================================================
+  (n vars = 38)
+  attend  |  
+  attend_sr  |  
+  howfound_notattend  |  
+  main_act_friends_time  |  
+  multiday_job  |  
+  multiday_job_cond  |  
+  daily_recall_lag  |  Lag (1-7) from daily-grid survey that filled this day (first-fill-wins, updated 
+  comp_recall_mode  |  Mode of the comprehensive recall that filled this day (1=in-person, 2=phone)
+  comp_recall_lag  |  Lag in days from comprehensive-recall survey that covered this day
+  recall_lag_any  |  Days between this day and the survey that filled its work value (daily grid: 1-7
+
+. log close
+      name:  <unnamed>
+       log:  /Users/owner/Library/CloudStorage/Dropbox/Labor Discipline/07. Data/3. Main Study 3.0/ld_replication/data/temp/../../code/analysis/luisa/diag_find_
+> duration.log
+  log type:  text
+ closed on:  30 May 2026, 15:00:42
+----------------------------------------------------------------------------------------------------------------------------------------------------------------

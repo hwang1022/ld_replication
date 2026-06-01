@@ -1,0 +1,170 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/owner/Library/CloudStorage/Dropbox/Labor Discipline/07. Dat
+> a/3. Main Study 3.0/ld_replication/data/temp/../../code/analysis/luisa/diag_v
+> erify_multiday.log
+  log type:  text
+ opened on:  30 May 2026, 14:03:19
+
+. 
+. *=== A. In the RAW phase-2 file, do v1 & v2 howfound + the explicit multiday 
+> Q coexist? ===
+. use "$temp/03_phase2_completed_cleaned.dta", clear
+
+. di "==== phase2: variables for howfound / multiday ===="
+==== phase2: variables for howfound / multiday ====
+
+. foreach p in *howfound* *multiday* {
+  2.     cap ds `p'
+  3. }
+
+. 
+. * explicit multiday yes/no question name + label
+. di "==== label on f_multiday_job_1 (explicit Q) ===="
+==== label on f_multiday_job_1 (explicit Q) ====
+
+. cap local Lm : value label f_multiday_job_1
+
+. di "f_multiday_job_1 value label = `Lm'"
+f_multiday_job_1 value label = rf4_1_1
+
+. cap label list `Lm'
+
+. 
+. * For grid slot 1: when howfound came from v2 (f_howfound missing, f_howfound
+> _v2 present),
+. * is the explicit multiday question answered? and what is it when v2 howfound
+> ==5?
+. di "==== slot1: is explicit multiday Q present on v2-sourced rows? ===="
+==== slot1: is explicit multiday Q present on v2-sourced rows? ====
+
+. gen byte v2src_1 = mi(f_howfound_1) & !mi(f_howfound_v2_1)
+
+. tab v2src_1, missing
+
+    v2src_1 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      6,520       91.52       91.52
+          1 |        604        8.48      100.00
+------------+-----------------------------------
+      Total |      7,124      100.00
+
+. di "  among v2-sourced slot-1 rows, explicit multiday Q (missing?) :"
+  among v2-sourced slot-1 rows, explicit multiday Q (missing?) :
+
+. tab f_multiday_job_1 v2src_1, missing
+
+ rf4_1. Was this is a |        v2src_1
+       multi-day job? |         0          1 |     Total
+----------------------+----------------------+----------
+                   No |        52        365 |       417 
+                  Yes |       108        239 |       347 
+                    . |     6,360          0 |     6,360 
+----------------------+----------------------+----------
+                Total |     6,520        604 |     7,124 
+
+. 
+. di "==== slot1: v2 howfound==5 (phone-friend) -> what explicit multiday value
+> ? ===="
+==== slot1: v2 howfound==5 (phone-friend) -> what explicit multiday value? ====
+
+. tab f_multiday_job_1 if f_howfound_v2_1==5, missing
+
+      rf4_1. Was this is a |
+            multi-day job? |      Freq.     Percent        Cum.
+---------------------------+-----------------------------------
+                        No |         14       38.89       38.89
+                       Yes |         22       61.11      100.00
+---------------------------+-----------------------------------
+                     Total |         36      100.00
+
+. 
+. *=== B. Reproduce the combine fallback to COUNT contaminated days ===
+. * Mirror 3_combine logic for howfound + multiday across the 7 grid slots,
+. * tracking provenance (v1 vs v2) so we can flag misclassification.
+. use "$temp/03_phase2_completed_cleaned.dta", clear
+
+. rename f_* d_*
+
+. 
+. local bad_total 0
+
+. local md5_total 0
+
+. forval i = 1/7 {
+  2.     cap confirm variable d_howfound_`i'
+  3.     if _rc continue
+  4.     * provenance: this slot's howfound will be taken from v2 iff v1 missin
+> g & v2 present
+.     gen byte v2src_`i' = mi(d_howfound_`i') & !mi(d_howfound_v2_`i')
+  5.     * combined howfound (mirror line 179)
+.     gen hf_`i' = d_howfound_`i'
+  6.     replace hf_`i' = d_howfound_v2_`i' if mi(hf_`i')
+  7.     * explicit multiday question for this slot (may not exist in v2)
+.     * combined multiday per line 258-260 (notattend not in phase2 grid the sa
+> me way; approximate)
+.     gen byte md_`i' = d_multiday_job_`i'
+  8.     replace md_`i' = (hf_`i'==5) if mi(md_`i') & !mi(hf_`i')
+  9.     * CONTAMINATION: md set to 1 via the ==5 fallback on a v2-sourced row
+.     *   (v2 code 5 = phone-friend, NOT multiday)
+.     gen byte bad_`i' = (md_`i'==1 & v2src_`i'==1 & mi(d_multiday_job_`i') & h
+> f_`i'==5)
+ 10.     qui count if bad_`i'==1
+ 11.     local b = r(N)
+ 12.     qui count if hf_`i'==5 & md_`i'==1
+ 13.     local m = r(N)
+ 14.     di "slot `i': multiday-by-code5 = `m';  of which v2 phone-friend MISFL
+> AGGED = `b'"
+ 15.     local bad_total = `bad_total' + `b'
+ 16.     local md5_total = `md5_total' + `m'
+ 17. }
+(4,389 missing values generated)
+(604 real changes made)
+(6,360 missing values generated)
+(2,735 real changes made)
+slot 1: multiday-by-code5 = 703;  of which v2 phone-friend MISFLAGGED = 0
+(6,206 missing values generated)
+(211 real changes made)
+(6,800 missing values generated)
+(918 real changes made)
+slot 2: multiday-by-code5 = 227;  of which v2 phone-friend MISFLAGGED = 0
+(6,825 missing values generated)
+(108 real changes made)
+(6,932 missing values generated)
+(299 real changes made)
+slot 3: multiday-by-code5 = 85;  of which v2 phone-friend MISFLAGGED = 0
+(7,023 missing values generated)
+(41 real changes made)
+(7,031 missing values generated)
+(101 real changes made)
+slot 4: multiday-by-code5 = 28;  of which v2 phone-friend MISFLAGGED = 0
+(7,071 missing values generated)
+(16 real changes made)
+(7,073 missing values generated)
+(53 real changes made)
+slot 5: multiday-by-code5 = 16;  of which v2 phone-friend MISFLAGGED = 0
+(7,089 missing values generated)
+(8 real changes made)
+(7,090 missing values generated)
+(35 real changes made)
+slot 6: multiday-by-code5 = 11;  of which v2 phone-friend MISFLAGGED = 0
+(7,095 missing values generated)
+(7 real changes made)
+(7,098 missing values generated)
+(29 real changes made)
+slot 7: multiday-by-code5 = 8;  of which v2 phone-friend MISFLAGGED = 0
+
+. di "==== TOTAL across slots: multiday flagged via howfound==5 = `md5_total'; 
+> misflagged v2 phone-friend = `bad_total' ===="
+==== TOTAL across slots: multiday flagged via howfound==5 = 1078; misflagged v2
+>  phone-friend = 0 ====
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/owner/Library/CloudStorage/Dropbox/Labor Discipline/07. Dat
+> a/3. Main Study 3.0/ld_replication/data/temp/../../code/analysis/luisa/diag_v
+> erify_multiday.log
+  log type:  text
+ closed on:  30 May 2026, 14:03:19
+-------------------------------------------------------------------------------

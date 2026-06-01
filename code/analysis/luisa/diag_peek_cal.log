@@ -1,0 +1,54 @@
+
+. clear all
+
+. set more off
+
+. global temp "/Users/owner/Library/CloudStorage/Dropbox/Labor Discipline/07. D
+> ata/3. Main Study 3.0/ld_replication/data/temp"
+
+. use "$temp/05_phase1_phase2_makepanel.dta", clear
+
+. foreach p in *holiday* *sunday* *dow* *weekday* *dayofweek* *reason* *noshow*
+>  *attend* *work* *day_off* {
+  2.     cap ds `p'
+  3. }
+
+. di "---- is panel a full daily calendar per pid? ----"
+---- is panel a full daily calendar per pid? ----
+
+. sort pid date
+
+. by pid: gen gap = date - date[_n-1]
+(225 missing values generated)
+
+. di "gaps > 1 day between consecutive panel rows for a worker:"
+gaps > 1 day between consecutive panel rows for a worker:
+
+. count if gap>1 & !mi(gap)
+  0
+
+. tab gap
+
+        gap |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |     24,156      100.00      100.00
+------------+-----------------------------------
+      Total |     24,156      100.00
+
+. di "---- work variable values ----"
+---- work variable values ----
+
+. tab work, missing
+
+      Work, |
+     random |
+ imputation |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |     10,119       41.50       41.50
+          1 |     11,118       45.60       87.10
+          . |      3,144       12.90      100.00
+------------+-----------------------------------
+      Total |     24,381      100.00
+
+. 
+end of do-file

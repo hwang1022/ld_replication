@@ -8,19 +8,7 @@ version 17
 clear all
 set more off
 
-if "$data" == "" {
-	global data "`c(pwd)'/data"
-}
-if "$data_final" == "" {
-	global data_final "${data}/final"
-}
-if "$data_temp" == "" {
-	global data_temp "${data}/temp"
-}
-if "$output" == "" {
-	global output "${data}/output"
-}
-local phase1_incentive "$data_temp/incentive_record_stand_clean.dta"
+local phase1_incentive "$temp/incentive_record_stand_clean.dta"
 
 local outdir "$output/tables"
 capture mkdir "$output"

@@ -1,0 +1,405 @@
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/owner/Library/CloudStorage/Dropbox/Labor Discipline/07. Data/3. Main Study 3.0/ld_replication/data/temp/../../code/analysis/luisa/diag_relia
+> ble_cut.log
+  log type:  text
+ opened on:  30 May 2026, 15:08:53
+
+. 
+. *--- program: build job_at_stand CORE BLOCK on whatever is in memory ---
+. capture program drop buildjas
+
+. program define buildjas
+  1.     gen byte grid = !mi(daily_recall_lag)
+  2.     gen byte clean_stand = .
+  3.     replace clean_stand = 1 if whenfound==2
+  4.     replace clean_stand = 0 if inlist(whenfound,1,3)
+  5.     replace clean_stand = 0 if mi(clean_stand) & !mi(howfound_notattend) & howfound_notattend!=5
+  6.     replace clean_stand = 1 if mi(clean_stand) & inlist(howfound,6,7,8,9,10,11)
+  7.     replace clean_stand = 0 if mi(clean_stand) & inlist(howfound,1,2,3,4,998)
+  8.     gen byte has_clean = (work==1 & multiday_job==0 & !mi(clean_stand))
+  9.     replace clean_stand = . if !has_clean
+ 10.     gen byte multiday_work = (work==1 & multiday_job==1)
+ 11.     gen byte mwflag = multiday_work if work==1
+ 12.     preserve
+ 13.         keep if work==1
+ 14.         sort pid date
+ 15.         by pid: gen byte lag_mw = mwflag[_n-1]
+ 16.         by pid: gen long spellstart = (mwflag==1 & (lag_mw!=1 | mi(lag_mw)))
+ 17.         by pid: gen long spell_id = sum(spellstart) if mwflag==1
+ 18.         by pid: gen byte prevwork_clean = clean_stand[_n-1]
+ 19.         keep pid date spell_id spellstart prevwork_clean
+ 20.         tempfile sp
+ 21.         save `sp'
+ 22.     restore
+ 23.     merge 1:1 pid date using `sp', nogen
+ 24.     preserve
+ 25.         keep if spellstart==1
+ 26.         keep pid spell_id prevwork_clean
+ 27.         rename prevwork_clean anchor_clean
+ 28.         tempfile an
+ 29.         save `an'
+ 30.     restore
+ 31.     merge m:1 pid spell_id using `an', nogen keep(1 3)
+ 32.     gen byte job_at_stand = clean_stand
+ 33.     replace  job_at_stand = anchor_clean if multiday_work==1 & !mi(anchor_clean)
+ 34.     replace  job_at_stand = . if grid==0
+ 35. end
+
+. 
+. *================================================================*
+. * 0. recall_reliable landscape
+. *================================================================*
+. use "$temp/05_phase1_phase2_makepanel.dta", clear
+
+. sort pid date
+
+. gen byte grid0 = !mi(daily_recall_lag)
+
+. di "==== recall_reliable distribution (all 24,381 rows) ===="
+==== recall_reliable distribution (all 24,381 rows) ====
+
+. tab recall_reliable, missing
+
+1 if recall |
+  data come |
+    from in |
+     person |
+  survey, 2 |
+    if from |
+      phone |
+  survey, . |
+  if no rec |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      2,932       12.03       12.03
+          1 |     17,350       71.16       83.19
+          . |      4,099       16.81      100.00
+------------+-----------------------------------
+      Total |     24,381      100.00
+
+. di "==== recall_reliable x grid (daily-grid day?) ===="
+==== recall_reliable x grid (daily-grid day?) ====
+
+. tab recall_reliable grid0, missing
+
+      1 if |
+    recall |
+ data come |
+   from in |
+    person |
+ survey, 2 |
+   if from |
+     phone |
+ survey, . |         grid0
+ if no rec |         0          1 |     Total
+-----------+----------------------+----------
+         0 |         0      2,932 |     2,932 
+         1 |         0     17,350 |    17,350 
+         . |     3,953        146 |     4,099 
+-----------+----------------------+----------
+     Total |     3,953     20,428 |    24,381 
+
+. di "==== recall_reliable among WORK days ===="
+==== recall_reliable among WORK days ====
+
+. tab recall_reliable if work==1, missing
+
+1 if recall |
+  data come |
+    from in |
+     person |
+  survey, 2 |
+    if from |
+      phone |
+  survey, . |
+  if no rec |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      1,085        9.76        9.76
+          1 |      9,769       87.87       97.63
+          . |        264        2.37      100.00
+------------+-----------------------------------
+      Total |     11,118      100.00
+
+. di "==== recall_reliable x phase (work days) ===="
+==== recall_reliable x phase (work days) ====
+
+. tab recall_reliable phase if work==1, missing
+
+      1 if |
+    recall |
+ data come |
+   from in |
+    person |
+ survey, 2 |
+   if from |
+     phone |
+ survey, . |         phase
+ if no rec |         1          2 |     Total
+-----------+----------------------+----------
+         0 |       463        622 |     1,085 
+         1 |     5,358      4,411 |     9,769 
+         . |       127        137 |       264 
+-----------+----------------------+----------
+     Total |     5,948      5,170 |    11,118 
+
+. 
+. *================================================================*
+. * (I) FULL build, then describe on reliable==1
+. *================================================================*
+. use "$temp/05_phase1_phase2_makepanel.dta", clear
+
+. sort pid date
+
+. buildjas
+(24,381 missing values generated)
+(5,896 real changes made)
+(2,523 real changes made)
+(985 real changes made)
+(1 real change made)
+(0 real changes made)
+(1,865 real changes made, 1,865 to missing)
+(13,263 missing values generated)
+(13,263 observations deleted)
+(219 missing values generated)
+(7,831 missing values generated)
+(3,712 missing values generated)
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St16643.000002 saved as .dta format
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                        13,263
+        from master                    13,263  
+        from using                          0  
+
+    Matched                            11,118  
+    -----------------------------------------
+(23,408 observations deleted)
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St16643.000004 saved as .dta format
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                        21,094
+        from master                    21,094  
+        from using                          0  
+
+    Matched                             3,287  
+    -----------------------------------------
+(16,841 missing values generated)
+(2,916 real changes made)
+(0 real changes made)
+
+. di "==== (I) multiday_job rate among WORK days: FULL vs reliable==1 ===="
+==== (I) multiday_job rate among WORK days: FULL vs reliable==1 ====
+
+. di "  FULL:"
+  FULL:
+
+. tab multiday_job if work==1, missing
+
+multiday_jo |
+          b |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      7,567       68.06       68.06
+          1 |      3,287       29.56       97.63
+          . |        264        2.37      100.00
+------------+-----------------------------------
+      Total |     11,118      100.00
+
+. di "  reliable==1 only:"
+  reliable==1 only:
+
+. tab multiday_job if work==1 & recall_reliable==1, missing
+
+multiday_jo |
+          b |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      7,197       73.67       73.67
+          1 |      2,572       26.33      100.00
+------------+-----------------------------------
+      Total |      9,769      100.00
+
+. di "==== (I) job_at_stand among WORK days: FULL ===="
+==== (I) job_at_stand among WORK days: FULL ====
+
+. tab job_at_stand if work==1, missing
+
+job_at_stan |
+          d |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      3,251       29.24       29.24
+          1 |      7,205       64.80       94.05
+          . |        662        5.95      100.00
+------------+-----------------------------------
+      Total |     11,118      100.00
+
+. di "==== (I) job_at_stand among WORK days: reliable==1 subset ===="
+==== (I) job_at_stand among WORK days: reliable==1 subset ====
+
+. tab job_at_stand if work==1 & recall_reliable==1, missing
+
+job_at_stan |
+          d |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      2,677       27.40       27.40
+          1 |      6,821       69.82       97.23
+          . |        271        2.77      100.00
+------------+-----------------------------------
+      Total |      9,769      100.00
+
+. di "==== (I) job_at_stand among WORK days: reliable==0 (phone) subset ===="
+==== (I) job_at_stand among WORK days: reliable==0 (phone) subset ====
+
+. tab job_at_stand if work==1 & recall_reliable==0, missing
+
+job_at_stan |
+          d |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |        574       52.90       52.90
+          1 |        384       35.39       88.29
+          . |        127       11.71      100.00
+------------+-----------------------------------
+      Total |      1,085      100.00
+
+. 
+. *================================================================*
+. * (II) STRICT: keep only reliable==1 rows, rebuild from scratch
+. *================================================================*
+. use "$temp/05_phase1_phase2_makepanel.dta", clear
+
+. keep if recall_reliable==1
+(7,031 observations deleted)
+
+. sort pid date
+
+. di "==== (II) STRICT subset size ===="
+==== (II) STRICT subset size ====
+
+. count
+  17,350
+
+. di "  work days in subset:"
+  work days in subset:
+
+. count if work==1
+  9,769
+
+. buildjas
+(17,350 missing values generated)
+(5,752 real changes made)
+(2,419 real changes made)
+(762 real changes made)
+(1 real change made)
+(0 real changes made)
+(1,760 real changes made, 1,760 to missing)
+(7,581 missing values generated)
+(7,581 observations deleted)
+(218 missing values generated)
+(7,197 missing values generated)
+(2,736 missing values generated)
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St16643.000002 saved as .dta format
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                         7,581
+        from master                     7,581  
+        from using                          0  
+
+    Matched                             9,769  
+    -----------------------------------------
+(16,486 observations deleted)
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St16643.000004 saved as .dta format
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                        14,778
+        from master                    14,778  
+        from using                          0  
+
+    Matched                             2,572  
+    -----------------------------------------
+(10,176 missing values generated)
+(2,410 real changes made)
+(0 real changes made)
+
+. di "==== (II) STRICT: multiday_job rate among work days ===="
+==== (II) STRICT: multiday_job rate among work days ====
+
+. tab multiday_job if work==1, missing
+
+multiday_jo |
+          b |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      7,197       73.67       73.67
+          1 |      2,572       26.33      100.00
+------------+-----------------------------------
+      Total |      9,769      100.00
+
+. di "==== (II) STRICT: job_at_stand among work days ===="
+==== (II) STRICT: job_at_stand among work days ====
+
+. tab job_at_stand if work==1, missing
+
+job_at_stan |
+          d |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      2,690       27.54       27.54
+          1 |      6,894       70.57       98.11
+          . |        185        1.89      100.00
+------------+-----------------------------------
+      Total |      9,769      100.00
+
+. di "==== (II) STRICT: spells rebuilt from reliable-only (length dist) ===="
+==== (II) STRICT: spells rebuilt from reliable-only (length dist) ====
+
+. preserve
+
+.     keep if spellstart==1
+(16,486 observations deleted)
+
+.     count
+  864
+
+.     bys pid (spell_id): gen x=1
+
+. restore
+
+. di "==== (II) STRICT: how fragmented? mean calendar gap between consecutive kept work days ===="
+==== (II) STRICT: how fragmented? mean calendar gap between consecutive kept work days ====
+
+. preserve
+
+.     keep if work==1
+(7,581 observations deleted)
+
+.     sort pid date
+
+.     by pid: gen long cg = date - date[_n-1]
+(218 missing values generated)
+
+.     tab cg if cg<=10
+
+         cg |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |      6,477       69.34       69.34
+          2 |      1,511       16.18       85.52
+          3 |        552        5.91       91.42
+          4 |        269        2.88       94.30
+          5 |        172        1.84       96.15
+          6 |        143        1.53       97.68
+          7 |         82        0.88       98.55
+          8 |         60        0.64       99.20
+          9 |         31        0.33       99.53
+         10 |         44        0.47      100.00
+------------+-----------------------------------
+      Total |      9,341      100.00
+
+. restore
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/owner/Library/CloudStorage/Dropbox/Labor Discipline/07. Data/3. Main Study 3.0/ld_replication/data/temp/../../code/analysis/luisa/diag_relia
+> ble_cut.log
+  log type:  text
+ closed on:  30 May 2026, 15:08:53
+----------------------------------------------------------------------------------------------------------------------------------------------------------------

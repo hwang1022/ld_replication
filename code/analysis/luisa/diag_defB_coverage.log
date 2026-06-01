@@ -1,0 +1,269 @@
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/owner/Library/CloudStorage/Dropbox/Labor Discipline/07. Data/3. Main Study 3.0/ld_replication/data/temp/../../code/analysis/luisa/diag_defB_
+> coverage.log
+  log type:  text
+ opened on:  30 May 2026, 14:16:50
+
+. 
+. use "$temp/05_phase1_phase2_makepanel.dta", clear
+
+. sort pid date
+
+. gen byte grid = !mi(daily_recall_lag)
+
+. 
+. * clean_stand (same as build)
+. gen byte clean_stand = .
+(24,381 missing values generated)
+
+. replace clean_stand = 1 if whenfound==2
+(5,896 real changes made)
+
+. replace clean_stand = 0 if inlist(whenfound,1,3)
+(2,523 real changes made)
+
+. replace clean_stand = 0 if mi(clean_stand) & !mi(howfound_notattend) & howfound_notattend!=5
+(985 real changes made)
+
+. replace clean_stand = 1 if mi(clean_stand) & inlist(howfound,6,7,8,9,10,11)
+(1 real change made)
+
+. replace clean_stand = 0 if mi(clean_stand) & inlist(howfound,1,2,3,4,998)
+(0 real changes made)
+
+. gen byte has_clean = (work==1 & multiday_job==0 & !mi(clean_stand))
+
+. replace clean_stand = . if !has_clean
+(1,865 real changes made, 1,865 to missing)
+
+. 
+. gen byte multiday_work = (work==1 & multiday_job==1)
+
+. 
+. * ---- A blocks (skip non-work) over WORK days ----
+. gen byte mwflag = multiday_work if work==1
+(13,263 missing values generated)
+
+. preserve
+
+.     keep if work==1
+(13,263 observations deleted)
+
+.     sort pid date
+
+.     by pid: gen byte lag_mw     = mwflag[_n-1]
+(219 missing values generated)
+
+.     by pid: gen long Astart     = (mwflag==1 & (lag_mw!=1 | mi(lag_mw)))
+
+.     by pid: gen long Ablock     = sum(Astart) if mwflag==1
+(7,831 missing values generated)
+
+.     by pid: gen byte prevwork_clean = clean_stand[_n-1]
+(3,712 missing values generated)
+
+.     keep pid date Ablock Astart prevwork_clean
+
+.     tempfile A
+
+.     save `A'
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St16221.000002 saved as .dta format
+
+. restore
+
+. merge 1:1 pid date using `A', nogen
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                        13,263
+        from master                    13,263  
+        from using                          0  
+
+    Matched                            11,118  
+    -----------------------------------------
+
+. 
+. * anchor for each A block (propagated source = B2 and current A)
+. preserve
+
+.     keep if Astart==1
+(23,408 observations deleted)
+
+.     keep pid Ablock prevwork_clean
+
+.     rename prevwork_clean Aanchor
+
+.     tempfile aa
+
+.     save `aa'
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St16221.000004 saved as .dta format
+
+. restore
+
+. merge m:1 pid Ablock using `aa', nogen keep(1 3)
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                        21,094
+        from master                    21,094  
+        from using                          0  
+
+    Matched                             3,287  
+    -----------------------------------------
+
+. 
+. * ---- B segments (split on non-work) over full calendar ----
+. sort pid date
+
+. by pid: gen byte lagB    = multiday_work[_n-1]
+(225 missing values generated)
+
+. by pid: gen long Bstart  = (multiday_work==1 & (lagB!=1 | mi(lagB)))
+
+. by pid: gen long Bseg    = sum(Bstart) if multiday_work==1
+(21,094 missing values generated)
+
+. 
+. * B1 anchor: each B segment's immediately-preceding WORK day clean source
+. preserve
+
+.     keep if work==1
+(13,263 observations deleted)
+
+.     sort pid date
+
+.     by pid: gen byte prevwork_clean2 = clean_stand[_n-1]
+(3,712 missing values generated)
+
+.     keep pid date prevwork_clean2
+
+.     tempfile pw
+
+.     save `pw'
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St16221.000006 saved as .dta format
+
+. restore
+
+. merge 1:1 pid date using `pw', nogen
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                        13,263
+        from master                    13,263  
+        from using                          0  
+
+    Matched                            11,118  
+    -----------------------------------------
+
+. preserve
+
+.     keep if Bstart==1
+(23,108 observations deleted)
+
+.     keep pid Bseg prevwork_clean2
+
+.     rename prevwork_clean2 Banchor
+
+.     tempfile bb
+
+.     save `bb'
+file /var/folders/6w/hqkd55sn3zg2h9v70d533xj40000gn/T//St16221.000008 saved as .dta format
+
+. restore
+
+. merge m:1 pid Bseg using `bb', nogen keep(1 3)
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                        21,094
+        from master                    21,094  
+        from using                          0  
+
+    Matched                             3,287  
+    -----------------------------------------
+
+. 
+. * ---- Build the three job_at_stand variants ----
+. * A (current)
+. gen byte jas_A = clean_stand
+(16,841 missing values generated)
+
+. replace  jas_A = Aanchor if multiday_work==1 & !mi(Aanchor)
+(2,916 real changes made)
+
+. replace  jas_A = . if grid==0
+(0 real changes made)
+
+. * B1 (re-anchor each segment)
+. gen byte jas_B1 = clean_stand
+(16,841 missing values generated)
+
+. replace  jas_B1 = Banchor if multiday_work==1 & !mi(Banchor)
+(2,112 real changes made)
+
+. replace  jas_B1 = . if grid==0
+(0 real changes made)
+
+. * B2 (split for counting, propagate original A-block source)
+. gen byte jas_B2 = clean_stand
+(16,841 missing values generated)
+
+. replace  jas_B2 = Aanchor if multiday_work==1 & !mi(Aanchor)
+(2,916 real changes made)
+
+. replace  jas_B2 = . if grid==0
+(0 real changes made)
+
+. 
+. di "==== COVERAGE among all WORK days (n=11,118) ===="
+==== COVERAGE among all WORK days (n=11,118) ====
+
+. foreach v in jas_A jas_B1 jas_B2 {
+  2.     qui count if work==1 & !mi(`v')
+  3.     local lab = r(N)
+  4.     qui count if work==1
+  5.     local tot = r(N)
+  6.     di "  `v': labeled = `lab' / `tot'  (" %5.1f 100*`lab'/`tot' "%)"
+  7. }
+  jas_A: labeled = 10456 / 11118  ( 94.0%)
+  jas_B1: labeled = 9652 / 11118  ( 86.8%)
+  jas_B2: labeled = 10456 / 11118  ( 94.0%)
+
+. di "==== COVERAGE among MULTIDAY work days only (n=3,287) ===="
+==== COVERAGE among MULTIDAY work days only (n=3,287) ====
+
+. foreach v in jas_A jas_B1 jas_B2 {
+  2.     qui count if multiday_work==1 & !mi(`v')
+  3.     local lab = r(N)
+  4.     qui count if multiday_work==1
+  5.     local tot = r(N)
+  6.     di "  `v': labeled = `lab' / `tot'  (" %5.1f 100*`lab'/`tot' "%)"
+  7. }
+  jas_A: labeled = 2916 / 3287  ( 88.7%)
+  jas_B1: labeled = 2112 / 3287  ( 64.3%)
+  jas_B2: labeled = 2916 / 3287  ( 88.7%)
+
+. di "==== Multiday days LEFT UNLABELED specifically by re-anchoring (in A, lost in B1) ===="
+==== Multiday days LEFT UNLABELED specifically by re-anchoring (in A, lost in B1) ====
+
+. count if multiday_work==1 & !mi(jas_A) & mi(jas_B1)
+  804
+
+. di "==== Do A and B1/B2 ever DISAGREE on the label (flip rate)? ===="
+==== Do A and B1/B2 ever DISAGREE on the label (flip rate)? ====
+
+. count if multiday_work==1 & !mi(jas_A) & !mi(jas_B1) & jas_A!=jas_B1
+  0
+
+. count if multiday_work==1 & !mi(jas_A) & !mi(jas_B2) & jas_A!=jas_B2
+  0
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/owner/Library/CloudStorage/Dropbox/Labor Discipline/07. Data/3. Main Study 3.0/ld_replication/data/temp/../../code/analysis/luisa/diag_defB_
+> coverage.log
+  log type:  text
+ closed on:  30 May 2026, 14:16:50
+----------------------------------------------------------------------------------------------------------------------------------------------------------------

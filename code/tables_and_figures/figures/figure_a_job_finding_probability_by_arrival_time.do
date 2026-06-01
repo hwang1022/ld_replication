@@ -1,21 +1,9 @@
-if "$data" == "" {
-	global data "`c(pwd)'/data"
-}
-if "$data_final" == "" {
-	global data_final "${data}/final"
-}
-if "$data_temp" == "" {
-	global data_temp "${data}/temp"
-}
-if "$output" == "" {
-	global output "${data}/output"
-}
-local analysis_main "$data_final/analysis_main.dta"
+local final_data_w_shocks "$final/final_data_w_shocks.dta"
 
 cap mkdir "$output"
 cap mkdir "$output/figures"
 
-use "`analysis_main'", clear
+use "`final_data_w_shocks'", clear
 cap gen arrival_time_hours_30 = .
 forvalues i = 6/10 {
 	replace arrival_time_hours_30 = `i' if arrival_time_hours < `i'.5 & arrival_time_hours_30 == . & phase == 0

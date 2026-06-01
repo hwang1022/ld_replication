@@ -62,7 +62,7 @@
 		*/
 	* Added 2024-04-11 - keep the first survey done with these duplicate PIDs 
 	bys pid: gen temp = _n==1
-	br if pid==1344 | pid==1553 | pid==1704 | pid==1776 | pid==1828 | pid==2111
+	* br if pid==1344 | pid==1553 | pid==1704 | pid==1776 | pid==1828 | pid==2111
 	* check that the later survey is being dropped in all cases
 	drop if temp == 0
 	tempfile temp

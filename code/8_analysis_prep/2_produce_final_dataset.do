@@ -148,6 +148,8 @@
 **# Calendar Events
 *********************
 
+	* Old code, Not used as of May 28 2026
+	/*
 	preserve
 		use "$external/calevents_clean.dta", clear
 
@@ -178,10 +180,34 @@
 		save `cal_events' , replace
 
 	restore
+	*/
 
-	merge m:1 date using `cal_events', keep(1 3) nogen
+	merge m:1 date using "$final/calevents_clean.dta", keep(1 3) nogen
 
 
+*************
+**# Weather
+*************
+
+	if "$weather_data" == "raw"{
+		merge m:1 stand date using "$final/weather_shock_final_day_stand.dta", keep(1 3) nogen keepusing(__RAW_WEATHER_____ mean_at mean_at_rec max_at max_at_rec accu_prec accu_prec_rec max_wc max_wc_rec __RAIN_CODE_____ wc_1 wc_2 wc_3 wc_4 wc_5 wc_6 wc_7 wc_rec_1 wc_rec_2 wc_rec_3 wc_rec_4 wc_rec_5 wc_rec_6 wc_rec_7 wc_geq_1 wc_geq_2 wc_geq_3 wc_geq_4 wc_geq_5 wc_geq_6 wc_geq_1_rec wc_geq_2_rec wc_geq_3_rec wc_geq_4_rec wc_geq_5_rec wc_geq_6_rec)
+	}
+	
+	if "$weather_data" == "percentile"{
+		merge m:1 stand date using "$final/weather_shock_final_day_stand.dta", keep(1 3) nogen keepusing(__RAW_WEATHER_____-wc_geq_6_rec)
+	}
+	
+	if "$weather_data" == "all"{
+		merge m:1 stand date using "$final/weather_shock_final_day_stand.dta", keep(1 3) nogen
+	}
+
+
+	* Options:
+		* "none" or "": Do not merge weather data to the final dataset
+		* "raw": Merge raw weather data at stand-date-level. This includes mean apparent temperature, mean apparent temperature during recruitment hours, max apparent temperature, max apparent temperature during recruitment hours, cumulative precipitation, precipitation during recruitment hours, and maximum weather code (the worst weather during the period) and weather code during recruitment hours.
+		* "percentile": Merge weather data at stand-date-level, but in addition to the raw weather data, include indicators for whether each weather variable falls in the top 85, 90, 95, 99% of values across all stand-date combinations of the calendar year.
+		* "all": Merge weather data at stand-date-level, but in addition to the raw weather data and percentile indicators, include rolling averages and lags of weather variables.
+	
 
 *********************************
 **# Final Cleaning and Labeling

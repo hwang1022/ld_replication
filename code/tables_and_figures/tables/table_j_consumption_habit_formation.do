@@ -8,20 +8,8 @@
 clear all
 set more off
 
-if "$data" == "" {
-	global data "`c(pwd)'/data"
-}
-if "$data_final" == "" {
-	global data_final "${data}/final"
-}
-if "$data_temp" == "" {
-	global data_temp "${data}/temp"
-}
-if "$output" == "" {
-	global output "${data}/output"
-}
-local analysis_main "$data_final/analysis_main.dta"
-local phase1_incentive "$data_temp/incentive_record_stand_clean.dta"
+local final_data_w_shocks "$final/final_data_w_shocks.dta"
+local phase1_incentive "$temp/incentive_record_stand_clean.dta"
 
 local outdir "$output/tables"
 local outfile "`outdir'/iv_com_weekly_attend_nop1attendance_originaldata.tex"
@@ -30,7 +18,7 @@ local alias "`outdir'/table_j.tex"
 capture mkdir "$output"
 capture mkdir "`outdir'"
 
-use "`analysis_main'", clear
+use "`final_data_w_shocks'", clear
 
 preserve
 		use "`phase1_incentive'", clear

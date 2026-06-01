@@ -1,21 +1,9 @@
-if "$data" == "" {
-	global data "`c(pwd)'/data"
-}
-if "$data_final" == "" {
-	global data_final "${data}/final"
-}
-if "$data_temp" == "" {
-	global data_temp "${data}/temp"
-}
-if "$output" == "" {
-	global output "${data}/output"
-}
-local analysis_main "$data_final/analysis_main.dta"
+local final_data_w_shocks "$final/final_data_w_shocks.dta"
 
 cap mkdir "$output"
 cap mkdir "$output/figures"
 
-use "`analysis_main'", clear
+use "`final_data_w_shocks'", clear
 
 gen arrival_time_hours_std_daily = arrival_time_hours
 replace arrival_time_hours_std_daily = arrival_time_hours - 0.25 if inlist(stand, 2, 6, 15, 17, 19, 20)

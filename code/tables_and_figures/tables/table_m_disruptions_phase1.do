@@ -5,22 +5,10 @@
 clear all
 set more off
 
-if "$data" == "" {
-	global data "`c(pwd)'/data"
-}
-if "$data_final" == "" {
-	global data_final "${data}/final"
-}
-if "$data_temp" == "" {
-	global data_temp "${data}/temp"
-}
-if "$output" == "" {
-	global output "${data}/output"
-}
 
 local outdir "$output/tables"
 local shock_threshold = 25
-local shocks_25_phase1 "$data_temp/shocks_dataset_`shock_threshold'_phase1.dta"
+local shocks_25_phase1 "$temp/shocks_dataset_`shock_threshold'_phase1.dta"
 local verified_tex "`outdir'/shocks_attend_j25_bootstrap_phase1.tex"
 local appendix_alias "`outdir'/table_m.tex"
 capture mkdir "$output"

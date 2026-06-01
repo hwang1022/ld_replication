@@ -17,25 +17,16 @@ set seed 42
 ** 1. Paths and analysis constants
 ************************************************************
 
-local main_data_prioritize_date "$data_final/final_data_prioritize_date.dta"
-local main_data_prioritize_inperson "$data_final/final_data_prioritize_in_person.dta"
+local final_data_w_shocks "$final/final_data_w_shocks.dta"
 
-// Set main data based on the "mode" global. Default to the prioritize_date version
-// if mode is not set
-local main_data "$data_final/final_data_prioritize_date.dta"
-if $prioritize_in_person == 1 {
-	local main_data "$data_final/final_data_prioritize_in_person.dta"
-}
-local analysis_main "$data_final/analysis_main.dta"
-
-local shocks_prediction_original "$data_temp/shocks_dataset_prediction_originaldata.dta"
-local shocks_prediction_altspec "$data_temp/shocks_dataset_prediction_originaldata_altspec.dta"
-local shocks_prediction_baseline "$data_temp/shocks_dataset_prediction_originaldata_baseline.dta"
-local shocks_prediction_predicted "$data_temp/shocks_dataset_prediction_originaldata_predicted.dta"
-local shocks_prediction_phase1 "$data_temp/shocks_dataset_prediction_phase1.dta"
-local shocks_table2 "$data_temp/shocks_dataset_table2.dta"
-local shocks_original_25 "$data_temp/shocks_dataset_originaldata_25.dta"
-local shocks_ready_original "$data_temp/shocks_dataset_ready_originaldata.dta"
+local shocks_prediction_original "$temp/shocks_dataset_prediction_originaldata.dta"
+local shocks_prediction_altspec "$temp/shocks_dataset_prediction_originaldata_altspec.dta"
+local shocks_prediction_baseline "$temp/shocks_dataset_prediction_originaldata_baseline.dta"
+local shocks_prediction_predicted "$temp/shocks_dataset_prediction_originaldata_predicted.dta"
+local shocks_prediction_phase1 "$temp/shocks_dataset_prediction_phase1.dta"
+local shocks_table2 "$temp/shocks_dataset_table2.dta"
+local shocks_original_25 "$temp/shocks_dataset_originaldata_25.dta"
+local shocks_ready_original "$temp/shocks_dataset_ready_originaldata.dta"
 
 ************************************************************
 ** 2. Main analysis dataset
@@ -73,7 +64,7 @@ program define gen_bl_cov
 	merge m:1 pid using "`bl_cov'", update replace keep(1 2 3 4 5) nogen
 end
 
-use "`main_data'", clear
+use "$main_data", clear
 gen_bl_cov
 
 cap drop work1_wkly2
@@ -94,7 +85,7 @@ drop temp*
 *   table_j_consumption_habit_formation.do
 *   table_l_general_equilibrium_effects.do
 * Also reused within this file to build all shock datasets below.
-save "`analysis_main'", replace
+save "`final_data_w_shocks'", replace
 
 ************************************************************
 ** 3. Phase 2 shock datasets
@@ -210,7 +201,7 @@ program define add_shock_timing
 end
 
 ** 3.1 Main Phase 2 shock dataset used by Table 2.
-use "`analysis_main'", clear
+use "`final_data_w_shocks'", clear
 egen standid = group(stand)
 gen treat = treatment
 add_phase_week_vars
@@ -249,11 +240,11 @@ foreach shock_threshold in 20 25 30 {
 	*   table_o_shock_analysis_col4_robustness.do
 	* For shock_threshold == 25, this overwrites the same file saved
 	* above for the same Table N/O consumers.
-	save "$data_temp/shocks_dataset_originaldata_`shock_threshold'.dta", replace
+	save "$temp/shocks_dataset_originaldata_`shock_threshold'.dta", replace
 }
 
 ** 3.2 Alternative control selection for Appendix shock robustness.
-use "`analysis_main'", clear
+use "`final_data_w_shocks'", clear
 egen standid = group(stand)
 gen treat = treatment
 add_phase_week_vars
@@ -289,10 +280,10 @@ add_shock_timing, threshold(25)
 * Used by:
 *   table_n_shock_analysis_col3_robustness.do
 *   table_o_shock_analysis_col4_robustness.do
-save "$data_temp/shocks_dataset_originaldata_25_altspec.dta", replace
+save "$temp/shocks_dataset_originaldata_25_altspec.dta", replace
 
 ** 3.3 Baseline-only residual specification for Appendix shock robustness.
-use "`analysis_main'", clear
+use "`final_data_w_shocks'", clear
 egen standid = group(stand)
 gen treat = treatment
 add_phase_week_vars
@@ -309,10 +300,10 @@ add_shock_timing, threshold(25)
 * Used by:
 *   table_n_shock_analysis_col3_robustness.do
 *   table_o_shock_analysis_col4_robustness.do
-save "$data_temp/shocks_dataset_originaldata_25_baseline.dta", replace
+save "$temp/shocks_dataset_originaldata_25_baseline.dta", replace
 
 ** 3.4 Rolling-residual shock robustness datasets.
-use "`analysis_main'", clear
+use "`final_data_w_shocks'", clear
 egen standid = group(stand)
 gen treat = treatment
 add_phase_week_vars
@@ -347,13 +338,13 @@ foreach rolling_num in 4 7 {
 	gen_loo_attendance_loop, phase(2)
 	* Internal input for the rolling-residual shock dataset saved next;
 	* no current modular do-file reads this prediction file directly.
-	save "$data_temp/shocks_dataset_prediction_originaldata_rolling_`rolling_num'.dta", replace
+	save "$temp/shocks_dataset_prediction_originaldata_rolling_`rolling_num'.dta", replace
 
 	add_shock_timing, threshold(25)
 	* Used by:
 	*   table_n_shock_analysis_col3_robustness.do
 	*   table_o_shock_analysis_col4_robustness.do
-	save "$data_temp/shocks_dataset_originaldata_rolling_`rolling_num'.dta", replace
+	save "$temp/shocks_dataset_originaldata_rolling_`rolling_num'.dta", replace
 }
 
 ************************************************************
@@ -364,7 +355,7 @@ foreach rolling_num in 4 7 {
 ** assigning the shock timing.
 ************************************************************
 
-use "`analysis_main'", clear
+use "`final_data_w_shocks'", clear
 egen standid = group(stand)
 gen treat = treatment
 gen treatXpostweek5 = treatment * (week_in >= 5)
@@ -401,4 +392,4 @@ save "`shocks_prediction_phase1'", replace
 add_shock_timing, threshold(25) strict
 * Used by:
 *   table_m_disruptions_phase1.do
-save "$data_temp/shocks_dataset_25_phase1.dta", replace
+save "$temp/shocks_dataset_25_phase1.dta", replace

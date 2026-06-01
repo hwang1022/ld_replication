@@ -7,21 +7,9 @@
 clear all
 set more off
 
-if "$data" == "" {
-	global data "`c(pwd)'/data"
-}
-if "$data_final" == "" {
-	global data_final "${data}/final"
-}
-if "$data_temp" == "" {
-	global data_temp "${data}/temp"
-}
-if "$output" == "" {
-	global output "${data}/output"
-}
-local analysis_main "$data_final/analysis_main.dta"
-local stand_size_intensity "$data_temp/stand_size_intensity.dta"
-local stand_size_studysample "$data_temp/stand_size_intensity_studysample.dta"
+local final_data_w_shocks "$final/final_data_w_shocks.dta"
+local stand_size_intensity "$temp/stand_size_intensity.dta"
+local stand_size_studysample "$temp/stand_size_intensity_studysample.dta"
 
 local outdir "$output/tables"
 local outfile "`outdir'/com_weekly_attend_b8_attend_work1_frag2_faq_higher_treat_intensity_exp_originaldata.tex"
@@ -32,7 +20,7 @@ capture mkdir "$data"
 capture mkdir "$output"
 capture mkdir "`outdir'"
 
-use "`analysis_main'", clear
+use "`final_data_w_shocks'", clear
 gen treat = treatment
 
 merge m:1 stand using "`stand_size_intensity'", ///

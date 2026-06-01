@@ -1,0 +1,182 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/owner/Library/CloudStorage/Dropbox/Labor Discipline/07. Dat
+> a/3. Main Study 3.0/ld_replication/data/temp/../../code/analysis/luisa/diag_e
+> xplore_multiday.log
+  log type:  text
+ opened on:  29 May 2026, 18:43:41
+
+. 
+. *** ---- 04 cleaned: hunt for any multiday duration/sequence vars ----
+. use "$temp/04_phase1_phase2_cleaned.dta", clear
+
+. 
+. di "==== search related patterns (guarded) ===="
+==== search related patterns (guarded) ====
+
+. foreach p in *howmany* *num_day* *days* *duration* *seq* *rf4* *rd4* *rd5* *r
+> f5* *multiday* {
+  2.     cap ds `p'
+  3.     if _rc==0 di "  (pattern `p' matched above)"
+  4. }
+  (pattern *days* matched above)
+  (pattern *multiday* matched above)
+
+. 
+. di "---- describe d_multiday* and rf4 family ----"
+---- describe d_multiday* and rf4 family ----
+
+. cap describe d_multiday*
+
+. cap describe d_multidayjob_notattend_1
+
+. 
+. *** check v2 label for howfound (categories 9/10/11 may come from v2)
+. di "==== d_howfound_v2 label ===="
+==== d_howfound_v2 label ====
+
+. cap describe d_howfound_v2_1
+
+. cap local lblv2 : value label d_howfound_v2_1
+
+. di "v2 label name = `lblv2'"
+v2 label name = 
+
+. cap label list `lblv2'
+
+. 
+. di "==== tab raw d_howfound_v2_1 ===="
+==== tab raw d_howfound_v2_1 ====
+
+. cap tab d_howfound_v2_1, missing
+
+. 
+. *** ---- 05 makepanel: whenfound x howfound, and 9/10/11 ----
+. use "$temp/05_phase1_phase2_makepanel.dta", clear
+
+. 
+. di "==== whenfound x howfound (collapsed) ===="
+==== whenfound x howfound (collapsed) ====
+
+. tab howfound whenfound, missing
+
+           |                  whenfound
+  howfound |         1          2          3          . |     Total
+-----------+--------------------------------------------+----------
+         1 |       734        241         11          0 |       986 
+         2 |       139        545          2          0 |       686 
+         3 |       171        290          6          0 |       467 
+         4 |         9          7          0          0 |        16 
+         5 |     1,313        105          0          0 |     1,418 
+         6 |         4         38          1          0 |        43 
+         7 |        59      1,497          3          0 |     1,559 
+         8 |        29      2,630          5          1 |     2,665 
+         9 |         5         39          0          0 |        44 
+        10 |         7        222          1          0 |       230 
+        11 |        19        282          1          0 |       302 
+       998 |         4          0          0          0 |         4 
+         . |         0          0          0     15,961 |    15,961 
+-----------+--------------------------------------------+----------
+     Total |     2,493      5,896         30     15,962 |    24,381 
+
+. 
+. di "==== among attend==1 & work==1, howfound distribution ===="
+==== among attend==1 & work==1, howfound distribution ====
+
+. tab howfound if attend==1 & work==1, missing
+
+   howfound |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |        807       11.06       11.06
+          2 |        555        7.61       18.67
+          3 |        388        5.32       23.99
+          5 |      1,190       16.31       40.30
+          6 |         40        0.55       40.85
+          7 |      1,359       18.63       59.48
+          8 |      2,226       30.51       89.99
+          9 |         34        0.47       90.46
+         10 |        199        2.73       93.19
+         11 |        254        3.48       96.67
+        998 |          2        0.03       96.70
+          . |        241        3.30      100.00
+------------+-----------------------------------
+      Total |      7,295      100.00
+
+. 
+. di "==== among attend==0 & work==1, howfound_notattend distribution ===="
+==== among attend==0 & work==1, howfound_notattend distribution ====
+
+. tab howfound_notattend if attend==0 & work==1, missing
+
+howfound_no |
+    tattend |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |        532       13.92       13.92
+          2 |        100        2.62       16.53
+          3 |        235        6.15       22.68
+          5 |      1,316       34.42       57.10
+        998 |         16        0.42       57.52
+          . |      1,624       42.48      100.00
+------------+-----------------------------------
+      Total |      3,823      100.00
+
+. 
+. di "==== whenfound present vs howfound present ===="
+==== whenfound present vs howfound present ====
+
+. gen has_when = !mi(whenfound)
+
+. gen has_how  = !mi(howfound)
+
+. tab has_when has_how
+
+           |        has_how
+  has_when |         0          1 |     Total
+-----------+----------------------+----------
+         0 |    15,961          1 |    15,962 
+         1 |         0      8,419 |     8,419 
+-----------+----------------------+----------
+     Total |    15,961      8,420 |    24,381 
+
+. 
+. di "==== for multiday_job==1 days: whenfound/howfound present? ===="
+==== for multiday_job==1 days: whenfound/howfound present? ====
+
+. tab howfound if multiday_job==1, missing
+
+   howfound |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |        141        4.29        4.29
+          2 |          9        0.27        4.56
+          3 |         28        0.85        5.42
+          5 |      1,397       42.50       47.92
+          6 |          8        0.24       48.16
+          7 |         14        0.43       48.59
+          8 |          1        0.03       48.62
+          9 |          8        0.24       48.86
+         10 |         50        1.52       50.38
+         11 |         59        1.79       52.18
+        998 |          1        0.03       52.21
+          . |      1,571       47.79      100.00
+------------+-----------------------------------
+      Total |      3,287      100.00
+
+. tab whenfound if multiday_job==1, missing
+
+  whenfound |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |      1,496       45.51       45.51
+          2 |        220        6.69       52.21
+          . |      1,571       47.79      100.00
+------------+-----------------------------------
+      Total |      3,287      100.00
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/owner/Library/CloudStorage/Dropbox/Labor Discipline/07. Dat
+> a/3. Main Study 3.0/ld_replication/data/temp/../../code/analysis/luisa/diag_e
+> xplore_multiday.log
+  log type:  text
+ closed on:  29 May 2026, 18:43:41
+-------------------------------------------------------------------------------

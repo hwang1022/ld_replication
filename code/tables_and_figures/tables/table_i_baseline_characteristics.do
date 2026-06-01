@@ -7,26 +7,14 @@
 clear all
 set more off
 
-if "$data" == "" {
-	global data "`c(pwd)'/data"
-}
-if "$data_final" == "" {
-	global data_final "${data}/final"
-}
-if "$data_temp" == "" {
-	global data_temp "${data}/temp"
-}
-if "$output" == "" {
-	global output "${data}/output"
-}
-local analysis_main "$data_final/analysis_main.dta"
+local final_data_w_shocks "$final/final_data_w_shocks.dta"
 
 local outdir "$output/tables"
 
 capture mkdir "$output"
 capture mkdir "`outdir'"
 
-use "`analysis_main'", clear
+use "`final_data_w_shocks'", clear
 
 bysort pid date: gen uniqpid = _n == 1
 keep if uniqpid == 1

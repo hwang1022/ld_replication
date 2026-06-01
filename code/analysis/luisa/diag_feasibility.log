@@ -1,0 +1,433 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/owner/Library/CloudStorage/Dropbox/Labor Discipline/07. Dat
+> a/3. Main Study 3.0/ld_replication/data/temp/../../code/analysis/luisa/diag_f
+> easibility.log
+  log type:  text
+ opened on:  29 May 2026, 18:47:22
+
+. 
+. use "$temp/05_phase1_phase2_makepanel.dta", clear
+
+. 
+. di "==== is there a whenfound_v2 anywhere? (check phase2 cleaned) ===="
+==== is there a whenfound_v2 anywhere? (check phase2 cleaned) ====
+
+. preserve
+
+. use "$temp/03_phase2_completed_cleaned.dta", clear
+
+. cap ds *whenfound*
+
+. restore
+
+. 
+. di "==== whenfound by attend status ===="
+==== whenfound by attend status ====
+
+. tab whenfound attend, missing
+
+           |        attend
+ whenfound |         0          1 |     Total
+-----------+----------------------+----------
+         1 |       409      2,084 |     2,493 
+         2 |       926      4,970 |     5,896 
+         3 |         5         25 |        30 
+         . |    12,410      3,552 |    15,962 
+-----------+----------------------+----------
+     Total |    13,750     10,631 |    24,381 
+
+. 
+. di "==== whenfound by phase ===="
+==== whenfound by phase ====
+
+. tab whenfound phase, missing col
+
++-------------------+
+| Key               |
+|-------------------|
+|     frequency     |
+| column percentage |
++-------------------+
+
+           |         phase
+ whenfound |         1          2 |     Total
+-----------+----------------------+----------
+         1 |     1,275      1,218 |     2,493 
+           |     10.82       9.67 |     10.23 
+-----------+----------------------+----------
+         2 |     3,442      2,454 |     5,896 
+           |     29.22      19.48 |     24.18 
+-----------+----------------------+----------
+         3 |        23          7 |        30 
+           |      0.20       0.06 |      0.12 
+-----------+----------------------+----------
+         . |     7,041      8,921 |    15,962 
+           |     59.77      70.80 |     65.47 
+-----------+----------------------+----------
+     Total |    11,781     12,600 |    24,381 
+           |    100.00     100.00 |    100.00 
+
+. 
+. di "==== multiday_job by phase ===="
+==== multiday_job by phase ====
+
+. tab multiday_job phase, missing col
+
++-------------------+
+| Key               |
+|-------------------|
+|     frequency     |
+| column percentage |
++-------------------+
+
+multiday_j |         phase
+        ob |         1          2 |     Total
+-----------+----------------------+----------
+         0 |     9,223      7,772 |    16,995 
+           |     78.29      61.68 |     69.71 
+-----------+----------------------+----------
+         1 |     1,312      1,975 |     3,287 
+           |     11.14      15.67 |     13.48 
+-----------+----------------------+----------
+         . |     1,246      2,853 |     4,099 
+           |     10.58      22.64 |     16.81 
+-----------+----------------------+----------
+     Total |    11,781     12,600 |    24,381 
+           |    100.00     100.00 |    100.00 
+
+. 
+. *** Build a simple stand/outside from whenfound and from howfound, compare on
+>  NON-multiday work days
+. gen src_when = .
+(24,381 missing values generated)
+
+. replace src_when = 1 if whenfound==2          // stand
+(5,896 real changes made)
+
+. replace src_when = 0 if inlist(whenfound,1,3) // outside
+(2,523 real changes made)
+
+. 
+. di "==== src_when on non-multiday work days (attend==1) ===="
+==== src_when on non-multiday work days (attend==1) ====
+
+. tab whenfound src_when if multiday_job==0 & work==1 & attend==1, missing
+
+           |             src_when
+ whenfound |         0          1          . |     Total
+-----------+---------------------------------+----------
+         1 |       810          0          0 |       810 
+         2 |         0      4,776          0 |     4,776 
+         3 |        25          0          0 |        25 
+         . |         0          0         79 |        79 
+-----------+---------------------------------+----------
+     Total |       835      4,776         79 |     5,690 
+
+. 
+. *** How many work days are multiday & need attribution, by phase
+. di "==== work-day counts needing attribution ===="
+==== work-day counts needing attribution ====
+
+. gen needs_attr = (multiday_job==1 & work==1)
+
+. tab needs_attr phase, col
+
++-------------------+
+| Key               |
+|-------------------|
+|     frequency     |
+| column percentage |
++-------------------+
+
+           |         phase
+needs_attr |         1          2 |     Total
+-----------+----------------------+----------
+         0 |    10,469     10,625 |    21,094 
+           |     88.86      84.33 |     86.52 
+-----------+----------------------+----------
+         1 |     1,312      1,975 |     3,287 
+           |     11.14      15.67 |     13.48 
+-----------+----------------------+----------
+     Total |    11,781     12,600 |    24,381 
+           |    100.00     100.00 |    100.00 
+
+. 
+. *** Eyeball multiday runs: show pattern for a handful of pids with many multi
+> day days
+. sort pid date
+
+. by pid: egen nmulti = total(multiday_job==1 & work==1)
+
+. gsort -nmulti pid date
+
+. di "==== top pids by # multiday workdays ===="
+==== top pids by # multiday workdays ====
+
+. preserve
+
+.     bys pid: keep if _n==1
+(24,156 observations deleted)
+
+.     gsort -nmulti
+
+.     list pid nmulti in 1/15, clean
+
+        pid   nmulti  
+  1.   1769       75  
+  2.   6846       66  
+  3.    350       63  
+  4.   1542       62  
+  5.    685       56  
+  6.    677       56  
+  7.   1826       56  
+  8.    137       56  
+  9.   1520       55  
+ 10.   2029       54  
+ 11.    354       48  
+ 12.   6848       47  
+ 13.    529       44  
+ 14.   6874       44  
+ 15.    202       43  
+
+. restore
+
+. 
+. *** Print day-by-day for the single pid with most multiday days
+. sum nmulti, meanonly
+
+. levelsof pid if nmulti==r(max), local(toppid)
+1769
+
+. local tp : word 1 of `toppid'
+
+. di "==== day-by-day for pid `tp' (phase, date, attend, work, multiday, whenfo
+> und, howfound) ===="
+==== day-by-day for pid 1769 (phase, date, attend, work, multiday, whenfound, h
+> owfound) ====
+
+. list date phase attend work multiday_job whenfound howfound howfound_notatten
+> d if pid==`tp', clean noobs
+
+         date   phase   attend   work   multid~b   whenfo~d   howfound   howf~e
+> nd  
+    18jul2022       1        1      0          .          .          .         
+>  .  
+    19jul2022       1        0      1          .          .          .         
+>  .  
+    20jul2022       1        0      0          .          .          .         
+>  .  
+    21jul2022       1        0      1          1          .          .         
+>  5  
+    22jul2022       1        0      1          1          .          .         
+>  5  
+    23jul2022       1        0      1          1          .          .         
+>  5  
+    24jul2022       1        0      1          1          .          .         
+>  5  
+    25jul2022       1        0      1          1          .          .         
+>  5  
+    26jul2022       1        0      1          1          .          .         
+>  5  
+    27jul2022       1        0      1          1          .          .         
+>  5  
+    28jul2022       1        1      1          1          .          .         
+>  5  
+    29jul2022       1        0      1          1          .          .         
+>  5  
+    30jul2022       1        0      1          1          .          .         
+>  5  
+    31jul2022       1        0      1          1          .          .         
+>  5  
+    01aug2022       1        0      1          1          .          .         
+>  5  
+    02aug2022       1        0      1          1          .          .         
+>  5  
+    03aug2022       1        1      1          1          .          .         
+>  5  
+    04aug2022       1        0      1          1          .          .         
+>  5  
+    05aug2022       1        0      1          1          .          .         
+>  5  
+    06aug2022       1        1      1          1          .          .         
+>  5  
+    07aug2022       1        0      1          1          .          .         
+>  5  
+    08aug2022       1        0      1          1          .          .         
+>  5  
+    09aug2022       1        0      1          1          .          .         
+>  5  
+    10aug2022       1        1      1          1          1          5         
+>  .  
+    11aug2022       1        1      1          1          1          5         
+>  .  
+    12aug2022       1        0      1          0          .          .         
+>  1  
+    13aug2022       1        1      1          1          .          .         
+>  5  
+    14aug2022       1        0      1          1          .          .         
+>  5  
+    15aug2022       1        0      1          1          .          .         
+>  5  
+    16aug2022       1        0      1          1          .          .         
+>  5  
+    17aug2022       1        1      1          1          .          .         
+>  5  
+    18aug2022       1        1      1          1          .          .         
+>  5  
+    19aug2022       1        0      1          1          .          .         
+>  5  
+    20aug2022       1        1      1          0          1          1         
+>  .  
+    21aug2022       1        0      1          0          1          1         
+>  .  
+    22aug2022       1        1      1          1          .          .         
+>  5  
+    23aug2022       1        0      1          1          .          .         
+>  5  
+    24aug2022       1        0      1          1          .          .         
+>  5  
+    25aug2022       1        0      1          1          .          .         
+>  5  
+    26aug2022       1        1      1          1          .          .         
+>  5  
+    27aug2022       1        1      1          1          1          5         
+>  .  
+    28aug2022       1        0      1          1          1          5         
+>  .  
+    29aug2022       1        1      1          1          1          5         
+>  .  
+    30aug2022       1        1      1          1          .          .         
+>  5  
+    31aug2022       1        0      1          1          .          .         
+>  5  
+    01sep2022       1        0      1          1          .          .         
+>  5  
+    02sep2022       1        1      1          0          1          1         
+>  .  
+    03sep2022       1        1      0          0          .          .         
+>  .  
+    04sep2022       1        0      1          0          .          .         
+>  1  
+    05sep2022       2        1      1          1          .          .         
+>  5  
+    06sep2022       2        0      1          1          .          .         
+>  5  
+    07sep2022       2        0      1          1          .          .         
+>  5  
+    08sep2022       2        1      1          1          .          .         
+>  5  
+    09sep2022       2        0      1          1          .          .         
+>  5  
+    10sep2022       2        1      1          1          .          .         
+>  5  
+    11sep2022       2        0      1          1          .          .         
+>  5  
+    12sep2022       2        0      1          1          .          .         
+>  5  
+    13sep2022       2        0      1          1          .          .         
+>  5  
+    14sep2022       2        0      1          1          .          .         
+>  5  
+    15sep2022       2        0      1          0          .          .         
+>  1  
+    16sep2022       2        1      1          1          1          5         
+>  .  
+    17sep2022       2        0      1          1          .          .         
+>  5  
+    18sep2022       2        0      0          0          .          .         
+>  .  
+    19sep2022       2        1      1          1          1          5         
+>  .  
+    20sep2022       2        1      1          1          .          .         
+>  5  
+    21sep2022       2        0      1          1          1          5         
+>  .  
+    22sep2022       2        1      1          1          .          .         
+>  5  
+    23sep2022       2        0      1          1          .          .         
+>  5  
+    24sep2022       2        1      1          0          .          .         
+>  1  
+    25sep2022       2        0      1          0          .          .         
+>  1  
+    26sep2022       2        0      1          0          .          .         
+>  1  
+    27sep2022       2        1      1          1          1          5         
+>  .  
+    28sep2022       2        0      1          1          1          5         
+>  .  
+    29sep2022       2        0      1          0          1          1         
+>  .  
+    30sep2022       2        0      1          1          .          .         
+>  5  
+    01oct2022       2        0      1          1          .          .         
+>  5  
+    02oct2022       2        0      1          0          .          .         
+>  1  
+    03oct2022       2        0      1          1          .          .         
+>  5  
+    04oct2022       2        0      1          1          .          .         
+>  5  
+    05oct2022       2        0      1          1          .          .         
+>  5  
+    06oct2022       2        0      1          1          .          .         
+>  5  
+    07oct2022       2        0      0          0          .          .         
+>  .  
+    08oct2022       2        1      1          1          1          1         
+>  .  
+    09oct2022       2        0      0          0          .          .         
+>  .  
+    10oct2022       2        1      1          1          1          1         
+>  .  
+    11oct2022       2        0      1          1          .          .         
+>  1  
+    12oct2022       2        0      1          1          .          .         
+>  1  
+    13oct2022       2        1      1          1          1          5         
+>  .  
+    14oct2022       2        0      1          1          1          5         
+>  .  
+    15oct2022       2        1      1          1          .          .         
+>  5  
+    16oct2022       2        0      0          0          .          .         
+>  .  
+    17oct2022       2        0      1          1          .          .         
+>  5  
+    18oct2022       2        1      1          1          1          1         
+>  .  
+    19oct2022       2        1      1          1          1          1         
+>  .  
+    20oct2022       2        1      .          .          .          .         
+>  .  
+    21oct2022       2        0      .          .          .          .         
+>  .  
+    22oct2022       2        0      .          .          .          .         
+>  .  
+    23oct2022       2        0      .          .          .          .         
+>  .  
+    24oct2022       2        0      .          .          .          .         
+>  .  
+    25oct2022       2        0      .          .          .          .         
+>  .  
+    26oct2022       2        0      .          .          .          .         
+>  .  
+    27oct2022       2        0      .          .          .          .         
+>  .  
+    28oct2022       2        0      .          .          .          .         
+>  .  
+    29oct2022       2        0      .          .          .          .         
+>  .  
+    30oct2022       2        0      .          .          .          .         
+>  .  
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/owner/Library/CloudStorage/Dropbox/Labor Discipline/07. Dat
+> a/3. Main Study 3.0/ld_replication/data/temp/../../code/analysis/luisa/diag_f
+> easibility.log
+  log type:  text
+ closed on:  29 May 2026, 18:47:22
+-------------------------------------------------------------------------------

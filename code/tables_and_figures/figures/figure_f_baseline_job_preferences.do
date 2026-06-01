@@ -1,21 +1,9 @@
-if "$data" == "" {
-	global data "`c(pwd)'/data"
-}
-if "$data_final" == "" {
-	global data_final "${data}/final"
-}
-if "$data_temp" == "" {
-	global data_temp "${data}/temp"
-}
-if "$output" == "" {
-	global output "${data}/output"
-}
-local analysis_main "$data_final/analysis_main.dta"
+local final_data_w_shocks "$final/final_data_w_shocks.dta"
 
 cap mkdir "$output"
 cap mkdir "$output/figures"
 
-use "`analysis_main'", clear
+use "`final_data_w_shocks'", clear
 duplicates drop pid, force
 label define lngterm_work 1 "Least likely" 2 "Not likely" 3 `""Neither likely""or unlikely""' 4 "Likely" 5 "Very likely"
 label value bs_dem_lngterm_work lngterm_work
@@ -23,7 +11,7 @@ twoway hist bs_dem_lngterm_work, lcolor(gs12) fcolor(gs12) frac xla(1/5, valuela
 graph export "$output/figures/bs_dem_no_ltjob.pdf", replace
 graph export "$output/figures/figure_f_a.pdf", replace
 
-use "`analysis_main'", clear
+use "`final_data_w_shocks'", clear
 duplicates drop pid, force
 keep pid bs_dem_no_ltjob_*
 drop bs_dem_no_ltjob_reasons bs_dem_no_ltjob_reasons_oth

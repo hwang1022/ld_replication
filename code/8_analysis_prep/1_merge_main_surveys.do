@@ -45,8 +45,8 @@
 	// 	using"$final/05_baseline_makevar.dta" , clear
 		
 	use pid date mode attend attend_sr work earn work_type arrival_time_hours phase ///
-		using"$temp/05_baseline_makevar.dta" , clear
-	
+		using "$temp/05_baseline_makevar.dta" , clear
+	cap drop __000000
 	* Restrict Sample
 	merge m:1 pid using "$temp/00_mainstudy_master.dta" , keep(3) keepusing(pid stand launchset batch strata treatment late_announcement_flag) nogen
 	
@@ -58,9 +58,8 @@
 	order 	__0_COVER________ pid stand launchset batch strata treatment late_announcement_flag ///
 			__1_DATE_VARIABLES________ date phase  ///
 			__2_DAILY_ATTENDACE________ 
-	
 	tempfile bl
-	save `bl' , replace	
+	save `bl'  //, replace	
 
 
 	
@@ -71,7 +70,7 @@
 					
 	use "$temp/05_phase1_phase2_makevar_daily.dta", clear
 	sort pid date
-	
+	cap drop __000000
 	* Restrict Sample
 	merge m:1 pid using "$temp/00_mainstudy_master.dta" , keep(3) keepusing(pid stand launchset batch strata treatment late_announcement_flag) nogen replace update
 	
@@ -104,7 +103,7 @@
 	order 	__0_COVER________ pid stand launchset batch strata treatment late_announcement_flag ///
 			__1_DATE_VARIABLES________ date phase  ///
 			__2_DAILY_ATTENDACE________ 
-	
+
 	tempfile p3
 	save `p3' , replace
 	

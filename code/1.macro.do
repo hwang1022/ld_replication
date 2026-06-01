@@ -18,6 +18,7 @@
 *******************************************
 **# Auxiliary Functions for Data Cleaning 
 *******************************************
+
 	
 	* Purpose: auxiliary function saving input in file called 'input.tex'
 	* Author: Unknown

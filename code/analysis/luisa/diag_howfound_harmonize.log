@@ -1,0 +1,326 @@
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/owner/Library/CloudStorage/Dropbox/Labor Discipline/07. Data/3. Main Study 3.0/ld_replication/data/temp/../../code/analysis/luisa/diag_howfo
+> und_harmonize.log
+  log type:  text
+ opened on:  30 May 2026, 16:04:53
+
+. 
+. *================================================================*
+. * A reusable program: harmonize one v2 howfound var to v1 scheme
+. *================================================================*
+. capture program drop hf_v2_to_v1
+
+. program define hf_v2_to_v1
+  1.     * args: 1=source v2 var, 2=new harmonized var name
+.     args src out
+  2.     recode `src' (1 2 = 1)(3 4 = 2)(5 6 = 3)(7 = 4)(8 9 = 6)(10 = 7)(11 = 8) ///
+>                  (998 = 998)(999 = 999), gen(`out')
+  3. end
+
+. 
+. *================================================================*
+. * Build harmonized combine on raw phase-2 (has v1 AND v2 per slot)
+. *================================================================*
+. use "$temp/03_phase2_completed_cleaned.dta", clear
+
+. 
+. local n_v2src   0     // # slot-rows sourced from v2
+
+. local n_naive_amb 0   // v2-sourced rows whose RAW v2 code is 5/6/7 (ambiguous in naive)
+
+. local n_standflip 0   // v2-sourced rows where naive=stand but harmonized=not-stand (or vice versa)
+
+. local n_code5_md  0   // v2-sourced rows with raw code 5 (naive would read as multiday)
+
+. 
+. forval i = 1/7 {
+  2.     cap confirm variable f_howfound_`i'
+  3.     if _rc continue
+  4.     cap confirm variable f_howfound_v2_`i'
+  5.     if _rc continue
+  6. 
+.     * (1) provenance flag
+.     gen byte hf_version_`i' = .
+  7.     replace  hf_version_`i' = 1 if !mi(f_howfound_`i')
+  8.     replace  hf_version_`i' = 2 if mi(f_howfound_`i') & !mi(f_howfound_v2_`i')
+  9. 
+.     * (2a) NAIVE combine (current line 179): raw v2 poured in
+.     gen hf_naive_`i' = f_howfound_`i'
+ 10.     replace hf_naive_`i' = f_howfound_v2_`i' if mi(hf_naive_`i')
+ 11. 
+.     * (2b) HARMONIZED combine: remap v2 -> v1 scheme first
+.     hf_v2_to_v1 f_howfound_v2_`i' hf_v2map_`i'
+ 12.     gen hf_harm_`i' = f_howfound_`i'
+ 13.     replace hf_harm_`i' = hf_v2map_`i' if mi(hf_harm_`i')
+ 14. 
+.     * ---- validation tallies (only on v2-sourced rows) ----
+.     qui count if hf_version_`i'==2
+ 15.     local n_v2src = `n_v2src' + r(N)
+ 16.     qui count if hf_version_`i'==2 & inlist(hf_naive_`i',5,6,7)
+ 17.     local n_naive_amb = `n_naive_amb' + r(N)
+ 18.     qui count if hf_version_`i'==2 & hf_naive_`i'==5
+ 19.     local n_code5_md = `n_code5_md' + r(N)
+ 20.     * stand status under each: stand = codes {6,7,8,9,10,11}
+.     gen byte st_naive_`i' = inlist(hf_naive_`i',6,7,8,9,10,11) if !mi(hf_naive_`i')
+ 21.     gen byte st_harm_`i'  = inlist(hf_harm_`i', 6,7,8,9,10,11) if !mi(hf_harm_`i')
+ 22.     qui count if hf_version_`i'==2 & st_naive_`i'!=st_harm_`i' & !mi(st_naive_`i') & !mi(st_harm_`i')
+ 23.     local n_standflip = `n_standflip' + r(N)
+ 24. }
+(7,124 missing values generated)
+(2,735 real changes made)
+(604 real changes made)
+(4,389 missing values generated)
+(604 real changes made)
+(477 differences between f_howfound_v2_1 and hf_v2map_1)
+(4,389 missing values generated)
+(604 real changes made)
+(3,785 missing values generated)
+(3,785 missing values generated)
+(7,124 missing values generated)
+(918 real changes made)
+(211 real changes made)
+(6,206 missing values generated)
+(211 real changes made)
+(167 differences between f_howfound_v2_2 and hf_v2map_2)
+(6,206 missing values generated)
+(211 real changes made)
+(5,995 missing values generated)
+(5,995 missing values generated)
+(7,124 missing values generated)
+(299 real changes made)
+(108 real changes made)
+(6,825 missing values generated)
+(108 real changes made)
+(84 differences between f_howfound_v2_3 and hf_v2map_3)
+(6,825 missing values generated)
+(108 real changes made)
+(6,717 missing values generated)
+(6,717 missing values generated)
+(7,124 missing values generated)
+(101 real changes made)
+(41 real changes made)
+(7,023 missing values generated)
+(41 real changes made)
+(30 differences between f_howfound_v2_4 and hf_v2map_4)
+(7,023 missing values generated)
+(41 real changes made)
+(6,982 missing values generated)
+(6,982 missing values generated)
+(7,124 missing values generated)
+(53 real changes made)
+(16 real changes made)
+(7,071 missing values generated)
+(16 real changes made)
+(12 differences between f_howfound_v2_5 and hf_v2map_5)
+(7,071 missing values generated)
+(16 real changes made)
+(7,055 missing values generated)
+(7,055 missing values generated)
+(7,124 missing values generated)
+(35 real changes made)
+(8 real changes made)
+(7,089 missing values generated)
+(8 real changes made)
+(4 differences between f_howfound_v2_6 and hf_v2map_6)
+(7,089 missing values generated)
+(8 real changes made)
+(7,081 missing values generated)
+(7,081 missing values generated)
+(7,124 missing values generated)
+(29 real changes made)
+(7 real changes made)
+(7,095 missing values generated)
+(7 real changes made)
+(4 differences between f_howfound_v2_7 and hf_v2map_7)
+(7,095 missing values generated)
+(7 real changes made)
+(7,088 missing values generated)
+(7,088 missing values generated)
+
+. 
+. di ""
+
+
+. di "==================================================================="
+===================================================================
+
+. di " VALIDATION: naive (current) vs harmonized combine, v2-sourced rows"
+ VALIDATION: naive (current) vs harmonized combine, v2-sourced rows
+
+. di "==================================================================="
+===================================================================
+
+. di "  v2-sourced slot-rows total ........................ `n_v2src'"
+  v2-sourced slot-rows total ........................ 995
+
+. di "  ... whose RAW v2 code is 5/6/7 (ambiguous naive) .. `n_naive_amb'"
+  ... whose RAW v2 code is 5/6/7 (ambiguous naive) .. 81
+
+. di "  ... raw code 5 -> naive MISREADS as multi-day ..... `n_code5_md'"
+  ... raw code 5 -> naive MISREADS as multi-day ..... 51
+
+. di "  ... STAND-status FLIPS once harmonized ............ `n_standflip'"
+  ... STAND-status FLIPS once harmonized ............ 30
+
+. di "  (stand-status flips are the dangerous ones: v2 phone/self-emp"
+  (stand-status flips are the dangerous ones: v2 phone/self-emp
+
+. di "   miscoded as a stand channel under the naive combine.)"
+   miscoded as a stand channel under the naive combine.)
+
+. 
+. di ""
+
+
+. di "==== Example slot 1: naive vs harmonized among v2-sourced rows ===="
+==== Example slot 1: naive vs harmonized among v2-sourced rows ====
+
+. label define HFL 1 "1 Phone-employer" 2 "2 Phone-recruiter" 3 "3 Phone-friend" ///
+>                  4 "4 Self-emp" 5 "5 Multi-day" 6 "6 Stand-recruiter" ///
+>                  7 "7 Stand-friend" 8 "8 Stand-rec-offered" 998 "998 Other" 999 "999 Incompl", replace
+
+. label values hf_naive_1 hf_harm_1 HFL
+
+. di " rows where v2 was used (hf_version_1==2):"
+ rows where v2 was used (hf_version_1==2):
+
+. tab hf_naive_1 hf_harm_1 if hf_version_1==2, missing
+
+                    |                                        hf_harm_1
+         hf_naive_1 | 1 Phone-e  2 Phone-r  3 Phone-f  4 Self-em  6 Stand-r  7 Stand-f  8 Stand-r  998 Other |     Total
+--------------------+----------------------------------------------------------------------------------------+----------
+   1 Phone-employer |       126          0          0          0          0          0          0          0 |       126 
+  2 Phone-recruiter |         7          0          0          0          0          0          0          0 |         7 
+     3 Phone-friend |         0         44          0          0          0          0          0          0 |        44 
+         4 Self-emp |         0          4          0          0          0          0          0          0 |         4 
+        5 Multi-day |         0          0         36          0          0          0          0          0 |        36 
+  6 Stand-recruiter |         0          0          9          0          0          0          0          0 |         9 
+     7 Stand-friend |         0          0          0         11          0          0          0          0 |        11 
+8 Stand-rec-offered |         0          0          0          0          3          0          0          0 |         3 
+                  9 |         0          0          0          0         23          0          0          0 |        23 
+                 10 |         0          0          0          0          0        148          0          0 |       148 
+                 11 |         0          0          0          0          0          0        192          0 |       192 
+          998 Other |         0          0          0          0          0          0          0          1 |         1 
+--------------------+----------------------------------------------------------------------------------------+----------
+              Total |       133         48         45         11         26        148        192          1 |       604 
+
+. 
+. di ""
+
+
+. di "==== (3) GATED multiday rule check (slot 1) ===="
+==== (3) GATED multiday rule check (slot 1) ====
+
+. di "  v2 rows with raw code 5 = phone-friend; naive multiday rule"
+  v2 rows with raw code 5 = phone-friend; naive multiday rule
+
+. di "  (howfound==5) would FLAG them. Gated rule (version==1) won't."
+  (howfound==5) would FLAG them. Gated rule (version==1) won't.
+
+. gen byte md_naive_1 = (hf_naive_1==5) if !mi(hf_naive_1)
+(3,785 missing values generated)
+
+. gen byte md_gated_1 = (hf_harm_1==5 & hf_version_1==1) if !mi(hf_harm_1)
+(3,785 missing values generated)
+
+. di "  multiday flagged by NAIVE howfound==5 (slot1):"
+  multiday flagged by NAIVE howfound==5 (slot1):
+
+. count if md_naive_1==1
+  717
+
+. di "  multiday flagged by GATED rule (slot1):"
+  multiday flagged by GATED rule (slot1):
+
+. count if md_gated_1==1
+  681
+
+. di "  of the naive-flagged, how many are v2 phone-friend (should be removed):"
+  of the naive-flagged, how many are v2 phone-friend (should be removed):
+
+. count if md_naive_1==1 & hf_version_1==2
+  36
+
+. 
+. di ""
+
+
+. di "==== Harmonized howfound distribution (slot 1, all rows) ===="
+==== Harmonized howfound distribution (slot 1, all rows) ====
+
+. tab hf_harm_1, missing
+
+          hf_harm_1 |      Freq.     Percent        Cum.
+--------------------+-----------------------------------
+   1 Phone-employer |        370        5.19        5.19
+  2 Phone-recruiter |        185        2.60        7.79
+     3 Phone-friend |        151        2.12        9.91
+         4 Self-emp |         14        0.20       10.11
+        5 Multi-day |        681        9.56       19.67
+  6 Stand-recruiter |         41        0.58       20.24
+     7 Stand-friend |        719       10.09       30.33
+8 Stand-rec-offered |      1,174       16.48       46.81
+          998 Other |          3        0.04       46.86
+        999 Incompl |          1        0.01       46.87
+                  . |      3,785       53.13      100.00
+--------------------+-----------------------------------
+              Total |      7,124      100.00
+
+. 
+. *================================================================*
+. * DROP-IN BLOCK for 3_combine_phase1_2.do  (printed for the user)
+. *================================================================*
+. di ""
+
+
+. di "================= DROP-IN FOR 3_combine_phase1_2.do ================="
+================= DROP-IN FOR 3_combine_phase1_2.do =================
+
+. di "* --- REPLACE the current line 179 block (howfound combine) with: ---"
+* --- REPLACE the current line 179 block (howfound combine) with: ---
+
+. di "* provenance + harmonized combine (v2 remapped to v1 scheme)"
+* provenance + harmonized combine (v2 remapped to v1 scheme)
+
+. di "apply7 gen byte d_howfound_version_ = ."
+apply7 gen byte d_howfound_version_ = .
+
+. di "apply7 replace  d_howfound_version_ = 1 if !mi(d_howfound_)"
+apply7 replace  d_howfound_version_ = 1 if !mi(d_howfound_)
+
+. di "apply7 replace  d_howfound_version_ = 2 if mi(d_howfound_) & !mi(d_howfound_v2_)"
+apply7 replace  d_howfound_version_ = 2 if mi(d_howfound_) & !mi(d_howfound_v2_)
+
+. di "apply7 recode d_howfound_v2_ (1 2=1)(3 4=2)(5 6=3)(7=4)(8 9=6)(10=7)(11=8)(998=998)(999=999)"
+apply7 recode d_howfound_v2_ (1 2=1)(3 4=2)(5 6=3)(7=4)(8 9=6)(10=7)(11=8)(998=998)(999=999)
+
+. di "apply7 replace d_howfound_ = d_howfound_v2_ if mi(d_howfound_)"
+apply7 replace d_howfound_ = d_howfound_v2_ if mi(d_howfound_)
+
+. di "drop d_howfound_v2_*"
+drop d_howfound_v2_*
+
+. di "*"
+*
+
+. di "* --- THEN change the multiday-from-channel line (was line 259) to GATE on v1: ---"
+* --- THEN change the multiday-from-channel line (was line 259) to GATE on v1: ---
+
+. di "apply7 replace d_multiday_job_ = (d_howfound_ == 5) if mi(d_multiday_job_) & !mi(d_howfound_) & d_howfound_version_==1"
+apply7 replace d_multiday_job_ = (d_howfound_ == 5) if mi(d_multiday_job_) & !mi(d_howfound_) & d_howfound_version_==1
+
+. di "*   (d_howfound_notattend_ has no v2 variant, so its ==5 rule is unchanged.)"
+*   (d_howfound_notattend_ has no v2 variant, so its ==5 rule is unchanged.)
+
+. di "===================================================================="
+====================================================================
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/owner/Library/CloudStorage/Dropbox/Labor Discipline/07. Data/3. Main Study 3.0/ld_replication/data/temp/../../code/analysis/luisa/diag_howfo
+> und_harmonize.log
+  log type:  text
+ closed on:  30 May 2026, 16:04:53
+----------------------------------------------------------------------------------------------------------------------------------------------------------------

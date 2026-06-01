@@ -176,8 +176,14 @@
 	drop d_why_notattend_v2_*
 	
 	* How did you find this job?
-	apply7 replace d_howfound_ =  d_howfound_v2_ if mi(d_howfound_)
-	drop d_howfound_v2_*
+// 	apply7 replace d_howfound_ =  d_howfound_v2_ if mi(d_howfound_)
+// 	drop d_howfound_v2_*
+
+	* <FIXME> LC 5/30/26 there was an inconsistency in how the two variables were coded
+	forval i = 1/7 {
+		recode d_howfound_v2_`i' (1 2=1)(3 4=2)(5 6=3)(7=4)(8 9=6)(10=7)(11=8)
+		replace d_howfound_`i' = d_howfound_v2_`i' if mi(d_howfound_`i')
+	}
 	
 	* Main Act: Friends
 	forval i=1/7 {

@@ -1,0 +1,712 @@
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/owner/Library/CloudStorage/Dropbox/Labor Discipline/07. Data/3. Main Study 3.0/ld_replication/data/temp/../../code/analysis/luisa/diag_check
+> _v2vars.log
+  log type:  text
+ opened on:  30 May 2026, 16:46:18
+
+. 
+. di "############ PHASE 2 RAW: enumerate ALL *v2* variables ############"
+############ PHASE 2 RAW: enumerate ALL *v2* variables ############
+
+. use "$temp/03_phase2_completed_cleaned.dta", clear
+
+. ds *v2*
+f_why_no~2_1  f_why_no~2_3  f_why_no~2_5  f_why_no~2_7  f17_v2_999    f_howfou~2_1  f_howfou~2_3  f_howfou~2_5  f_howfou~2_7  f17_v2_9
+f_why_no~2_2  f_why_no~2_4  f_why_no~2_6  f_comp_rea~2  f_comp_whe~2  f_howfou~2_2  f_howfou~2_4  f_howfou~2_6  f17_v2_8
+
+. di ""
+
+
+. di "############ PHASE 1 RAW: enumerate ALL *v2* variables ############"
+############ PHASE 1 RAW: enumerate ALL *v2* variables ############
+
+. use "$temp/03_phase1_completed_cleaned.dta", clear
+
+. cap ds *v2*
+
+. if _rc di "  (no *v2* variables in phase 1 raw)"
+
+. 
+. di ""
+
+
+. di "############ RECONCILIATION at 3_combine line 175: why_attend <- why_notattend_v2 ############"
+############ RECONCILIATION at 3_combine line 175: why_attend <- why_notattend_v2 ############
+
+. use "$temp/03_phase2_completed_cleaned.dta", clear
+
+. di "---- variable labels ----"
+---- variable labels ----
+
+. foreach v in f_why_attend_1 f_why_notattend_1 f_why_notattend_v2_1 {
+  2.     local l : variable label `v'
+  3.     local vl : value label `v'
+  4.     di "  `v'   | varlabel: `l'   | value label: `vl'"
+  5. }
+  f_why_attend_1   | varlabel: Reason attending stand   | value label: rf2_a_1
+  f_why_notattend_1   | varlabel: If tried, why they did not attend stand   | value label: rf8_a_1
+  f_why_notattend_v2_1   | varlabel: Not attend reason   | value label: rf8_a_v2_1
+
+. di "---- VALUE LABELS side by side ----"
+---- VALUE LABELS side by side ----
+
+. di "== f_why_attend_1 (v1, the target) =="
+== f_why_attend_1 (v1, the target) ==
+
+. local L : value label f_why_attend_1
+
+. label list `L'
+rf2_a_1:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+
+. di "== f_why_notattend_1 (v1 'if tried, why not attend') =="
+== f_why_notattend_1 (v1 'if tried, why not attend') ==
+
+. local L : value label f_why_notattend_1
+
+. label list `L'
+rf8_a_1:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+
+. di "== f_why_notattend_v2_1 (v2, the source poured in) =="
+== f_why_notattend_v2_1 (v2, the source poured in) ==
+
+. local L : value label f_why_notattend_v2_1
+
+. label list `L'
+rf8_a_v2_1:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+
+. 
+. di ""
+
+
+. di "############ MAIN ACTIVITY: is there a v2 variant? ############"
+############ MAIN ACTIVITY: is there a v2 variant? ############
+
+. di "---- f_main_activity_1 label & value label ----"
+---- f_main_activity_1 label & value label ----
+
+. local l : variable label f_main_activity_1
+
+. local vl : value label f_main_activity_1
+
+. di "  f_main_activity_1 | varlabel: `l' | value label: `vl'"
+  f_main_activity_1 | varlabel: f1. What was the main activity you engaged in  days ago? | value label: 
+
+. label list `vl'
+p1_1:
+           1 1
+           2 2
+           3 3
+mode:
+           1 1. in-person
+           2 2. Phone
+alternate:
+           1 1. Same
+           2 2. Alternate
+p6:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+r1:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+r2:
+           0 0. No, this is not his number
+           1 1. No, he is not available now
+           2 2. Yes.
+           3 3. Yes, but call on a different number.
+         999 999. Survey was incomplete
+r3:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+r6_a:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+r6_b:
+           1 1. The phone was ringing but no one picked up
+           2 2. The phone was switched off
+           3 3. The phone number was invalid
+           4 4. There was some network issue and the call did not go through.
+           5 5. The phone number was busy/ enganged
+           6 6. Insufficient balance
+           7 7. The call did not go through (Exotel).
+         999 999. Survey was incomplete
+r6_c:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+r7:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+name_check:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+p8:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+p9:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+p10:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+p11:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+cov1:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+p12:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+p12_a:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+p12_b:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+p12_c:
+           1 1. The participant was too drunk
+           2 2. The participant left in the middle of questioning
+           3 3. The participant was not interested anymore
+           4 4. The participant got a job
+         998 998. Others
+f18:
+           1 1. Native
+           2 2. Chennai
+           3 3. Partly in Chennai and partly in native
+         998 998. Others
+         999 999. Survey was incomplete
+f19:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+pay:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+z0:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+z0_a:
+           1 1. Had to leave immediately/Did not have time
+           2 2. Was not interested
+           3 3. Felt uncomfortable with questions
+           4 4. Friends did not allow him to take the survey completely
+           5 5. Participant was drunk
+         998 998. Others
+z0_a1:
+           1 1. Wrong Number
+           2 2. Was not interested
+           3 3. Felt uncomfortable with questions
+           4 4. Had to leave immediately/Did not have time
+           5 5. Felt it was too long and cut the call
+           6 6. Asked to call another time after answering a few questions.
+           7 7. The phone was ringing but no one picked up
+           8 8. The phone number was busy/ enganged
+           9 9. The phone was switched off
+          10 10. The phone number was invalid
+          11 11. There were network issues throughout and therefore the call got cut in the m
+          12 12. There was some network issue and the call did not go through.
+          13 13. Out of service
+          14 14. Insufficient balance
+          15 15. Exotel Error
+         998 998. Others, specify: ______
+z0_b:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+z4:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+z4_a:
+           1 1. More recall than required
+           2 2. Less recall than required
+za1:
+           1 0. No
+           2 1. Yes
+           3 3. I don't know
+         999 999. Survey was incomplete
+za2:
+           1 0. No
+           2 1. Yes
+           3 3. I don't know
+         999 999. Survey was incomplete
+za3:
+           1 1. Found a job
+           2 2. Returned home
+           3 3. Left for any reason other than work
+         998 998. Other, Specify ____
+         999 999. Survey was incomplete
+za4:
+           1 Listened to the questions keenly and answered appropriately
+           2 Was a little distracted (i.e. Kept looking around, talking to his friends, etc.)
+           3 Was in a hurry to finish the survey.
+           4 Was annoyed at us while answering the questions.
+           5 Did not answer any of the questions properly.
+         998 998. Other, Specify ____
+         999 999. Survey was incomplete
+rf1_1:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf1_a_1:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf1_b_1:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf1_c_1:
+           1 1. I am a helper.
+           2 2. I am a mason.
+           3 3. I am a mesthri/ supervisor
+           4 4. Does not apply.
+         999 999. Survey was incomplete
+rf1_c_2:
+           1 1. I am a helper.
+           2 2. I am a mason.
+           3 3. I am a mesthri/ supervisor
+           4 4. Does not apply.
+         999 999. Survey was incomplete
+rf1_c_3:
+           1 1. I am a helper.
+           2 2. I am a mason.
+           3 3. I am a mesthri/ supervisor
+           4 4. Does not apply.
+         999 999. Survey was incomplete
+rf1_c_4:
+           1 1. I am a helper.
+           2 2. I am a mason.
+           3 3. I am a mesthri/ supervisor
+           4 4. Does not apply.
+         999 999. Survey was incomplete
+rf1_c_5:
+           1 1. I am a helper.
+           2 2. I am a mason.
+           3 3. I am a mesthri/ supervisor
+           4 4. Does not apply.
+         999 999. Survey was incomplete
+rf1_c_6:
+           1 1. I am a helper.
+           2 2. I am a mason.
+           3 3. I am a mesthri/ supervisor
+           4 4. Does not apply.
+         999 999. Survey was incomplete
+rf1_c_7:
+           1 1. I am a helper.
+           2 2. I am a mason.
+           3 3. I am a mesthri/ supervisor
+           4 4. Does not apply.
+         999 999. Survey was incomplete
+rf2_1:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf2_a_1:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf3_1:
+           1 1. I already had a job before coming to the stand
+           2 2. While at the stand (friend gave me a job, met recruiter, recruiter phone call
+           3 3. After I left the stand without finding a job there
+         998 998. Other, specify:
+         999 999. Survey was incomplete
+rf4_1:
+           1 1. Phone- An employer/owner called me/I called the employer
+           2 2. Phone- A recruiter/contractor contacted me/I called the recruiter
+           3 3. Phone- A friend or family member offered me work/I called them
+           4 4. Self Employed- I worked for myself (self-owned business and earned an income)
+           5 5. Multi-day job with the same employer.
+           6 6. Stand- recruiter/contractor called/ I called the recruiter/contractor
+           7 7. Stand- A friend or family member offered me job when I was at the stand.
+           8 8. Stand- A reccruiter offered me job when I was at the stand.
+         998 998. Others, specify ______
+         999 999. Survey was incomplete
+rf6_1:
+           1 1. Phone- An employer/owner called me/I called the emplyer
+           2 2. Phone- A recruiter/contractor contacted me/I called the recruiter
+           3 3. Phone- A friend or family member offered me work/I called them
+           4 4. Self Employed- I worked for myself (self-owned business and earned an income)
+           5 5. Multi-day job with the same employer.
+         998 998. Others, specify
+         999 999. Survey was incomplete
+rf6_a_1:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf6_a_2:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf6_a_3:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf6_a_4:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf6_a_5:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf6_a_6:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf6_a_7:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf7_1:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf7_2:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf7_3:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf7_4:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf7_5:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf7_6:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf7_7:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf8_1:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf8_a_1:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf12_1:
+           1 1. I thought there would be no job at the stand.
+           2 2. I did not feel like working.
+           3 3. I had physical pain.
+           4 4. I was sick/injured.
+           5 5. I had other obligations (Events that were planned i.e. marriage, functions, e
+           6 6. I was hungover.
+           7 7. I had an emergency (fire, flood, accident, someone got sick or other unexpect
+         998 998. Others, specify:_______
+         999 999. Survey was incomplete
+rf9_1:
+           1 1. I spent time with my children or family.
+           2 2. I stayed home for doing household chores.
+           3 3. I spent time with my friends.
+           4 4. I attended a function
+           5 5. I took rest
+           6 6. I had to attend to someone sick.
+           7 7. I was traveling to my native/ other place.
+           8 8. I did work, but not for pay.
+         996 996. I don’t remember
+         998 998. Other, specify
+         999 999. Survey was incomplete
+rf11_1:
+           1 1. I called some recruiters.
+           2 2. I called/asked a friend or family member for work.
+           3 3. I went directly to a construction/work site.
+           4 4. I went to a different stand.
+         998 998. Other, specify
+         999 999. Survey was incomplete
+rf13_1:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf13_2:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf13_3:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf13_4:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf13_5:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf13_6:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf13_7:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+f18_v2:
+           1 1. Native
+           2 2. Chennai
+           3 3. Partly in Chennai and partly in native
+         998 998. Others
+         999 999. Survey was incomplete
+rf1_a_paid_1:
+           1 1. Will be paid tomorrow
+           2 2. Will be paid at the end of the week
+           3 3. Don't know when he will be paid
+         998 998. Others, specify:______
+rf1_a_paid_2:
+           1 1. Will be paid tomorrow
+           2 2. Will be paid at the end of the week
+           3 3. Don't know when he will be paid
+         998 998. Others, specify:______
+rf1_a_paid_3:
+           1 1. Will be paid tomorrow
+           2 2. Will be paid at the end of the week
+           3 3. Don't know when he will be paid
+         998 998. Others, specify:______
+rf1_a_paid_4:
+           1 1. Will be paid tomorrow
+           2 2. Will be paid at the end of the week
+           3 3. Don't know when he will be paid
+         998 998. Others, specify:______
+rf1_a_paid_5:
+           1 1. Will be paid tomorrow
+           2 2. Will be paid at the end of the week
+           3 3. Don't know when he will be paid
+         998 998. Others, specify:______
+rf1_a_paid_6:
+           1 1. Will be paid tomorrow
+           2 2. Will be paid at the end of the week
+           3 3. Don't know when he will be paid
+         998 998. Others, specify:______
+rf1_a_paid_7:
+           1 1. Will be paid tomorrow
+           2 2. Will be paid at the end of the week
+           3 3. Don't know when he will be paid
+         998 998. Others, specify:______
+rf8_a_v2_1:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf4_v2_1:
+           1 1. Phone- An employer/owner called me
+           2 2. Phone - I called the employer
+           3 3. Phone- A recruiter/contractor contacted me
+           4 4. Phone- I called the recruiter
+           5 5. Phone- A friend or family member offered me work
+           6 6. Phone - I called my friend or family member
+           7 7. Self Employed- I worked for myself (self-owned business and earned an income)
+           8 8. Stand- recruiter/contractor called/ I called the recruiter/contractor
+           9 9. Stand - I called a recruiter while I was at the stand
+          10 9. Stand- A friend or family member offered me job when I was at the stand.
+          11 10. Stand- A reccruiter offered me job when I was at the stand.
+         998 998. Others, specify ______
+         999 999. Survey was incomplete
+rf4_v2_2:
+           1 1. Phone- An employer/owner called me
+           2 2. Phone - I called the employer
+           3 3. Phone- A recruiter/contractor contacted me
+           4 4. Phone- I called the recruiter
+           5 5. Phone- A friend or family member offered me work
+           6 6. Phone - I called my friend or family member
+           7 7. Self Employed- I worked for myself (self-owned business and earned an income)
+           8 8. Stand- recruiter/contractor called/ I called the recruiter/contractor
+           9 9. Stand - I called a recruiter while I was at the stand
+          10 9. Stand- A friend or family member offered me job when I was at the stand.
+          11 10. Stand- A reccruiter offered me job when I was at the stand.
+         998 998. Others, specify ______
+         999 999. Survey was incomplete
+rf4_v2_3:
+           1 1. Phone- An employer/owner called me
+           2 2. Phone - I called the employer
+           3 3. Phone- A recruiter/contractor contacted me
+           4 4. Phone- I called the recruiter
+           5 5. Phone- A friend or family member offered me work
+           6 6. Phone - I called my friend or family member
+           7 7. Self Employed- I worked for myself (self-owned business and earned an income)
+           8 8. Stand- recruiter/contractor called/ I called the recruiter/contractor
+           9 9. Stand - I called a recruiter while I was at the stand
+          10 9. Stand- A friend or family member offered me job when I was at the stand.
+          11 10. Stand- A reccruiter offered me job when I was at the stand.
+         998 998. Others, specify ______
+         999 999. Survey was incomplete
+rf4_v2_4:
+           1 1. Phone- An employer/owner called me
+           2 2. Phone - I called the employer
+           3 3. Phone- A recruiter/contractor contacted me
+           4 4. Phone- I called the recruiter
+           5 5. Phone- A friend or family member offered me work
+           6 6. Phone - I called my friend or family member
+           7 7. Self Employed- I worked for myself (self-owned business and earned an income)
+           8 8. Stand- recruiter/contractor called/ I called the recruiter/contractor
+           9 9. Stand - I called a recruiter while I was at the stand
+          10 9. Stand- A friend or family member offered me job when I was at the stand.
+          11 10. Stand- A reccruiter offered me job when I was at the stand.
+         998 998. Others, specify ______
+         999 999. Survey was incomplete
+rf4_v2_5:
+           1 1. Phone- An employer/owner called me
+           2 2. Phone - I called the employer
+           3 3. Phone- A recruiter/contractor contacted me
+           4 4. Phone- I called the recruiter
+           5 5. Phone- A friend or family member offered me work
+           6 6. Phone - I called my friend or family member
+           7 7. Self Employed- I worked for myself (self-owned business and earned an income)
+           8 8. Stand- recruiter/contractor called/ I called the recruiter/contractor
+           9 9. Stand - I called a recruiter while I was at the stand
+          10 9. Stand- A friend or family member offered me job when I was at the stand.
+          11 10. Stand- A reccruiter offered me job when I was at the stand.
+         998 998. Others, specify ______
+         999 999. Survey was incomplete
+rf4_v2_6:
+           1 1. Phone- An employer/owner called me
+           2 2. Phone - I called the employer
+           3 3. Phone- A recruiter/contractor contacted me
+           4 4. Phone- I called the recruiter
+           5 5. Phone- A friend or family member offered me work
+           6 6. Phone - I called my friend or family member
+           7 7. Self Employed- I worked for myself (self-owned business and earned an income)
+           8 8. Stand- recruiter/contractor called/ I called the recruiter/contractor
+           9 9. Stand - I called a recruiter while I was at the stand
+          10 9. Stand- A friend or family member offered me job when I was at the stand.
+          11 10. Stand- A reccruiter offered me job when I was at the stand.
+         998 998. Others, specify ______
+         999 999. Survey was incomplete
+rf4_v2_7:
+           1 1. Phone- An employer/owner called me
+           2 2. Phone - I called the employer
+           3 3. Phone- A recruiter/contractor contacted me
+           4 4. Phone- I called the recruiter
+           5 5. Phone- A friend or family member offered me work
+           6 6. Phone - I called my friend or family member
+           7 7. Self Employed- I worked for myself (self-owned business and earned an income)
+           8 8. Stand- recruiter/contractor called/ I called the recruiter/contractor
+           9 9. Stand - I called a recruiter while I was at the stand
+          10 9. Stand- A friend or family member offered me job when I was at the stand.
+          11 10. Stand- A reccruiter offered me job when I was at the stand.
+         998 998. Others, specify ______
+         999 999. Survey was incomplete
+rf4_1_1:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf4_1_2:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf4_1_3:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf4_1_4:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf4_1_5:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf4_1_6:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf4_1_7:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf6_b_1:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf6_b_2:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf6_b_3:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf6_b_4:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf6_b_5:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf6_b_6:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+rf6_b_7:
+           0 No
+           1 Yes
+         999 999. Survey was incomplete
+
+. di "---- any main-activity variable containing v2? ----"
+---- any main-activity variable containing v2? ----
+
+. cap ds *main*v2*
+
+. if _rc di "  (none: main_activity has NO v2 variant -> not reconciled across versions)"
+  (none: main_activity has NO v2 variant -> not reconciled across versions)
+
+. 
+. di ""
+
+
+. di "############ COMP RECALL v2 vars (line 148) ############"
+############ COMP RECALL v2 vars (line 148) ############
+
+. foreach v in f_comp_where_v2 {
+  2.     cap confirm variable `v'
+  3.     if !_rc {
+  4.         local l : variable label `v'
+  5.         local vl : value label `v'
+  6.         di "  `v' | varlabel: `l' | value label: `vl'"
+  7.     }
+  8. }
+  f_comp_where_v2 | varlabel: f18. Finally, we would like to know where you spend the time since ${recent_dat | value label: f18_v2
+
+. log close
+      name:  <unnamed>
+       log:  /Users/owner/Library/CloudStorage/Dropbox/Labor Discipline/07. Data/3. Main Study 3.0/ld_replication/data/temp/../../code/analysis/luisa/diag_check
+> _v2vars.log
+  log type:  text
+ closed on:  30 May 2026, 16:46:18
+----------------------------------------------------------------------------------------------------------------------------------------------------------------

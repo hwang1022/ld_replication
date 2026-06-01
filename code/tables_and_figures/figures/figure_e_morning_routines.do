@@ -1,21 +1,9 @@
-if "$data" == "" {
-	global data "`c(pwd)'/data"
-}
-if "$data_final" == "" {
-	global data_final "${data}/final"
-}
-if "$data_temp" == "" {
-	global data_temp "${data}/temp"
-}
-if "$output" == "" {
-	global output "${data}/output"
-}
-local analysis_main "$data_final/analysis_main.dta"
+local final_data_w_shocks "$final/final_data_w_shocks.dta"
 
 cap mkdir "$output"
 cap mkdir "$output/figures"
 
-use "`analysis_main'", clear
+use "`final_data_w_shocks'", clear
 keep if !mi(r_reg_morning_act_water)
 reshape long r_reg_morning_act_, i(pid) j(activities) string
 statsby, by(activities treatment) clear: ci means r_reg_morning_act_, level(90)
@@ -40,7 +28,7 @@ twoway (bar mean bord if treatment == 0, lcolor(gs12) fcolor(gs12)) || ///
 graph export "$output/figures/bar_morning_activities_low_att.pdf", replace
 graph export "$output/figures/figure_e_a.pdf", replace
 
-use "`analysis_main'", clear
+use "`final_data_w_shocks'", clear
 keep if !mi(r_morning_alarm)
 graph bar (meanci) r_morning_alarm, over(treatment) asyvars ///
 	bar(1, fcolor(gs12) lcolor(gs12)) bar(2, fcolor(none) lcolor(maroon)) ///
