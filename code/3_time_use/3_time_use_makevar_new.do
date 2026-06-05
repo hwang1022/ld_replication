@@ -4,7 +4,7 @@
 *	Purpose: Make Time Use Variables
 * 	
 *	Author: HW
-*	Last modified: Apr 28, 2026 HW
+*	Last modified: Jun 2, 2026 ST
 **************************************************
 **************************************************
 
@@ -35,13 +35,28 @@
 	lab def last_sleep_time_slot 0 "Before 5:30" 1 "5:30-6:00" 2 "6:00-6:30" 3 "6:30-7:00" 4 "7:00-7:30" 5 "7:30-8:00" 6 "8:00-8:30" 7 "8:30-9:00" , replace
 	lab val last_sleep_time_slot last_sleep_time_slot
 
+	/*
+	ST: Merging phase data based on pid and date
+	*/
+		
+	local phase_source_data "$temp/05_phase1_phase2_makepanel.dta"
+	preserve 
+		use "`phase_source_data'", clear 
+		keep pid date phase treatment stand strata 
+		drop if missing(pid date phase)
+		isid pid phase week_in date
+		tempfile phase_info
+		save "`phase_info'", replace 
+	restore 
+
+	merge 1:1 pid date using "`phase_info'"
+	drop if _merge==2
+	// drop _merge 
+
 	keep pid date last_sleep_time_slot time_bed_hours
 	sort pid date
 	
 	save "$temp/lss_time_use_sleep.dta" , replace
-
-
-
 
 
 
