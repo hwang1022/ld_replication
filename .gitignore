@@ -3,5 +3,8 @@
 !code/
 !code/**
 
+# Ignore Stata data files everywhere, including inside code/
+*.dta
+
 # Ignore macOS Finder metadata files in all folders
 **/.DS_Store
