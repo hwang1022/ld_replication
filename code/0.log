@@ -2,7 +2,7 @@
 Running /Users/st2246/Documents/Stata/ado/personal/profile.do ...
 
 
-. do "0_master.do"
+. do "0.master.do"
 
 . *********************************************************
 . *********************************************************
@@ -2729,7 +2729,7 @@ file ~/Dropbox/Labor Discipline/07. Data/3. Main Study
 .                 tempfile pid_ops
 
 .                 save `pid_ops'
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000002 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000002 saved
     as .dta format
 
 .         restore 
@@ -2889,9 +2889,9 @@ bs_sttime3: all characters numeric; replaced as byte
 .         tempfile bs_notfilled
 
 .         save `bs_notfilled' , replace
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000003 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000003 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000003 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000003 saved
     as .dta format
 
 .         
@@ -4490,14 +4490,14 @@ file ~/Dropbox/Labor Discipline/07. Data/3. Main Study
 .                 tempfile worktype
 
 .                 save `worktype'
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000005 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000005 saved
     as .dta format
 
 .         restore
 
 .         
 .         display "`worktype'"
-/var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000005
+/var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000005
 
 . 
 .         capture drop _merge
@@ -4769,7 +4769,7 @@ survey been |
 .         tempfile temp
 
 .         save `temp'
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000009 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000009 saved
     as .dta format
 
 .         restore 
@@ -5103,7 +5103,7 @@ file ~/Dropbox/Labor Discipline/07. Data/3. Main Study
 .         tempfile pid_ops
 
 .         save `pid_ops'
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00000b saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00000b saved
     as .dta format
 
 .         restore 
@@ -6334,7 +6334,7 @@ Duplicates in terms of pid
 .                 tempfile screening
 
 .                 save `screening'
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00000d saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00000d saved
     as .dta format
 
 .         restore
@@ -6753,7 +6753,7 @@ file ~/Dropbox/Labor Discipline/07. Data/3. Main Study
 .         tempfile pid_ops
 
 .         save `pid_ops'
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00000f saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00000f saved
     as .dta format
 
 .         restore 
@@ -8093,7 +8093,7 @@ file ~/Dropbox/Labor Discipline/07. Data/3. Main Study
 .                 tempfile phone_data
 
 .                 save `phone_data'
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00000h saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00000h saved
     as .dta format
 
 .         restore
@@ -9004,7 +9004,7 @@ file ~/Dropbox/Labor Discipline/07. Data/3. Main Study
 .                 tempfile phone_data
 
 .                 save `phone_data'
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00000j saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00000j saved
     as .dta format
 
 .         restore
@@ -9349,9 +9349,9 @@ d_part_leave_reason_others was byte now str1
 .                 tempfile phase2merge
 
 .                 save `phase2merge' , replace
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00000l not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00000l not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00000l saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00000l saved
     as .dta format
 
 .         
@@ -27457,7 +27457,7 @@ note: label truncated to 80 characters
 .                 tempfile work_random_impute_inc_h
 
 .                 save `work_random_impute_inc_h'
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00000n saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00000n saved
     as .dta format
 
 .         restore
@@ -27523,7 +27523,7 @@ file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00000n saved
 .                 tempfile work_mean_impute_inc_h
 
 .                 save `work_mean_impute_inc_h'
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00000p saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00000p saved
     as .dta format
 
 .         restore
@@ -27596,7 +27596,7 @@ file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00000p saved
 .                 tempfile work_random_impute_exc_h
 
 .                 save `work_random_impute_exc_h'
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00000r saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00000r saved
     as .dta format
 
 .         restore
@@ -27660,7 +27660,7 @@ file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00000r saved
 .                 tempfile work_mean_impute_exc_h
 
 .                 save `work_mean_impute_exc_h'
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00000t saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00000t saved
     as .dta format
 
 .         restore
@@ -28471,7 +28471,7 @@ file ~/Dropbox/Labor Discipline/07. Data/3. Main Study
 .     tempfile spells
 
 .     save `spells'
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00000v saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00000v saved
     as .dta format
 
 . restore
@@ -28513,7 +28513,7 @@ file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00000v saved
 .     tempfile anc
 
 .     save `anc'
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00000x saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00000x saved
     as .dta format
 
 . restore
@@ -28618,9 +28618,9 @@ file ~/Dropbox/Labor Discipline/07. Data/3. Main Study
 .                 tempfile late_announce_no_data
 
 .                 save `late_announce_no_data' , replace
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000011 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000011 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000011 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000011 saved
     as .dta format
 
 .         restore
@@ -28647,7 +28647,7 @@ file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000011 saved
 .                 tempfile attend
 
 .                 save `attend'
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000013 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000013 saved
     as .dta format
 
 .         restore 
@@ -28670,7 +28670,7 @@ file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000013 saved
 .                 tempfile attendb8
 
 .                 save `attendb8'
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000015 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000015 saved
     as .dta format
 
 .         restore 
@@ -28701,7 +28701,7 @@ file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000015 saved
 .                 tempfile work
 
 .                 save `work'
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000017 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000017 saved
     as .dta format
 
 .         restore
@@ -28723,7 +28723,7 @@ file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000017 saved
 .                 tempfile work1
 
 .                 save `work1'
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000019 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000019 saved
     as .dta format
 
 .         restore
@@ -28745,7 +28745,7 @@ file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000019 saved
 .                 tempfile work_orig
 
 .                 save `work_orig'
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00001b saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00001b saved
     as .dta format
 
 .         restore
@@ -28766,7 +28766,7 @@ Duplicates in terms of pid phase week_in
 .                 tempfile temp
 
 .                 save `temp'
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00001d saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00001d saved
     as .dta format
 
 .         restore 
@@ -29239,9 +29239,9 @@ Duplicates in terms of pid date
 .         tempfile pre_survey_dates_only
 
 .         save `pre_survey_dates_only' , replace
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00001e not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00001e not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00001e saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00001e saved
     as .dta format
 
 .  
@@ -29284,9 +29284,9 @@ file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00001e saved
 .                 restore
  21.         }
 (1,950 observations deleted)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00001g not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00001g not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00001g saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00001g saved
     as .dta format
 (190 observations deleted)
 
@@ -29319,14 +29319,14 @@ Duplicates in terms of pid
     -----------------------------------------
 (240 real changes made)
 (240 real changes made)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00001h not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00001h not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00001h saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00001h saved
     as .dta format
 (1,980 observations deleted)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00001j not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00001j not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00001j saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00001j saved
     as .dta format
 (203 observations deleted)
 
@@ -29359,14 +29359,14 @@ Duplicates in terms of pid
     -----------------------------------------
 (87 real changes made)
 (87 real changes made)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00001k not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00001k not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00001k saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00001k saved
     as .dta format
 (1,976 observations deleted)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00001m not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00001m not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00001m saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00001m saved
     as .dta format
 (213 observations deleted)
 
@@ -29399,14 +29399,14 @@ Duplicates in terms of pid
     -----------------------------------------
 (83 real changes made)
 (83 real changes made)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00001n not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00001n not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00001n saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00001n saved
     as .dta format
 (1,902 observations deleted)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00001p not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00001p not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00001p saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00001p saved
     as .dta format
 (207 observations deleted)
 
@@ -29439,14 +29439,14 @@ Duplicates in terms of pid
     -----------------------------------------
 (165 real changes made)
 (165 real changes made)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00001q not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00001q not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00001q saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00001q saved
     as .dta format
 (1,994 observations deleted)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00001s not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00001s not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00001s saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00001s saved
     as .dta format
 (210 observations deleted)
 
@@ -29479,14 +29479,14 @@ Duplicates in terms of pid
     -----------------------------------------
 (59 real changes made)
 (59 real changes made)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00001t not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00001t not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00001t saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00001t saved
     as .dta format
 (1,898 observations deleted)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00001v not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00001v not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00001v saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00001v saved
     as .dta format
 (210 observations deleted)
 
@@ -29519,14 +29519,14 @@ Duplicates in terms of pid
     -----------------------------------------
 (293 real changes made)
 (293 real changes made)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00001w not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00001w not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00001w saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00001w saved
     as .dta format
 (1,779 observations deleted)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000020 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000020 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000020 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000020 saved
     as .dta format
 (213 observations deleted)
 
@@ -29559,14 +29559,14 @@ Duplicates in terms of pid
     -----------------------------------------
 (234 real changes made)
 (234 real changes made)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000021 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000021 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000021 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000021 saved
     as .dta format
 (1,314 observations deleted)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000023 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000023 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000023 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000023 saved
     as .dta format
 (192 observations deleted)
 
@@ -29599,14 +29599,14 @@ Duplicates in terms of pid
     -----------------------------------------
 (1,632 real changes made)
 (1,632 real changes made)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000024 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000024 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000024 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000024 saved
     as .dta format
 (1,640 observations deleted)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000026 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000026 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000026 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000026 saved
     as .dta format
 (185 observations deleted)
 
@@ -29639,14 +29639,14 @@ Duplicates in terms of pid
     -----------------------------------------
 (1,255 real changes made)
 (1,255 real changes made)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000027 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000027 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000027 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000027 saved
     as .dta format
 (1,818 observations deleted)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000029 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000029 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000029 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000029 saved
     as .dta format
 (210 observations deleted)
 
@@ -29679,14 +29679,14 @@ Duplicates in terms of pid
     -----------------------------------------
 (543 real changes made)
 (543 real changes made)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002a not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002a not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002a saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002a saved
     as .dta format
 (1,999 observations deleted)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002c not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002c not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002c saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002c saved
     as .dta format
 (217 observations deleted)
 
@@ -29719,9 +29719,9 @@ Duplicates in terms of pid
     -----------------------------------------
 (86 real changes made)
 (86 real changes made)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002d not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002d not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002d saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002d saved
     as .dta format
 
 .         
@@ -29758,9 +29758,9 @@ file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002d saved
 .         tempfile survey_dates_only
 
 .         save `survey_dates_only' , replace
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002e not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002e not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002e saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002e saved
     as .dta format
 
 .         
@@ -38962,27 +38962,30 @@ file ~/Dropbox/Labor Discipline/07. Data/3. Main Study
 . 
 .         /*
 >         ST: Merging phase data based on pid and date
+> 
+>         // TODO: test that table_c works with updated data
+> 
 >         */
 .                 
-.         local phase_source_data "$temp/05_phase1_phase2_makepanel.dta"
+.         local phase_source_data "$temp/03_bs_phase123_makevar.dta"
 
 .         preserve 
 
 .                 use "`phase_source_data'", clear 
 
-.                 keep pid date phase 
+.                 keep pid date phase treatment strata stand
 
 .                 drop if missing(pid) |  missing(date) | missing(phase)
 (0 observations deleted)
 
-.                 isid pid phase date
+.                 isid pid phase date 
 
 .                 tempfile phase_info
 
 .                 save "`phase_info'", replace 
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002g not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002g not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002g saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002g saved
     as .dta format
 
 .         restore 
@@ -38993,20 +38996,18 @@ file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002g saved
 
     Result                      Number of obs
     -----------------------------------------
-    Not matched                        24,278
-        from master                       106  (_merge==1)
-        from using                     24,172  (_merge==2)
+    Not matched                        76,294
+        from master                        44  (_merge==1)
+        from using                     76,250  (_merge==2)
 
-    Matched                               209  (_merge==3)
+    Matched                               271  (_merge==3)
     -----------------------------------------
 
-.         drop if _merge==2
-(24,172 observations deleted)
+.         drop if _merge==2 // drop _merge 
+(76,250 observations deleted)
 
-.         // drop _merge 
 . 
-.         keep pid date last_sleep_time_slot time_bed_hours
-
+.         // keep pid date phase last_sleep_time_slot time_bed_hours
 .         sort pid date
 
 .         
@@ -39022,6 +39023,8 @@ file ~/Dropbox/Labor Discipline/07. Data/3. Main Study
 
 .         merge 1:m pid using "$temp/lss_time_use_sleep.dta", keep(3) nogen
 (variable pid was float, now double to accommodate using data's values)
+(label tc already defined)
+(label stand_lab already defined)
 
     Result                      Number of obs
     -----------------------------------------
@@ -39321,2313 +39324,2313 @@ Duplicates in terms of all variables
  11.         }
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002i not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002i not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002i saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002i saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002j not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002j not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002j saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002j saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002k not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002k not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002k saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002k saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002l not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002l not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002l saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002l saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002m not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002m not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002m saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002m saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002n not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002n not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002n saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002n saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002o not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002o not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002o saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002o saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002p not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002p not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002p saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002p saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002q not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002q not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002q saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002q saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002r not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002r not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002r saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002r saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002s not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002s not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002s saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002s saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002t not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002t not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002t saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002t saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002u not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002u not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002u saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002u saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002v not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002v not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002v saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002v saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002w not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002w not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002w saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002w saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002x not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002x not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00002x saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00002x saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000030 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000030 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000030 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000030 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000031 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000031 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000031 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000031 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000032 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000032 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000032 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000032 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000033 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000033 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000033 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000033 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000034 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000034 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000034 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000034 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000035 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000035 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000035 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000035 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000036 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000036 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000036 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000036 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000037 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000037 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000037 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000037 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000038 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000038 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000038 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000038 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000039 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000039 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000039 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000039 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003a not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003a not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003a saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003a saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003b not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003b not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003b saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003b saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003c not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003c not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003c saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003c saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003d not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003d not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003d saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003d saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003e not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003e not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003e saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003e saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003f not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003f not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003f saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003f saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003g not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003g not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003g saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003g saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003h not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003h not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003h saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003h saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003i not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003i not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003i saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003i saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003j not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003j not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003j saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003j saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003k not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003k not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003k saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003k saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003l not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003l not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003l saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003l saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003m not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003m not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003m saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003m saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003n not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003n not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003n saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003n saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003o not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003o not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003o saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003o saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003p not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003p not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003p saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003p saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003q not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003q not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003q saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003q saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003r not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003r not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003r saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003r saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003s not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003s not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003s saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003s saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003t not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003t not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003t saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003t saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003u not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003u not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003u saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003u saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003v not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003v not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003v saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003v saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003w not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003w not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003w saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003w saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003x not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003x not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00003x saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00003x saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000040 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000040 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000040 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000040 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000041 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000041 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000041 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000041 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000042 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000042 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000042 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000042 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000043 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000043 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000043 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000043 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000044 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000044 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000044 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000044 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000045 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000045 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000045 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000045 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000046 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000046 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000046 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000046 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000047 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000047 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000047 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000047 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000048 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000048 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000048 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000048 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000049 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000049 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000049 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000049 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004a not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004a not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004a saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004a saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004b not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004b not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004b saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004b saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004c not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004c not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004c saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004c saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004d not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004d not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004d saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004d saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004e not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004e not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004e saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004e saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004f not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004f not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004f saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004f saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004g not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004g not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004g saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004g saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004h not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004h not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004h saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004h saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004i not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004i not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004i saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004i saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004j not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004j not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004j saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004j saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004k not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004k not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004k saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004k saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004l not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004l not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004l saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004l saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004m not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004m not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004m saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004m saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004n not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004n not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004n saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004n saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004o not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004o not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004o saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004o saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004p not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004p not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004p saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004p saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004q not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004q not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004q saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004q saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004r not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004r not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004r saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004r saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004s not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004s not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004s saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004s saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004t not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004t not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004t saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004t saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004u not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004u not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004u saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004u saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004v not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004v not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004v saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004v saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004w not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004w not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004w saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004w saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004x not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004x not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00004x saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00004x saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000050 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000050 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000050 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000050 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000051 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000051 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000051 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000051 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000052 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000052 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000052 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000052 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000053 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000053 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000053 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000053 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000054 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000054 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000054 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000054 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000055 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000055 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000055 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000055 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000056 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000056 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000056 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000056 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000057 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000057 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000057 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000057 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000058 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000058 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000058 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000058 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000059 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000059 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000059 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000059 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005a not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005a not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005a saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005a saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005b not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005b not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005b saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005b saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005c not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005c not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005c saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005c saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005d not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005d not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005d saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005d saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005e not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005e not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005e saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005e saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005f not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005f not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005f saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005f saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005g not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005g not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005g saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005g saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005h not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005h not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005h saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005h saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005i not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005i not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005i saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005i saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005j not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005j not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005j saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005j saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005k not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005k not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005k saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005k saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005l not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005l not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005l saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005l saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005m not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005m not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005m saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005m saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005n not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005n not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005n saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005n saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005o not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005o not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005o saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005o saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005p not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005p not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005p saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005p saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005q not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005q not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005q saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005q saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005r not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005r not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005r saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005r saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005s not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005s not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005s saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005s saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005t not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005t not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005t saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005t saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005u not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005u not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005u saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005u saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005v not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005v not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005v saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005v saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005w not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005w not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005w saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005w saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005x not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005x not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00005x saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00005x saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000060 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000060 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000060 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000060 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000061 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000061 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000061 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000061 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000062 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000062 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000062 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000062 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000063 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000063 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000063 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000063 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000064 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000064 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000064 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000064 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000065 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000065 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000065 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000065 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000066 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000066 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000066 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000066 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000067 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000067 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000067 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000067 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000068 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000068 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000068 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000068 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000069 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000069 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000069 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000069 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006a not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006a not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006a saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006a saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006b not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006b not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006b saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006b saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006c not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006c not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006c saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006c saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006d not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006d not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006d saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006d saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006e not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006e not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006e saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006e saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006f not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006f not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006f saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006f saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006g not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006g not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006g saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006g saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006h not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006h not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006h saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006h saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006i not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006i not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006i saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006i saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006j not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006j not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006j saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006j saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006k not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006k not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006k saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006k saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006l not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006l not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006l saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006l saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006m not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006m not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006m saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006m saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006n not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006n not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006n saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006n saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006o not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006o not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006o saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006o saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006p not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006p not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006p saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006p saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006q not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006q not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006q saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006q saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006r not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006r not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006r saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006r saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006s not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006s not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006s saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006s saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006t not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006t not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006t saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006t saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006u not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006u not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006u saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006u saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006v not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006v not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006v saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006v saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006w not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006w not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006w saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006w saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006x not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006x not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00006x saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00006x saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000070 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000070 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000070 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000070 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000071 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000071 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000071 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000071 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000072 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000072 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000072 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000072 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000073 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000073 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000073 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000073 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000074 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000074 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000074 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000074 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000075 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000075 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000075 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000075 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000076 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000076 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000076 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000076 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000077 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000077 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000077 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000077 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000078 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000078 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000078 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000078 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000079 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000079 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000079 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000079 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007a not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007a not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007a saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007a saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007b not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007b not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007b saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007b saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007c not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007c not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007c saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007c saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007d not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007d not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007d saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007d saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007e not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007e not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007e saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007e saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007f not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007f not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007f saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007f saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007g not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007g not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007g saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007g saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007h not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007h not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007h saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007h saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007i not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007i not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007i saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007i saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007j not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007j not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007j saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007j saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007k not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007k not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007k saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007k saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007l not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007l not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007l saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007l saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007m not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007m not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007m saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007m saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007n not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007n not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007n saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007n saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007o not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007o not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007o saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007o saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007p not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007p not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007p saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007p saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007q not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007q not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007q saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007q saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007r not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007r not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007r saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007r saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007s not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007s not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007s saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007s saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007t not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007t not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007t saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007t saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007u not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007u not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007u saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007u saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007v not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007v not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007v saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007v saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007w not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007w not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007w saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007w saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007x not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007x not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00007x saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00007x saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000080 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000080 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000080 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000080 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000081 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000081 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000081 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000081 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000082 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000082 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000082 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000082 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000083 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000083 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000083 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000083 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000084 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000084 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000084 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000084 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000085 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000085 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000085 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000085 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000086 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000086 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000086 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000086 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000087 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000087 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000087 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000087 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000088 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000088 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000088 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000088 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000089 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000089 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000089 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000089 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008a not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008a not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008a saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008a saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008b not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008b not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008b saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008b saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008c not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008c not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008c saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008c saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008d not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008d not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008d saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008d saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008e not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008e not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008e saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008e saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008f not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008f not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008f saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008f saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008g not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008g not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008g saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008g saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008h not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008h not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008h saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008h saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008i not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008i not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008i saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008i saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008j not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008j not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008j saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008j saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008k not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008k not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008k saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008k saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008l not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008l not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008l saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008l saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008m not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008m not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008m saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008m saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008n not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008n not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008n saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008n saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008o not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008o not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008o saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008o saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008p not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008p not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008p saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008p saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008q not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008q not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008q saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008q saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008r not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008r not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008r saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008r saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008s not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008s not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008s saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008s saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008t not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008t not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008t saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008t saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008u not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008u not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008u saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008u saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008v not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008v not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008v saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008v saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008w not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008w not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008w saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008w saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008x not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008x not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00008x saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00008x saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000090 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000090 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000090 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000090 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000091 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000091 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000091 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000091 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000092 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000092 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000092 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000092 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000093 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000093 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000093 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000093 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000094 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000094 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000094 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000094 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000095 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000095 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000095 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000095 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000096 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000096 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000096 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000096 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000097 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000097 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000097 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000097 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000098 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000098 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000098 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000098 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000099 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000099 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.000099 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.000099 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009a not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009a not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009a saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009a saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009b not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009b not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009b saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009b saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009c not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009c not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009c saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009c saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009d not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009d not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009d saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009d saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009e not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009e not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009e saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009e saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009f not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009f not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009f saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009f saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009g not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009g not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009g saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009g saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009h not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009h not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009h saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009h saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009i not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009i not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009i saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009i saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009j not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009j not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009j saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009j saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009k not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009k not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009k saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009k saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009l not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009l not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009l saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009l saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009m not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009m not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009m saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009m saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009n not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009n not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009n saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009n saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009o not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009o not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009o saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009o saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009p not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009p not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009p saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009p saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009q not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009q not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009q saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009q saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009r not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009r not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009r saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009r saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009s not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009s not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009s saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009s saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009t not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009t not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009t saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009t saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009u not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009u not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009u saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009u saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009v not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009v not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009v saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009v saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009w not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009w not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009w saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009w saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009x not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009x not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.00009x saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.00009x saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000a0 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000a0 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000a0 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000a0 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000a1 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000a1 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000a1 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000a1 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000a2 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000a2 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000a2 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000a2 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000a3 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000a3 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000a3 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000a3 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000a4 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000a4 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000a4 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000a4 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000a5 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000a5 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000a5 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000a5 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000a6 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000a6 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000a6 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000a6 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000a7 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000a7 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000a7 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000a7 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000a8 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000a8 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000a8 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000a8 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000a9 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000a9 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000a9 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000a9 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000aa not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000aa not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000aa saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000aa saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ab not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ab not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ab saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ab saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ac not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ac not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ac saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ac saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ad not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ad not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ad saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ad saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ae not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ae not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ae saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ae saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000af not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000af not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000af saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000af saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ag not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ag not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ag saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ag saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ah not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ah not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ah saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ah saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ai not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ai not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ai saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ai saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000aj not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000aj not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000aj saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000aj saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ak not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ak not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ak saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ak saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000al not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000al not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000al saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000al saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000am not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000am not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000am saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000am saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000an not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000an not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000an saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000an saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ao not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ao not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ao saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ao saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ap not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ap not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ap saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ap saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000aq not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000aq not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000aq saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000aq saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ar not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ar not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ar saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ar saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000as not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000as not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000as saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000as saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000at not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000at not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000at saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000at saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000au not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000au not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000au saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000au saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000av not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000av not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000av saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000av saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000aw not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000aw not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000aw saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000aw saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ax not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ax not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ax saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ax saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000b0 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000b0 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000b0 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000b0 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000b1 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000b1 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000b1 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000b1 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000b2 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000b2 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000b2 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000b2 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000b3 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000b3 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000b3 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000b3 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000b4 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000b4 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000b4 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000b4 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000b5 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000b5 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000b5 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000b5 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000b6 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000b6 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000b6 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000b6 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000b7 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000b7 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000b7 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000b7 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000b8 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000b8 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000b8 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000b8 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000b9 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000b9 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000b9 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000b9 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ba not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ba not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ba saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ba saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bb not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bb not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bb saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bb saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bc not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bc not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bc saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bc saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bd not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bd not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bd saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bd saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000be not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000be not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000be saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000be saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bf not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bf not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bf saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bf saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bg not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bg not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bg saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bg saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bh not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bh not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bh saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bh saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bi not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bi not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bi saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bi saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bj not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bj not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bj saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bj saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bk not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bk not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bk saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bk saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bl not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bl not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bl saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bl saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bm not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bm not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bm saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bm saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bn not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bn not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bn saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bn saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bo not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bo not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bo saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bo saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bp not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bp not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bp saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bp saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bq not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bq not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bq saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bq saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000br not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000br not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000br saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000br saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bs not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bs not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bs saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bs saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bt not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bt not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bt saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bt saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bu not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bu not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bu saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bu saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bv not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bv not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bv saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bv saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bw not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bw not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bw saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bw saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bx not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bx not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000bx saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000bx saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000c0 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000c0 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000c0 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000c0 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000c1 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000c1 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000c1 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000c1 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000c2 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000c2 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000c2 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000c2 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000c3 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000c3 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000c3 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000c3 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000c4 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000c4 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000c4 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000c4 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000c5 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000c5 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000c5 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000c5 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000c6 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000c6 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000c6 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000c6 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000c7 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000c7 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000c7 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000c7 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000c8 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000c8 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000c8 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000c8 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000c9 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000c9 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000c9 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000c9 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ca not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ca not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ca saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ca saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cb not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cb not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cb saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cb saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cc not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cc not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cc saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cc saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cd not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cd not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cd saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cd saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ce not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ce not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ce saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ce saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cf not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cf not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cf saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cf saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cg not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cg not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cg saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cg saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ch not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ch not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ch saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ch saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ci not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ci not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ci saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ci saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cj not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cj not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cj saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cj saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ck not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ck not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ck saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ck saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cl not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cl not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cl saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cl saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cm not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cm not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cm saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cm saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cn not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cn not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cn saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cn saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000co not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000co not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000co saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000co saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cp not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cp not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cp saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cp saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cq not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cq not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cq saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cq saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cr not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cr not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cr saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cr saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cs not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cs not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cs saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cs saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ct not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ct not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ct saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ct saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cu not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cu not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cu saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cu saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cv not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cv not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cv saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cv saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cw not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cw not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cw saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cw saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cx not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cx not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000cx saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000cx saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000d0 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000d0 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000d0 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000d0 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000d1 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000d1 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000d1 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000d1 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000d2 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000d2 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000d2 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000d2 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000d3 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000d3 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000d3 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000d3 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000d4 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000d4 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000d4 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000d4 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000d5 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000d5 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000d5 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000d5 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000d6 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000d6 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000d6 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000d6 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000d7 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000d7 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000d7 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000d7 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000d8 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000d8 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000d8 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000d8 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000d9 not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000d9 not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000d9 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000d9 saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000da not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000da not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000da saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000da saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000db not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000db not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000db saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000db saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000dc not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000dc not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000dc saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000dc saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000dd not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000dd not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000dd saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000dd saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000de not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000de not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000de saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000de saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000df not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000df not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000df saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000df saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000dg not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000dg not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000dg saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000dg saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000dh not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000dh not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000dh saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000dh saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000di not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000di not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000di saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000di saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000dj not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000dj not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000dj saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000dj saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000dk not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000dk not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000dk saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000dk saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000dl not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000dl not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000dl saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000dl saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000dm not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000dm not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000dm saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000dm saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000dn not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000dn not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000dn saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000dn saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000do not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000do not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000do saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000do saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,784 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000dp not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000dp not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000dp saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000dp saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000dq not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000dq not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000dq saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000dq saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000dr not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000dr not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000dr saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000dr saved
     as .dta format
 (encoding automatically selected: ISO-8859-1)
 (6 vars, 8,808 obs)
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ds not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ds not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ds saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ds saved
     as .dta format
 . 
 .         * Combine all datasets
@@ -43767,7 +43770,7 @@ file ~/Dropbox/Labor Discipline/07. Data/3. Main Study
 .         tempfile bl
 
 .         save `bl'  //, replace  
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000dt saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000dt saved
     as .dta format
 
 . 
@@ -43820,9 +43823,9 @@ file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000dt saved
 .         tempfile p12
 
 .         save `p12' , replace
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000du not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000du not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000du saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000du saved
     as .dta format
 
 .         
@@ -43870,9 +43873,9 @@ file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000du saved
 .         tempfile p3
 
 .         save `p3' , replace
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000dv not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000dv not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000dv saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000dv saved
     as .dta format
 
 .         
@@ -44605,9 +44608,9 @@ file ~/Dropbox/Labor Discipline/07. Data/3. Main Study
 .                 tempfile late_announce_no_data
 
 .                 save `late_announce_no_data' , replace
-(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000dx not
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000dx not
     found)
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000dx saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000dx saved
     as .dta format
 
 .         restore
@@ -44637,7 +44640,7 @@ file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000dx saved
 .                 tempfile attend
 
 .                 save `attend'
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000e1 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000e1 saved
     as .dta format
 
 .         restore 
@@ -44660,7 +44663,7 @@ file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000e1 saved
 .                 tempfile attendb8
 
 .                 save `attendb8'
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000e3 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000e3 saved
     as .dta format
 
 .         restore 
@@ -44691,7 +44694,7 @@ file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000e3 saved
 .                 tempfile work
 
 .                 save `work'
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000e5 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000e5 saved
     as .dta format
 
 .         restore
@@ -44713,7 +44716,7 @@ file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000e5 saved
 .                 tempfile work1
 
 .                 save `work1'
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000e7 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000e7 saved
     as .dta format
 
 .         restore
@@ -44735,7 +44738,7 @@ file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000e7 saved
 .                 tempfile work_orig
 
 .                 save `work_orig'
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000e9 saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000e9 saved
     as .dta format
 
 .         restore
@@ -44756,7 +44759,7 @@ Duplicates in terms of pid phase week_in
 .                 tempfile temp
 
 .                 save `temp'
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000eb saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000eb saved
     as .dta format
 
 .         restore 
@@ -44874,7 +44877,7 @@ file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000eb saved
 .         tempfile temp 
 
 .         save `temp'
-file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St05199.0000ec saved
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St18627.0000ec saved
     as .dta format
 
 .         

@@ -163,36 +163,21 @@
 		* <FIXME> LC: record the z for rows that will be filled in this iteration.
 		* Must be written BEFORE the numericVars loop so `recall_source == 2` still
 		* reflects the pre-upgrade state.
-		if $prioritize_in_person == 1 {
-			bys pid (date): replace daily_recall_lag = `z' if ///
-			    d_`z'_nmissing[_n+`z'] != 0 & ///
-			    (nmissing == 0 | (recall_source == 2 & mode[_n+`z'] == 1)) & ///
-			    pid == pid[_n+`z']
-		}
-		else {
-			bys pid (date): replace daily_recall_lag = `z' if ///
-			    d_`z'_nmissing[_n+`z'] != 0 & nmissing == 0 & pid == pid[_n+`z']
-		}
+		bys pid (date): replace daily_recall_lag = `z' if ///
+			d_`z'_nmissing[_n+`z'] != 0 & ///
+			(nmissing == 0 | (recall_source == 2 & mode[_n+`z'] == 1)) & ///
+			pid == pid[_n+`z']
 		foreach var in `numericVars' {
-			if $prioritize_in_person == 1 {
-				bys pid (date): replace `var'= d_`var'_`z'[_n+`z'] if ///
-				d_`z'_nmissing[_n+`z'] != 0 & (nmissing == 0 | (recall_source == 2 & mode[_n+`z'] == 1)) & pid == pid[_n+`z'] & (d_`var'_`z'[_n+`z'] != 999 & d_`var'_`z'[_n+`z'] != .)
-			}
-			else {
-				bys pid (date): replace `var'= d_`var'_`z'[_n+`z'] if ///
-				d_`z'_nmissing[_n+`z'] != 0 & nmissing == 0 & pid == pid[_n+`z'] & d_`var'_`z'[_n+`z'] != 999
-			}
+
+			bys pid (date): replace `var'= d_`var'_`z'[_n+`z'] if ///
+			d_`z'_nmissing[_n+`z'] != 0 & (nmissing == 0 | (recall_source == 2 & mode[_n+`z'] == 1)) & pid == pid[_n+`z'] & (d_`var'_`z'[_n+`z'] != 999 & d_`var'_`z'[_n+`z'] != .)
+
 		}
 		
 		foreach var in `stringVars' {
-			if $prioritize_in_person == 1 {
-				bys pid (date): replace `var'= d_`var'_`z'[_n+`z']  if ///
-				d_`z'_nmissing[_n+`z'] != 0 & (nmissing == 0 | (recall_source == 2 & mode[_n+`z'] == 1)) & pid == pid[_n+`z'] & (d_`var'_`z'[_n+`z'] != "999" & d_`var'_`z'[_n+`z'] != "")
-			}
-			else {
-				bys pid (date): replace `var'= d_`var'_`z'[_n+`z']  if ///
-				d_`z'_nmissing[_n+`z'] != 0 & nmissing == 0 & pid == pid[_n+`z'] & d_`var'_`z'[_n+`z'] != "999"
-			}
+
+			bys pid (date): replace `var'= d_`var'_`z'[_n+`z']  if ///
+			d_`z'_nmissing[_n+`z'] != 0 & (nmissing == 0 | (recall_source == 2 & mode[_n+`z'] == 1)) & pid == pid[_n+`z'] & (d_`var'_`z'[_n+`z'] != "999" & d_`var'_`z'[_n+`z'] != "")
 		}
 
 		ereplace nmissing = rownonmiss(`numericVars' `stringVars'), strok 			

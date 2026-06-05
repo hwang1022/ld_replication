@@ -1,0 +1,3520 @@
+
+Running /Users/st2246/Documents/Stata/ado/personal/profile.do ...
+
+
+. do "0_master.do"
+
+. *********************************************************
+. *********************************************************
+. *                                                                            
+>                                    *
+. *       Master Do-File: LD                                                   
+>                    *
+. *       Date Created: Oct 7 2024 by HW                                       
+>    *
+. *       Last Modified: June 1 2026 by HW                                     
+>    *
+. *                                                                            
+>                                    *
+. *       This master do-file defines globals and programs        *
+. *       and cleans individual survey rounds                                  
+>    *
+. *       and creates final dataset                                            
+>            *
+. *       and conducts analysis                                                
+>            *
+. *                                                                            
+>                                    *
+. *********************************************************
+. *********************************************************
+. 
+. 
+. ******************
+. **# Update Notes
+. ******************
+. 
+. * Notes May 28, 2026 HW:
+. *   - We now no longer maintain support for the original data version.
+. 
+. 
+. * Notes June 1, 2026 HW:
+. *   - We now only support the prioritize in person version following Luisa's 
+> decision.
+. 
+. 
+. 
+. **********************
+. **# Initialize Stata
+. **********************
+. 
+. ****
+. **## Install Packages
+. ****
+. 
+.         local install_packages = 0
+
+.         if `install_packages' == 1 {
+.                 local packagelist baltab strclean
+.                 foreach package in `packagelist' {
+  2.                         cap net uninstall `package'
+  3.                         net install `package', from(https://raw.githubuser
+> content.com/haowang5/stata/main/) replace
+  4.         }
+. 
+.         ssc install ietoolkit, replace
+.         ssc install grstyle, replace
+.         ssc install boottest, replace
+.         ssc install elabel, replace
+.         }
+
+. 
+. ****
+. **## Initialize Stata
+. ****
+. 
+.         ieboilstart, version(18.0)
+
+    DISCLAIMER: Due to how settings work in Stata, this command can only
+        attempt to harmonize settings as much as possible across users, but
+        no guarantee can be given that all commands will always behave
+        identically unless the exact same version and type of Stata is used,
+        with the same releases of user-contributed commands installed.
+
+    Settings set by this command:
+    clear all
+    set maxvar       32767 , permanently
+    set matsize      400   , permanently
+    set niceness     5     , permanently
+    set min_memory   0     , permanently
+    set max_memory   .     , permanently
+    set segmentsize  32m   , permanently
+    set more         off   , permanently
+    pause            on
+    set varabbrev    off   , permanently
+    set type         float , permanently
+
+    IMPORTANT: One setting of this command requires that `r(version)' is run
+        on the immediate line after this command. Include the quotes ` and '
+        in `r(version)'. This sets the Stata version which cannot be done for
+        this purpose inside the command. This message will show regardless if
+        this is already done. Read more on this requirement in the help file.
+
+.         `r(version)'
+
+. 
+.         set seed 42
+
+. 
+.         set scheme s2color
+
+.         graph set window fontface "Times New Roman"
+not available in non-GUI version
+
+.         grstyle init
+
+.         grstyle color background white
+
+.         grstyle linepattern major_grid dash
+
+. 
+. 
+.         *******************
+.         **# Define Macros
+.         *******************
+. 
+.         * Important Macros:
+.         * run_cleaning: whether to run the cleaning dofiles
+.         * run_analysis: whether to run the analysis dofiles
+.         * data_version: "new" or "original" (Support for original data is dep
+> recated as of May 28, 2026)
+.         * data_version_new: "prioritize_date" or "prioritize_in_person". If y
+> ou chose "original", this option is ignored.
+. 
+.         * weather_data: whether to merge weather data into the main analysis 
+> dataset
+. 
+. 
+. 
+.         ****
+.         **## Run dofiles
+.         ****
+. 
+.         * Indicator directory defined
+.         global  MasterRunning = 1
+
+. 
+.         * Whether run everything, or just define directories
+.         * Install Packages: Install packages written by Hao Wang used in the 
+> analysis
+.         * Run Cleaning: cleaning of the surveys
+.         * Run Analysis: Generate tables and figures in the paper and slides
+.         local   run_cleaning                            = 1
+
+.         local   run_analysis                            = 0
+
+. 
+.         **# The version of Data to use
+.         global data_version_new "prioritize_in_person" // "prioritize_date" o
+> r "prioritize_in_person". If you chose "original", this option is ignored.
+
+. 
+.         * If prioritize in-person recall over recalls made on phone but on a 
+> closer date.
+.         if "$data_version_new" == "prioritize_in_person" global prioritize_in
+> _person = 1
+
+.         if "$data_version_new" == "prioritize_date" global prioritize_in_pers
+> on = 0
+
+. 
+. 
+. 
+.         * Which Weather Data to Merge
+.         global weather_data "all"
+
+.         * Options:
+.         * "none" or "": Do not merge weather data to the final dataset
+.         * "raw": Merge raw weather data at stand-date-level. This includes me
+> an apparent temperature, mean apparent temperature during recruitment hours, 
+> max apparent temperature, max apparent temperature during recruitment hours, 
+> cumulative precipitation, precipitation during recruitment hours, and maximum
+>  weather code (the worst weather during the period) and weather code during r
+> ecruitment hours.
+.         * "percentile": Merge weather data at stand-date-level, but in additi
+> on to the raw weather data, include indicators for whether each weather varia
+> ble falls in the top 85, 90, 95, 99% of values across all stand-date combinat
+> ions of the calendar year.
+.         * "all": Merge weather data at stand-date-level, but in addition to t
+> he raw weather data and percentile indicators, include rolling averages and l
+> ags of weather variables.
+.         
+.         ****
+.         **## Directories
+.         ****
+. 
+.         * If your Dropbox is in you home directory
+.         global db_dir "~/Dropbox"
+
+. 
+.         * If you use Windows or you Dropbox not in the default location
+.         if      "`c(username)'" == "hschof"                                  
+>                    global db_dir "C:/Users/hschof/Dropbox"
+
+. 
+.         global ld_dir                           "$db_dir/Labor Discipline"
+
+.         global replication_dir          "$ld_dir/07. Data/3. Main Study 3.0/l
+> d_replication"
+
+.         global code                             "$replication_dir/code"
+
+.         global raw                                      "$replication_dir/dat
+> a/raw"
+
+.         global temp                             "$replication_dir/data/temp"
+
+.         global final                            "$replication_dir/data/final"
+
+.         global external                         "$replication_dir/data/extern
+> al"
+
+. 
+.         * The Dataset
+.         global main_data        "$final/final_data_replication.dta"
+
+.         global output           "$replication_dir/output"
+
+. 
+.         global tables   "$output/tables"
+
+.         global figures  "$output/figures"
+
+.         global stats    "$output/stats"
+
+. 
+. 
+. 
+.         ****
+.         **## List Stands Chracteristics
+.         ****
+. 
+.         * Dropped stands
+.         global droplist "4, 7, 8, 9, 10, 11, 12, 14, 19"
+
+. 
+.         * Different cutoff times
+.         global cutoff_0815 "2, 6, 15, 17, 19, 20"
+
+.         global cutoff_0745 "12"
+
+. 
+.         * Union PIDs
+.         global union_pid "1409, 1414, 1416, 1448"
+
+. 
+.         * Formal Dropouts
+.         global dropout_pid "2107, 555, 547, 646, 689, 641, 1405, 1903, 1928, 
+> 2020, 1744, 1333"
+
+. 
+.         ****
+.         **## Define Programs
+.         ****
+. 
+.         do "$code/1.macro.do"
+
+. ******************************************
+. ******************************************
+. **                                                                           
+>    **
+. **              LABOR DISCIPLINE PROJECT                **
+. **                                                                           
+>    **
+. **                      MACROS DOFILE                   **
+. **                                                                           
+>    **
+. **                                                                           
+>    **
+. **      Created by HW Jul 18 2024                       **
+. **      Last Edited by HW Aug 16 2024           **
+. **                                                                           
+>    **
+. ******************************************
+. ******************************************
+. 
+.         * This dofile defines auxiliary functions that will be used by the ma
+> in program. 
+.         * The functions were written by Luisa and previous RA's
+.         
+. *******************************************
+. **# Auxiliary Functions for Data Cleaning 
+. *******************************************
+. 
+.         
+.         * Purpose: auxiliary function saving input in file called 'input.tex'
+.         * Author: Unknown
+.         * Last modified: Unknown
+.         cap program drop save_input 
+
+.         program define save_input 
+  1. 
+.                 syntax [anything], number(str) filename(str) [format(str)]
+  2. 
+. 
+.                 if "`format'" != "" local number_formatted = string(`number',
+>  "`format'")
+  3.                 else local number_formatted "`number'"
+  4. 
+.                 /*
+>                 if `number_formatted' >= 0 & `number_formatted' < 1 {
+>                         local number_formatted = subinstr("`number_formatted'
+> ", "0.", ".", .)
+>                 }
+>                 if `number_formatted' <= 0 & `number_formatted' > -1 {
+>                         local number_formatted = subinstr("`number_formatted'
+> ", "-0.", "-.", .)
+>                 }
+>                 */
+. 
+.                 file open newfile using "$stats/`filename'.tex", write replac
+> e
+  5.                 file write newfile "`number_formatted'%"
+  6.                 file close newfile
+  7.         end
+
+.         
+. 
+.         * Purpose: Auxiliary function to install any uninstalled ssc packages
+>  before using them
+.         * Author: Unknown
+.         * Last modified: Unknown
+.         cap program drop verify_package 
+
+.         program verify_package
+  1.                 args package
+  2.                 capture which `package'
+  3.                 if _rc ssc install `package'
+  4.                 if !_rc di "Package `package' already installed in the sys
+> tem. Code can proceed."
+  5.         end
+
+. 
+.         
+.         
+.         * Purpose: create a local with max number of days of recall
+.         * Author: Luisa
+.         * Last modified: 09-07-2021 - LC
+.         cap program drop        defineRecallDays
+
+.         program define          defineRecallDays, rclass
+  1.                 syntax, varname(str)
+  2.                 
+.                 local i = 1     
+  3.                 local rc = 0
+  4.                 while `rc' != 1 {
+  5.                         capture confirm variable `varname'_`i'
+  6.                         if !_rc {
+  7.                                 * if this variable does not exist 
+.                                 local ++i 
+  8.                                         * this increases the local i by va
+> lue 1
+.                                 local rc = 0
+  9.                         }
+ 10.                         else {
+ 11.                                 local d = `i' - 1
+ 12.                                 return local max_days_recall = `d'
+ 13.                                 disp(`d')
+ 14.                                 local rc = 1
+ 15.                         }
+ 16.                 }
+ 17.         end
+
+.         
+.         
+.         
+.         * Purpose: Unknown
+.         * Author: Luisa
+.         * Last modified: Unknown
+.         cap program drop        makeDates
+
+.         program define          makeDates, rclass
+  1. 
+.         syntax, launchDate(str)
+  2.         return clear
+  3.         tempvar date
+  4.         
+.         local launchDate_dow = dow(`launchDate')
+  5.         assert `launchDate_dow' == 1
+  6.         
+.         local date = `launchDate'
+  7. 
+.         local baseline     = `date' + 3
+  8.         local baseline_end = `date' + 15
+  9.         local announcement = `date' + 16
+ 10.         local announcement_end_b1  = `date' + 20
+ 11.         local announcement_end_b2  = `date' + 22
+ 12.         local announcement_end_b3  = `date' + 22
+ 13.         
+.         // LC 29-04-2024: these dates are now overwritten in the master_dates
+> .do
+.         // to reflect actual timeline
+.         local phase1       = `date' + 21 
+ 14.         local phase1_end   = `date' + 69
+ 15.         local phase2       = `date' + 70
+ 16.         local phase2_end   = `date' + 119
+ 17. 
+. 
+.         * Save in r(.)
+.         return local baseline     = `baseline'
+ 18.         return local baseline_end = `baseline_end'
+ 19.         return local announcement = `announcement'
+ 20.         return local announcement_end_b1 = `announcement_end_b1'
+ 21.         return local announcement_end_b2 = `announcement_end_b2'
+ 22.         return local announcement_end_b3 = `announcement_end_b3'
+ 23.         return local phase1       = `phase1'
+ 24.         return local phase1_end   = `phase1_end'
+ 25.         return local phase2       = `phase2'
+ 26.         return local phase2_end   = `phase2_end'
+ 27.                 
+.         
+.         end
+
+.         
+.         
+.         * Purpose: Generate holiday list to record days when staff was not in
+>  the fieldwe
+.         * Author: Luisa
+.         * Last modified: Luisa 4/11/26  
+.         cap program drop        makeHolidays
+
+.         program define          makeHolidays, rclass
+  1.         return clear
+  2.         preserve
+  3.         import excel "$raw/MLD_Stand_Tracker_original.xlsx", ///
+>                 sheet("Holidays") firstrow case(lower) clear
+  4.                 * <FIXME> LC 4/21/26 moved this before levelsof command, o
+> therwise previously not excluded.
+.                 drop if date == td(08nov2022) // J-pal Holiday but not local 
+> holiday. Keep data on that day
+  5.                 levelsof date, local(holidays)
+  6.                 return local holiday_list = "`holidays'"
+  7.         restore
+  8.         
+.         end
+
+.         
+.         
+.         * Purpose: Unknown
+.         * Author: Luisa
+.         * Last modified: Unknown        
+.         cap program drop        makeLaunchList  
+
+.         program define          makeLaunchList, rclass
+  1. 
+.                 syntax, [launchSet(str)]
+  2.                 
+.                 local SetNum = wordcount("`launchSet'")
+  3.                 
+.                 local LaunchSetList
+  4.                 
+.                 forval v = 1/`SetNum' {
+  5.                         if `v' == 1 {
+  6.                                 local thisVar : word 1 of `launchSet'
+  7.                                 local LaunchSetList " `thisVar' "
+  8.                         }
+  9.                         else {
+ 10.                                 local thisVar : word `v' of `launchSet'   
+>       
+ 11.                                 local LaunchSetList " `LaunchSetList' , `t
+> hisVar' "
+ 12.                         }
+ 13.                 }
+ 14.                 return local List = "`LaunchSetList'"
+ 15. 
+.         end     
+
+.         
+.         
+.         
+.         
+.         
+.         
+.         
+.         * Purpose: Unknown
+.         * Author: Luisa
+.         * Last modified: Unknown        
+.         cap program drop        standLabeling           
+
+.         program define          standLabeling
+  1.         cap label drop stand_lab
+  2.     label define stand_lab      1 "1. Adambakam" 2 "2. Avadi" 3 "3. Aynava
+> ram" 4 "4. Mandaveli" 5 "5. MKB" 6 "6. Korattur" 7 "7. MMDA" ///
+>                                                                 8 "8. Porur" 
+> 9 "9. TVK Nagar" 10 "10. Poonamallee"      11 "11. Keelkattalai" 12 "12. Kris
+> hna Nagar" ///
+>                                                                 13 "13. Thiru
+> vanmiyur" 15 "15. Velachery" 16 "16. Padappai" 17 "17. Guduvanchery" 18 "18. 
+> Pammal" 20 "20. Iyapandagal"
+  3.     qui label list stand_lab
+  4.         forv i = 1/`r(max)' {
+  5.            global stand_lab_`i': label stand_lab `i'
+  6.         }
+  7.         
+.         end
+
+.         standLabeling
+
+.         
+.         
+.         
+.         
+.         
+.         * Purpose: Unknown
+.         * Author: Unknown
+.         * Last modified: Unknown
+.         cap program drop        setDates                
+
+.         program define          setDates
+  1.         
+.         tempvar var 
+  2.         gen `var' = 1
+  3.         
+.         global launchDateSet1  = td(28feb2022)
+  4.         global launchDateSet2  = td(07mar2022)
+  5.         global launchDateSet3  = td(14mar2022)
+  6.         global launchDateSet4  = td(28mar2022)
+  7.         global launchDateSet5  = td(04apr2022)
+  8.         global launchDateSet6  = td(09may2022)
+  9.         global launchDateSet7  = td(16may2022)
+ 10.         global launchDateSet8  = td(23may2022)
+ 11.         global launchDateSet9  = td(30may2022)
+ 12.         global launchDateSet10 = td(06jun2022)
+ 13.         global launchDateSet11 = td(13jun2022)
+ 14.         global launchDateSet12 = td(20jun2022)
+ 15.         global launchDateSet13 = td(27jun2022)
+ 16.         global launchDateSet14 = td(04jul2022)
+ 17.         global launchDateSet15 = td(11jul2022)
+ 18.         global launchDateSet16 = td(18jul2022)
+ 19.         global launchDateSet17 = td(27jun2022)
+ 20.         global launchDateSet18 = td(04jul2022)
+ 21.         global launchDateSet19 = td(04jul2022)
+ 22.         global launchDateSet20 = td(11jul2022)
+ 23. 
+. 
+.         * Number of total sets of stands launched
+.         global numSetsTotal = 20
+ 24. 
+.         forv i = 1/$numSetsTotal {
+ 25. 
+.                 makeDates, launchDate("${launchDateSet`i'}")
+ 26.                 
+.                 global baselineStartSet`i' = r(baseline)
+ 27.                 global baselineEndSet`i'   = r(baseline_end)
+ 28.                 
+.                 global phase1StartSet`i'   = r(phase1)
+ 29.                 global phase1EndSet`i'     = r(phase1_end)
+ 30. 
+.                 global phase2StartSet`i'   = r(phase2)
+ 31.                 global phase2EndSet`i'     = r(phase2_end)
+ 32.                 
+.                 global announcementStartSet`i'  = r(announcement)
+ 33.                 global announcementEndSet`i'_b1 = r(announcement_end_b1)
+ 34.                 
+.                 global announcementStartSet`i'  = r(announcement)
+ 35.                 global announcementEndSet`i'_b2 = r(announcement_end_b2)
+ 36. 
+.                 global announcementStartSet`i'  = r(announcement)
+ 37.                 global announcementEndSet`i'_b3 = r(announcement_end_b3)
+ 38.         }
+ 39. 
+.         *Launchset 1
+.         global phase1StartSet1       = td(21mar2022)
+ 40.         global phase1EndSet1         = td(08may2022)
+ 41.         global phase2StartSet1       = td(09may2022)
+ 42.         global phase2EndSet1             = td(03jul2022)
+ 43. 
+.         *Launchset 2
+.         global phase1StartSet2       = td(28mar2022)
+ 44.         global phase1EndSet2         = td(15may2022)
+ 45.         global phase2StartSet2       = td(16may2022)
+ 46.         global phase2EndSet2             = td(10jul2022)
+ 47. 
+.         *Launchset 3
+.         global phase1StartSet3       = td(04apr2022)
+ 48.         global phase1EndSet3         = td(22may2022)
+ 49.         global phase2StartSet3       = td(23may2022)
+ 50.         global phase2EndSet3             = td(17jul2022)
+ 51. 
+.         *Launchset 4
+.         // holiday, announcement extended
+.         global announcementStartSet4 = td(18apr2022)
+ 52.         global announcementEndSet4   = td(24apr2022)
+ 53.         global phase1StartSet4       = td(25apr2022)
+ 54.         global phase1EndSet4         = td(12jun2022)
+ 55.         global phase2StartSet4       = td(13jun2022)
+ 56.         global phase2EndSet4         = td(07aug2022)
+ 57. 
+.         *Launchset 5
+.         // holiday, baseline extended
+.         global baselineEndSet5        = td(22apr2022)
+ 58.         global announcementStartSet5  = td(25apr2022)
+ 59.         global announcementEndSet5    = td(1may2022)
+ 60.         global phase1StartSet5        = td(02may2022)
+ 61.         global phase1EndSet5          = td(19jun2022)
+ 62.         global phase2StartSet5        = td(20jun2022)
+ 63.         global phase2EndSet5          = td(14aug2022)
+ 64.         
+.         *Launchset 10
+.         // phase 1 extended by 1 week
+.         global phase1StartSet10         = td(27jun2022)
+ 65.         global phase1EndSet10       = td(11sep2022)
+ 66.         global phase2StartSet10     = td(12sep2022)
+ 67.         global phase2EndSet10           = td(06nov2022)
+ 68.         
+.         *Launchset 11
+.         global phase1StartSet11     = td(04jul2022)
+ 69.         global phase1EndSet11       = td(18sep2022)
+ 70.         global phase2StartSet11     = td(19sep2022)
+ 71.         global phase2EndSet11           = td(13nov2022)
+ 72.         
+.         *Launchset 12
+.         * 11 july
+.         global phase1StartSet12     = td(11jul2022) // HW added Nov 2024 foll
+> owing [PRLS] Study Timeline Spreadsheet
+ 73.         global phase1EndSet12       = td(25sep2022)
+ 74.         global phase2StartSet12     = td(26sep2022)
+ 75.         global phase2EndSet12           = td(20nov2022)
+ 76.         
+.         *Launchset 13
+.         global phase1StartSet13     = td(18Jul2022)
+ 77.         global phase1EndSet13       = td(04sept2022)
+ 78.         global phase2StartSet13     = td(05sept2022)
+ 79.         global phase2EndSet13           = td(30oct2022)
+ 80.         
+.         *Launchset 14
+.         global phase1StartSet14     = td(25jul2022)
+ 81.         global phase1EndSet14       = td(11sep2022)
+ 82.         global phase2StartSet14     = td(12sep2022)
+ 83.         global phase2EndSet14           = td(6nov2022)
+ 84.         
+.         *Launchset 15 
+.         // we added one day of screening
+.         global baselineStartSet15       = td(15jul2022)
+ 85.         * 1 aug
+.         global baselineEndSet15     = td(27jul2022)     // HW added Nov 2024 
+> following [PRLS] Study Timeline Spreadsheet
+ 86.         global phase1StartSet15     = td(1aug2022)
+ 87.         global phase1EndSet15       = td(18sep2022)
+ 88.         global phase2StartSet15     = td(19sep2022)
+ 89.         global phase2EndSet15           = td(13nov2022)
+ 90.         
+.         *Launchset 16
+.         global phase1StartSet16     = td(08aug2022) //monday
+ 91.         global phase1EndSet16       = td(25sep2022) //sunday
+ 92.         global phase2StartSet16     = td(26sep2022) //monday
+ 93.         global phase2EndSet16           = td(20nov2022) //sunday
+ 94. 
+.         *Launchset 17
+.         // NOTE: before stand Phase 1 extension, this used to be launchset 13
+.         global phase1StartSet17     = td(18Jul2022) //monday
+ 95.         global phase1EndSet17       = td(02oct2022) //sunday
+ 96.         global phase2StartSet17     = td(03oct2022) //monday
+ 97.         global phase2EndSet17           = td(27nov2022) //sunday
+ 98. 
+.         makeHolidays
+ 99. 
+.         global holiday_list = r(holiday_list)
+100.         
+.         end
+
+.         setDates
+(4 vars, 21 obs)
+(1 observation deleted)
+22722 22749 22750 22751 22768 22872 22876 22888 22923 22942 22951 23004 23011 2
+> 3024 23025 23036 23043 23091 23107 23114
+
+.         
+.         
+.         * Save Temp File
+.         * Author: HW. May 2025
+.         * This program does not work if you'd like to use the temp file
+.         * This program is simply in place to comply with "statsby , ci means"
+.         * If you don't save before running the code it will not let you run
+.         cap program drop        savetemp                
+
+.         program define          savetemp
+  1.         
+.                 tempfile garbage
+  2.                 save `garbage'
+  3.         
+.         end
+
+.         
+.         
+. 
+.         * Generate baseline covariates for original dataset. New datatsets ha
+> ve these variables already.
+.         * For replicating analysis using the original dataset.
+.         * Created by HW in April 2026
+.         cap program drop gen_bl_cov
+
+.         program define gen_bl_cov
+  1.                 preserve
+  2. 
+.                         cap drop bl_attend bl_earn miss_bl_earn bl_modalwage
+  3. 
+.                         keep if phase == 0
+  4. 
+.                         egen temp = mean(attend), by(pid)
+  5.                         egen bl_attend = max(temp), by(pid)
+  6.                         drop temp
+  7. 
+.                         * earnings 
+.                         egen temp = mean(earn) , by(pid)
+  8.                         egen bl_earn = max(temp), by(pid)
+  9.                         gen miss_bl_earn = (bl_earn==.)
+ 10.                         replace bl_earn = 0 if miss_bl_earn==1
+ 11.                         drop temp
+ 12.                         
+.                         * Modal Work
+.                         egen temp1 = mode(earn) if earn>0, by(pid)
+ 13.                         egen bl_modalwage = max(temp1), by(pid)
+ 14.                         replace bl_modalwage = 0 if bl_modalwage==.
+ 15.                         drop temp1
+ 16. 
+.                         keep pid bl_attend bl_earn miss_bl_earn bl_modalwage
+ 17.                         duplicates drop pid, force
+ 18. 
+.                         tempfile bl_cov
+ 19.                         save `bl_cov', replace
+ 20. 
+.                 restore
+ 21. 
+.                 merge m:1 pid using `bl_cov', update replace keep(1 2 3 4 5) 
+> nogen
+ 22. 
+. 
+.         end
+
+. 
+end of do-file
+
+. 
+.         *******************
+.         **# Data Creation
+.         *******************
+.         if `run_cleaning' == 1 {
+. 
+.                 ****
+.                 **## 1.  Screening
+.                 ****
+. 
+.                 * Last Edited by HW Nov 8 2024
+. 
+.                 * Input:        01_screening_named.dta
+.                 * Output:
+.                 * 06_screening_dem_vars_with_pid.dta    (Demographics vars on
+> ly, will be merged into main data)
+.                 * 07_screening_makevar_with_pid.dta             (All vars)
+. 
+. 
+.                 * Clean raw data, save completed surveys
+.                 * Manual corrections made by field team
+.                 * HW assumes everything is correct
+.                 include "$code/1_1_screening/1_screening_cleaning.do"
+
+. **************************************************
+. *Project: LD Main Study
+. *Purpose: Clean raw screening data (data entry errors)  
+. *Author: Supraja
+. *Last modified: 2024-03-25 (YS)
+. **************************************************
+.         
+. /*----------------------------------------------------*/
+.    /* [>   1.  Open data    <] */ 
+. /*----------------------------------------------------*/
+. 
+.         use "$raw/01_screening_named.dta", clear
+
+.         format date %td
+
+.         destring launchset, replace
+launchset already numeric; no replace
+
+. 
+. /*----------------------------------------------------*/
+.    /* [>   2.  Clean data    <] */ 
+. /*----------------------------------------------------*/
+. 
+.         // Entry errors, 28-02-2022
+.         *Deleting wrongy submitted form
+.         drop  if interviewer=="18. Bharathi" & rid ==1108 & key=="uuid:c54b1d
+> 96-edd0-41f4-9e24-cc54757e89e6"
+(1 observation deleted)
+
+.         
+.         * Correcting for completion status
+.         replace check_completion=0 if key=="uuid:75f07299-87c3-40dc-9af4-0a4f
+> fe6783ec"
+(1 real change made)
+
+.         replace check_reason_incomplete=2 if key=="uuid:75f07299-87c3-40dc-9a
+> f4-0a4ffe6783ec"
+(1 real change made)
+
+.         
+.         replace check_completion=0 if key=="uuid:ebfb5a30-57b9-4e3f-8fa9-2602
+> 3a0a473d"
+(1 real change made)
+
+.         replace check_reason_incomplete=2 if key=="uuid:ebfb5a30-57b9-4e3f-8f
+> a9-26023a0a473d"
+(1 real change made)
+
+.         
+.         * Correcting for wrongly entered commute time
+.         replace ss_timetakenhrs=0 if key=="uuid:f4fe32c7-929f-4cec-a4eb-d7390
+> 5aafade"
+(1 real change made)
+
+.         replace ss_timetakenmins=10 if key=="uuid:f4fe32c7-929f-4cec-a4eb-d73
+> 905aafade"
+(1 real change made)
+
+.         
+.         //Entry errors, 01-03-2022
+.         replace rid = 3315 if interviewer=="8. Avinash" & key =="uuid:55f4cde
+> f-422d-40a7-bfcf-299f4e4b1e46"
+(1 real change made)
+
+.         replace launchset = 1 if rid ==3315
+(1 real change made)
+
+.         
+.         *practise survey submitted 
+.         drop if rid ==211 & key =="uuid:f4e6ae63-d031-4e4d-a2af-89f6d1e51c40"
+(1 observation deleted)
+
+.         
+.         //Errors, 02-03-2022
+.         *Correcting name entered
+.         //replace ss1="Ramachandran" if rid==5204 & key=="uuid:9bc767ed-b325-
+> 41d2-935d-ec7eb2fad9af"
+.         //replace ss1_1="" if rid==5204 & key=="uuid:9bc767ed-b325-41d2-935d-
+> ec7eb2fad9af"
+.         
+.         *Encoding 998 in area   
+.         local area Adambakkam Adampakkam Addambakkam Adhambakkam Adhampakkam
+
+.         foreach area in `area'{
+  2.         replace ss_dem_stay=99 if ss_dem_stay_others=="`area'"
+  3.         replace ss_dem_stay_others="" if ss_dem_stay_others=="`area'"
+  4.         }
+(13 real changes made)
+(13 real changes made)
+(11 real changes made)
+(11 real changes made)
+(1 real change made)
+(1 real change made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+
+.         replace ss_dem_stay=100 if ss_dem_stay_others=="Drama nagar"
+(2 real changes made)
+
+.         replace ss_dem_stay=101 if ss_dem_stay_others=="Poonmalie"
+(1 real change made)
+
+.         
+.         local area Pulithivakkam Puluthivakkam
+
+.         foreach area in `area'{
+  2.         replace ss_dem_stay =102 if ss_dem_stay_others=="`area'"
+  3.         replace ss_dem_stay_others="" if ss_dem_stay_others=="`area'"
+  4.         }
+(1 real change made)
+(1 real change made)
+(5 real changes made)
+(5 real changes made)
+
+.         
+.         replace ss_dem_stay =103 if ss_dem_stay_others=="Marina Beach"
+(1 real change made)
+
+.         replace ss_dem_stay_others="" if ss_dem_stay_others=="Marina Beach"
+(1 real change made)
+
+.         replace ss_dem_stay =103 if ss_dem_stay_others=="Marina beach"  
+(3 real changes made)
+
+.         replace ss_dem_stay_others="" if ss_dem_stay_others=="Marina beach"
+(3 real changes made)
+
+.         replace ss_dem_stay =103 if ss_dem_stay_others=="Beach" 
+(1 real change made)
+
+.         replace ss_dem_stay_others="" if ss_dem_stay_others=="Beach"
+(1 real change made)
+
+.         replace ss_dem_stay =103 if ss_dem_stay_others=="Beach near light hou
+> se"
+(1 real change made)
+
+.         replace ss_dem_stay_others="" if ss_dem_stay_others=="Beach near ligh
+> t house"
+(1 real change made)
+
+.         replace ss_dem_stay =103 if ss_dem_stay_others=="Maina Beach"
+(1 real change made)
+
+.         replace ss_dem_stay_others="" if ss_dem_stay_others=="Maina Beach"
+(1 real change made)
+
+.         replace ss_dem_stay =103 if ss_dem_stay_others=="Light house"
+(2 real changes made)
+
+.         replace ss_dem_stay_others="" if ss_dem_stay_others=="Light house"
+(2 real changes made)
+
+.         replace ss_dem_stay =104 if ss_dem_stay_others=="Manadi"
+(1 real change made)
+
+.         replace ss_dem_stay_others="" if ss_dem_stay_others=="Manadi"
+(1 real change made)
+
+.         replace ss_dem_stay =104 if ss_dem_stay_others=="Manadi"
+(0 real changes made)
+
+.         replace ss_dem_stay_others="" if ss_dem_stay_others=="Manadi"
+(0 real changes made)
+
+.         replace ss_dem_stay =105 if ss_dem_stay_others=="Guduvancheri"
+(1 real change made)
+
+.         replace ss_dem_stay_others="" if ss_dem_stay_others=="Guduvancheri"
+(1 real change made)
+
+.         replace ss_dem_stay=106 if ss_dem_stay_others=="R A puram" | ss_dem_s
+> tay_others=="RA puram"
+(11 real changes made)
+
+.         replace ss_dem_stay_others="" if ss_dem_stay_others=="R A puram" | ss
+> _dem_stay_others=="RA puram"
+(11 real changes made)
+
+.         replace ss_dem_stay =105 if ss_dem_stay_others=="Arakonam" | ss_dem_s
+> tay_others=="Arakkonam"
+(3 real changes made)
+
+.         replace ss_dem_stay_others="" if ss_dem_stay_others=="Arakonam" | ss_
+> dem_stay_others=="Arakkonam"
+(3 real changes made)
+
+.         
+.         *Encoding 998 in house type
+.         replace ss_dem_housetype= 5 if ss_dem_housetype_others=="Coconut tree
+>  olai house"
+(1 real change made)
+
+.         replace ss_dem_housetype_others = "" if ss_dem_housetype_others=="Coc
+> onut tree olai house"
+(1 real change made)
+
+.         
+.         /*Encoding 998 in profession
+>         replace ss_profession_nonconst="31" if ss_profession_nonconst_others=
+> ="Painter"
+>         replace ss_profession_nonconst="15" if ss_profession_nonconst_others=
+> ="Metro Water" | ss_profession_nonconst_others=="Metro water" ///
+>         | ss_profession_nonconst_others=="Metro water connection work" | ss_p
+> rofession_nonconst_others=="Metro water work"
+>         replace ss_profession_nonconst_others="" if ss_profession_nonconst_ot
+> hers=="Metro Water" | ss_profession_nonconst_others=="Metro water" ///
+>         | ss_profession_nonconst_others=="Metro water connection work" | ss_p
+> rofession_nonconst_others=="Metro water work"
+>         replace ss_type="15" if ss_type_others=="Metro Water" | ss_type_other
+> s=="Metro Water line" | ss_type_others=="Metro water work"
+>         replace ss_type_others ="" if ss_type_others=="Metro Water" | ss_type
+> _others=="Metro Water line" | ss_type_others=="Metro water work"
+>         replace ss_type="15" if ss_type_others=="Metro connection work" 
+>         replace ss_type_others ="" if ss_type_others=="Metro connection work"
+>  
+>         replace ss_type="2" if ss_type_others=="Fish business"
+>         replace ss_type_others ="" if ss_type_others=="Fish business"
+>         replace ss_type="17" if ss_type_others=="Housekeeping"
+>         replace ss_type_others ="" if ss_type_others=="Housekeeping"
+>         replace ss_type="15" if ss_type_others=="Metro water" 
+>         replace ss_type_others ="" if ss_type_others=="Metro water" 
+>         */
+.         
+.         //Correcting for errors on 02-03-2022
+.         *Error in stand 
+.         replace stand=5 if stand==6 & date==td(02march2022) & interviewer=="1
+> 1. Selvaraj" & rid==5215
+(1 real change made)
+
+.         
+.         //Correcting for duplicate rid on 08-03-22
+.         replace rid = 1235 if key=="uuid:cddfd29e-06dd-4765-b92c-dc2bca02cc84
+> " & rid==1233
+(1 real change made)
+
+.         
+.         //Correcting launcset error 14-3-2022
+.         replace launchset=3 if date==td(14mar2022) & rid>=1119 & rid<=1442
+(21 real changes made)
+
+.         replace launchset=3 if date==td(16mar2022)
+(4 real changes made)
+
+.         
+.         //Correcting for entry errors in stand and interviewer names, 28-03-2
+> 022
+.         replace stand =8 if stand==3 & key=="uuid:11a21819-210b-4200-9c3d-f42
+> b93d28378"
+(1 real change made)
+
+.         replace interviewer="37. Bhuvaneshwari" if interviewer=="998" & (inte
+> rviewer_others=="Bhuvaneshwari" | interviewer_others=="Bhuvi")
+(6 real changes made)
+
+.         replace stand=9 if stand==5 & key=="uuid:d352aec9-4970-4f87-a7b1-f1e9
+> 62056529"
+(1 real change made)
+
+.         replace interviewer="24. John" if interviewer=="998" & interviewer_ot
+> hers=="John"
+(8 real changes made)
+
+.         replace interviewer="32. Manikandan" if interviewer=="998" & (intervi
+> ewer_others=="Manikanda E" | interviewer_others=="Manikandan E" | interviewer
+> _others=="Manikandan e" | interviewer_others=="Kottur")
+(14 real changes made)
+
+.         
+.         //Correcting duplicate rid, 28-03-2022
+.         replace rid=6315 if rid==6301 & interviewer=="21. Surya" & key=="uuid
+> :89c2fa1a-f1d2-4749-8f3f-c1b54c382838"
+(1 real change made)
+
+.         
+.         //Correcting for launchset, 28-03-2022
+.         replace launchset=4 if date==td(28mar2022)
+(184 real changes made)
+
+.         
+.         //Stand labelling
+.         label define stand_lab 1 "1. Adambakam" 2 "2. Avadi" 3 "3. Aynavaram"
+>  4 "4. Mandaveli" 5 "5. MKB" 6 "6. Korattur" 7 "7. MMDA" 8 "8. Porur" 9 "9. T
+> VK Nagar"
+
+.         label val stand stand_lab
+
+.         
+.         //Correcting for duplicate RID, 29-03-2022
+.         replace rid=8115 if rid==8114 & date==td(29mar2022) & key=="uuid:7f1f
+> 00b6-34e6-4803-9369-498d9e96cdd3"
+(1 real change made)
+
+.         
+.         //Correcting for entry error, 29-03-2022
+.         replace check_completion=0 if check_completion==1 & date==td(29mar202
+> 2) & rid==9217
+(1 real change made)
+
+.         
+.         //Correcting duplicate RID 30-03-2022
+.         replace rid=7339 if rid==7338 & date==td(30mar2022) & key=="uuid:71db
+> f00a-eed5-4dd8-ae16-cd6e72d0ec4f"
+(1 real change made)
+
+.         replace rid=8529 if rid==8513 & date==td(30mar2022) & key=="uuid:bd16
+> 4804-6765-449d-8203-ce364eda41f9"
+(1 real change made)
+
+.         
+.         //Correcting for wrongly entered name , 31-03-2022
+.         
+.         //correcting for wrongly entered rid
+.         replace rid = 7310 if rid==7010  & key=="uuid:fb17c508-0d51-4bff-a9a0
+> -6c866623aa95"
+(1 real change made)
+
+.         replace rid = 7311 if rid==7011  & key=="uuid:bc2a3951-66f7-46a8-8cbd
+> -dc89bf891a89"
+(1 real change made)
+
+.         replace rid = 7312 if rid== 7012 & key=="uuid:109ed836-7eaf-449c-9afc
+> -f1c672030c41"
+(1 real change made)
+
+.         replace rid = 7313 if rid== 7013 & key=="uuid:0bffd092-1ba4-4bb8-8c3a
+> -fb342ef86ee0"
+(1 real change made)
+
+.         
+.         //rid duplicate correction, 04-04-2022
+.         replace rid=8539 if rid==8529 & interviewer=="40. Anupriya" & date==t
+> d(04apr2022) & key=="uuid:c6041e77-1074-48e2-b182-129bffecd7a8"
+(1 real change made)
+
+.         replace launchset=5 if rid==8539 
+(1 real change made)
+
+.         
+.         //rid duplicate, 07-04-2022
+.         replace rid=8541 if rid==8539 & interviewer=="40. Anupriya" & date==t
+> d(06apr2022) & key=="uuid:90569f7d-4652-4593-b650-c62cc77d673f"
+(1 real change made)
+
+.         
+.         //09-05-22 changing stand for two rids 10310 and 10501
+.         replace stand = 10 if (rid == 10310 | rid == 10501) & date == td(09ma
+> y2022)
+(2 real changes made)
+
+.         
+.         //11-05-22 changing stand for rid 10341
+.         replace stand = 10 if rid == 10341 & date == td(11may2022)
+(1 real change made)
+
+.         
+.         //replace batch = 1 for first batch rid in poonamallee
+.         replace batch = 1 if rid == 10430
+(1 real change made)
+
+.         replace date = td(17may2022) if rid == 10430
+(1 real change made)
+
+.         
+.         //replace batch = 2 for second batch rid in poonamallee
+.         replace batch = 2 if rid == 10350
+(1 real change made)
+
+.         
+.         //Correcting for duplicate rid on 18-05-22
+.         replace rid = 10257 if key=="uuid:c75bcb59-be6e-4916-ad1c-a70a922a156
+> 8" & rid==10251
+(1 real change made)
+
+.         
+.         //replacing launchset for 16-18 may 2022
+.         replace launchset = 7 if date == td(16may2022) |date == td(17may2022)
+>  |date == td(18may2022) 
+(104 real changes made)
+
+.         
+.         //24-05-22 replacing rid for 32. Manikandan because he used a repeat 
+> RID
+.         replace rid = 11415 if rid == 1111 & interviewer == "32. Manikandan" 
+(1 real change made)
+
+.         
+.         //30-05-22 replacing launchset for this week 30may-01jun
+.         replace launchset = 9 if date == td(30may2022) | date == td(31may2022
+> ) | date == td(01jun2022)
+(48 real changes made)
+
+.         
+.         //replacing stand for rid 12312 on 06jun2022
+.         replace stand = 12 if key == "uuid:2ae4658f-5aa0-45e0-9d4d-c2dc681adf
+> 52"
+(1 real change made)
+
+.         
+.         //6-06-2022 (LC) assigning launchset to RIDs from 45. Subash
+.         replace launchset = 10 if interviewer == "45. Subash" & date == td(06
+> jun2022) & rid > 13500 & rid < 13516
+(15 real changes made)
+
+.         
+.         //07-06-22 replacing repeat rid for nandhakumar 
+.         replace rid = 13421 if key == "uuid:0151639b-5d0c-4656-bbb8-fe0f478e4
+> 49a"
+(1 real change made)
+
+.         
+.         //07-06-22 assigning launchsets for RIDs from today 
+.         replace launchset = 10 if date == td(07jun2022) 
+(50 real changes made)
+
+.         
+.         //08-06-22 assigning launchsets for RIDs from today 
+.         replace launchset = 10 if date == td(08jun2022) 
+(58 real changes made)
+
+.         
+.         //cleaning stand name for a 12000s RID
+.         replace stand = 12 if rid == 12414
+(1 real change made)
+
+.         
+.         //13-06-22 pre-emptively replacing launchset for this batch
+.         replace launchset = 11 if date == td(13jun2022) | date == td(14jun202
+> 2) | date == td(15jun2022)
+(67 real changes made)
+
+.         replace stand = 12 if key == "uuid:0beb9d00-d67a-4551-9fca-b10091689f
+> 1e"
+(0 real changes made)
+
+.         
+.         //14-06-22
+.         replace ss_timetakenhrs  = 0  if key == "uuid:03c0480f-54bd-45f4-9a44
+> -b5f09cf8e7f4" & rid == 13124
+(1 real change made)
+
+.         replace ss_timetakenmins = 15 if key == "uuid:03c0480f-54bd-45f4-9a44
+> -b5f09cf8e7f4" & rid == 13124
+(1 real change made)
+
+.         
+.         //15-06-22
+.         * stand correction
+.         replace stand = 12 if key == "uuid:94b8777e-c6f3-41b2-80ee-8383ee0d8d
+> b3"
+(1 real change made)
+
+.         replace stand = 13 if key == "uuid:5d6feeaf-916c-4bd3-952c-86064dc6c5
+> 48"
+(1 real change made)
+
+.         replace stand = 13 if key == "uuid:c356dbbe-17cd-4054-b631-fe9c87105e
+> 14"
+(1 real change made)
+
+. 
+.         // 20-06-22
+.         replace date = td(20jun2022) if key == "uuid:b1aaa793-1b3f-43df-8ac1-
+> 48428149656a"
+(1 real change made)
+
+.         replace stand = 14 if inlist(rid, 14101, 14301, 14302, 14501, 14502) 
+> & date == td(20jun2022)
+(5 real changes made)
+
+.         drop if key == "uuid:02164abb-d4f1-4478-99ef-baa267ba430e" // 15305, 
+> it was marked as partially complete because "4. Friends did not allow him to 
+> take the survey completely"
+(1 observation deleted)
+
+.         
+.         // LC Drop surveys taken at Saidapet on 20/06/22: this is because we 
+> ended up dropping this stand and move to Velachery
+.         // we used the same stand id and also used the same RIDs that weren't
+>  used. 
+.         drop if stand == 15 & date == td(20jun2022) // LC 5/7: commenting thi
+> s out because there doesn't seem to be a reason for this ??
+(18 observations deleted)
+
+.         
+.         // 21-06-22 
+.         replace stand = 15 if stand == 998 & date == td(21jun2022)
+(40 real changes made)
+
+.         replace stand = 15 if stand == 11 & key == "uuid:41ca6401-a27e-433d-9
+> ee8-df76d709ca4a"
+(1 real change made)
+
+. 
+.         //22-06-22 
+.         replace ss_timetakenmins = ss_timetakenhrs if ss_timetakenhrs > 2 & s
+> s_timetakenhrs != . & ss_timetakenmins == 0  // for those that mins != 0 I ke
+> pt the number of hours taken
+(71 real changes made)
+
+.         replace ss_timetakenhrs  = 0  if ss_timetakenmins == ss_timetakenhrs 
+> & ss_timetakenhrs > 2 & ss_timetakenhrs != . // for those that mins != 0 I ke
+> pt the number of hours taken
+(72 real changes made)
+
+.         replace rid = 15519 if key == "uuid:8deeb30b-1dd6-42af-8a76-ccba1cf2e
+> 212" // rid 15515 was duplicated
+(1 real change made)
+
+.         
+.         //27-06-22
+.         replace rid = 15529    if key == "uuid:7ed95fa7-f438-4482-a4d8-7f6493
+> 03cb52" // rid 15519 was duplicated
+(1 real change made)
+
+.         replace launchset = 13 if key == "uuid:7ed95fa7-f438-4482-a4d8-7f6493
+> 03cb52" // was entered as rid 15519 that was a launchset 12
+(1 real change made)
+
+.         
+.         //28-06-22
+.         replace stand = 17 if key == "uuid:84bd00fc-4605-4784-b847-e7df237ca6
+> 16" //  rid 17409 entered as stand 10
+(1 real change made)
+
+.         replace stand = 15 if key == "uuid:6fcbd42c-c519-4a30-8944-6a6eb772f2
+> 4f" //  rid 15131 entered as stand 998
+(1 real change made)
+
+.         
+.         //04-07-22, replacing rid entry error
+.         replace rid=20404 if key=="uuid:a221bbf4-5eed-4fcf-9bee-b03fa8b4c0ed"
+(1 real change made)
+
+.         
+.         *Correcting for 998 in stand value
+.         replace stand=18 if stand==998 & date==td(04jul2022) & rid>18000 & ri
+> d<18999
+(52 real changes made)
+
+.         replace stand=19 if stand==998 & date==td(04jul2022) & rid>19000 & ri
+> d<19999
+(48 real changes made)
+
+.         replace stand=20 if stand==998 & date==td(04jul2022) & rid>20000 & ri
+> d<20999
+(40 real changes made)
+
+.         replace launchset=14 if stand==18 & date==td(04jul2022)
+(11 real changes made)
+
+.         replace launchset=14 if stand==19 & date==td(04jul2022)
+(0 real changes made)
+
+.         replace launchset=14 if stand==20 & date==td(04jul2022)
+(0 real changes made)
+
+.         
+.         //05-07-22
+.         replace stand=16 if stand_others=="Padappai" & date==td(05jul2022)
+(3 real changes made)
+
+.         replace stand=18 if stand_others=="Pammal" & date==td(05jul2022)
+(5 real changes made)
+
+.         replace stand=20 if stand_others=="Sholinganallur" & date==td(05jul20
+> 22)
+(2 real changes made)
+
+.         
+.         //06-07-2022(NL)
+.         replace stand=16 if stand_others=="Padappai" & date==td(06jul2022)
+(2 real changes made)
+
+. 
+.         //07-07-2022
+.         replace batch =1 if key == "uuid:ed5b5189-7119-4dfd-9c43-74c8b11a9e45
+> " // rid 19415
+(1 real change made)
+
+.         
+.         //11-07-2022
+.         replace batch = 2      if date == td(11jul2022) & inlist(stand, 18, 1
+> 9, 20)
+(5 real changes made)
+
+.         replace launchset = 15 if date == td(11jul2022) & inlist(stand, 18, 1
+> 9, 20) & batch == 2
+(42 real changes made)
+
+.         
+.         //12-07-2022
+.         replace batch = 2 if inlist(rid, 20330, 18435, 19242) // were entered
+>  as batch 1
+(3 real changes made)
+
+. 
+.         
+.         replace batch = 2 if inlist(rid, 19426,19427,19428,19429,19430,19431)
+>  & interviewer == "44. Krishnan" & date == td(14jul2022)
+(6 real changes made)
+
+.         
+.         //18-07-2022
+.         replace batch = 3 if key == "uuid:5898bb1e-bab7-4737-a09d-90ba8b4d6fb
+> 3" // RID 17552
+(1 real change made)
+
+.         
+.         //19-07-2022
+.         replace rid = 17467 if key == "uuid:29abe196-0622-476c-ac7f-508d2dad1
+> 13d" // RID 17462 was duplicated
+(1 real change made)
+
+.         
+.         //20-07-2022
+.         replace rid =  17479 if key == "uuid:9f7500f0-c60a-4cdd-9722-a17dc724
+> 2b65" // RID 17447 was duplicated
+(1 real change made)
+
+. 
+.         * Drop dropped stands 
+.         drop if inlist(stand, ${droplist}) //DL 1/7/22, defined in master dof
+> ile
+(1,427 observations deleted)
+
+.                 
+. /*----------------------------------------------------*/
+.    /* [>   3.  Save data    <] */ 
+. /*----------------------------------------------------*/
+. 
+.         sort date interviewer rid
+
+.         order rid date interviewer 
+
+.         isid rid
+
+.         save "$temp/02_screening_cleaned.dta", replace
+file ~/Dropbox/Labor Discipline/07. Data/3. Main Study
+    3.0/ld_replication/data/temp/02_screening_cleaned.dta saved
+
+.         tab check_completion, m
+
+  Z0. Has the survey been |
+               completed? |      Freq.     Percent        Cum.
+--------------------------+-----------------------------------
+                    0. No |         24        1.37        1.37
+                   1. Yes |      1,722       98.40       99.77
+999. Partially Incomplete |          4        0.23      100.00
+--------------------------+-----------------------------------
+                    Total |      1,750      100.00
+
+.         /*
+> 
+>           Z0. Has the survey been |
+>                        completed? |      Freq.     Percent        Cum.
+>         --------------------------+-----------------------------------
+>                             0. No |         24        1.37        1.37
+>                            1. Yes |      1,722       98.40       99.77
+>         999. Partially Incomplete |          4        0.23      100.00
+>         --------------------------+-----------------------------------
+>                             Total |      1,750      100.00
+>         */
+.         
+. 
+.         * Only keep completed surveys 
+.         keep if check_completion==1
+(28 observations deleted)
+
+.         save "$temp/03_screening_completed_cleaned.dta", replace
+file ~/Dropbox/Labor Discipline/07. Data/3. Main Study
+    3.0/ld_replication/data/temp/03_screening_completed_cleaned.dta saved
+
+. 
+. 
+. 
+.         
+.         
+. 
+. 
+.         
+.         
+. . 
+.                 * Clean up variables - gen ss_* variables
+.                 include "$code/1_1_screening/2_screening_makevar.do"
+
+. **************************************************
+. *Project: LD 
+. *Purpose: Create dataset of screening survey; create dataset with demographic
+>  variables
+. *Author : Luisa
+. *Last last modified: 2024-03-25 (YS)
+. *Last modified: 2024-10-18 (HW)
+. **************************************************
+.         
+. /*----------------------------------------------------*/
+.    /* [>   1.  Open data    <] */ 
+. /*----------------------------------------------------*/
+. 
+.         use "$temp/02_screening_cleaned.dta", clear
+
+.         isid rid
+
+.         
+. /*----------------------------------------------------*/
+.    /* [>   2.  Gen dummies    <] */ 
+. /*----------------------------------------------------*/
+. 
+.         local dem_vars_to_keep ""
+
+. 
+. 
+.         * Education
+.         gen ss_dem_educ_numeracy = ss_dem_calculation == 1                   
+>    if !mi(ss_dem_calculation)      & ss_dem_calculation    !=999
+(35 missing values generated)
+
+.         gen ss_dem_educ_literacy = ss_dem_read_tamil == 1                    
+>    if !mi(ss_dem_read_tamil)       & ss_dem_read_tamil     !=999
+(34 missing values generated)
+
+.         gen ss_dem_educ_noschool = inlist(ss_dem_highest_edu, 1, 2) if !mi(ss
+> _dem_highest_edu)  & ss_dem_highest_edu    !=999
+(35 missing values generated)
+
+.         local dem_vars_to_keep "`dem_vars_to_keep' ss_dem_educ*"
+
+.         
+.         * Commuting mode of transport
+.         split(ss_commute)
+variables created as string: 
+ss_commute1  ss_commute2  ss_commute3
+
+.         local pvars = r(nvars)
+
+. 
+.         local transport "bus auto train moto bike foot"
+
+.         foreach var in `transport' {
+  2.                 gen ss_dem_commute_`var' = 0 if !mi(ss_commute)
+  3.         }
+(34 missing values generated)
+(34 missing values generated)
+(34 missing values generated)
+(34 missing values generated)
+(34 missing values generated)
+(34 missing values generated)
+
+.         
+.         forv i = 1/`pvars' {
+  2.                 destring ss_commute`i', replace
+  3.                 replace ss_dem_commute_bus   = 1 if ss_commute`i' == 1 
+  4.                 replace ss_dem_commute_auto  = 1 if ss_commute`i' == 2  
+  5.                 replace ss_dem_commute_train = 1 if ss_commute`i' == 3 
+  6.                 replace ss_dem_commute_moto  = 1 if ss_commute`i' == 4 
+  7.                 replace ss_dem_commute_bike  = 1 if ss_commute`i' == 5 
+  8.                 replace ss_dem_commute_foot  = 1 if ss_commute`i' == 6 
+  9.                 replace ss_dem_commute_auto  = 1 if ss_commute`i' == 7 // 
+> HW: Oct 17 2024 Shared auto also considered auto
+ 10.                 drop ss_commute`i'
+ 11.         }
+ss_commute1: all characters numeric; replaced as byte
+(34 missing values generated)
+(298 real changes made)
+(60 real changes made)
+(68 real changes made)
+(334 real changes made)
+(227 real changes made)
+(724 real changes made)
+(5 real changes made)
+ss_commute2: all characters numeric; replaced as byte
+(1619 missing values generated)
+(0 real changes made)
+(25 real changes made)
+(22 real changes made)
+(7 real changes made)
+(5 real changes made)
+(65 real changes made)
+(7 real changes made)
+ss_commute3: all characters numeric; replaced as byte
+(1743 missing values generated)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1 real change made)
+(0 real changes made)
+(5 real changes made)
+(1 real change made)
+
+.         
+.         * Commuting time (in fractions of hours)
+.         gen ss_dem_commute_time = ss_timetakenhrs + ss_timetakenmins/60
+(34 missing values generated)
+
+.         local dem_vars_to_keep "`dem_vars_to_keep' ss_dem_commute*"
+
+.         
+.         * Commuting Costs
+.         bys rid: gen commute_bike_day=ss_dem_cost_bike/7 if ss_dem_cost_bike!
+> =. 
+(1,408 missing values generated)
+
+.         bys rid: gen ss_dem_overall_cost= commute_bike_day if commute_bike_da
+> y!=. & ss_commute=="4"
+(1,427 missing values generated)
+
+.         bys rid: replace ss_dem_overall_cost= (commute_bike_day+ss_dem_commut
+> e_cost)/2 if commute_bike_day!=. & ss_commute!="4"
+(9 real changes made)
+
+.         drop commute_bike_day 
+
+.         local dem_vars_to_keep "`dem_vars_to_keep' ss_dem_overall_cost"
+
+.         
+. 
+. /*----------------------------------------------------*/
+.    /* [>   3.  Label variables    <] */ 
+. /*----------------------------------------------------*/
+. 
+.         * Education
+.         label var ss_dem_educ_numeracy "Can correctly multiply"
+
+.         label var ss_dem_educ_literacy "Can read tamil newspaper"
+
+.         label var ss_dem_educ_noschool "Never went to school"
+
+.         
+.         * Mode of commuting
+.         label var ss_dem_commute_foot       "Commutes to stand on foot"
+
+.         local transport "bus auto train moto bike"
+
+.         foreach mode in `transport' {
+  2.                 label var ss_dem_commute_`mode' "Cmmutes to stand by `mode
+> '"
+  3.         }
+
+.         
+.         * Commuting time
+.         label var ss_dem_commute_time           "Commuting time to stand (in 
+> fr. of hour)"
+
+.         
+.         *Commute cost
+.         label var ss_dem_overall_cost       "Commuting cost (overall)"
+
+.         
+.         
+. /*----------------------------------------------------*/
+.    /* [>   4.  Save data    <] */ 
+. /*----------------------------------------------------*/
+. 
+. 
+.         save "$temp/04_screening_makevar.dta", replace
+file ~/Dropbox/Labor Discipline/07. Data/3. Main Study
+    3.0/ld_replication/data/temp/04_screening_makevar.dta saved
+
+.         
+.         * Save demographic variables for eligible participants 
+.         keep if eligible == 1
+(687 observations deleted)
+
+.         keep rid ss_dem*
+
+.         save "$temp/05_screening_dem_vars.dta", replace
+file ~/Dropbox/Labor Discipline/07. Data/3. Main Study
+    3.0/ld_replication/data/temp/05_screening_dem_vars.dta saved
+
+. . 
+.                 * Merge in pid
+.                 include "$code/1_1_screening/3_screening_merge_pid.do"
+
+. **************************************************
+. *Project: LD Main Study
+. *Script : 04_screening_merge_pid
+. *Purpose: Merge pids into screening data
+. *Author : Luisa
+. *Last modified: 2024-03-26 (YS)
+. **************************************************
+.         
+. /*----------------------------------------------------*/
+.    /* [>   1.  Open data    <] */ 
+. /*----------------------------------------------------*/
+. 
+.         * create rid-pid data set for merge 
+.         use "$raw/master_pid_list.dta", clear
+
+.         isid rid
+
+.         * every surveyor is given a bunch of IDs to start talking to people 
+.         drop if inlist(stand, ${droplist}) // defined in master dofile
+(835 observations deleted)
+
+.         keep rid pid stand
+
+.         save "$temp/master_pid_list.dta", replace
+file ~/Dropbox/Labor Discipline/07. Data/3. Main Study
+    3.0/ld_replication/data/temp/master_pid_list.dta saved
+
+. 
+. 
+. /*----------------------------------------------------*/
+.    /* [>   2.  Merge with PIDs    <] */ 
+. /*----------------------------------------------------*/
+. 
+.         * open screening data set
+.         use "$temp/05_screening_dem_vars.dta", clear
+
+. 
+.         merge 1:1 rid using "$temp/master_pid_list.dta", keep(1 2 3)
+(variable rid was int, now float to accommodate using data's values)
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                            12
+        from master                         4  (_merge==1)
+        from using                          8  (_merge==2)
+
+    Matched                             1,059  (_merge==3)
+    -----------------------------------------
+
+.         * April 2024: LC pretty confident that is fully updated and good to u
+> se.
+.         
+. 
+.         /*     
+>    Result                           # of obs.
+>     -----------------------------------------
+>     not matched                            12
+>         from master                         4  (_merge==1)
+>         from using                          8  (_merge==2)
+> 
+>     matched                             1,059  (_merge==3)
+>     -----------------------------------------
+> 
+>         */
+. 
+.         drop if pid == . // _merge==1 
+(4 observations deleted)
+
+.         * FIXME what does _merge==2 correspond to? why do we retain those obs
+> ?
+.                 /*
+>                     pid |      Freq.     Percent        Cum.
+>         ------------+-----------------------------------
+>                1327 |          1       12.50       12.50
+>                1501 |          1       12.50       25.00 // Assigned to Saida
+> pet, but we abandoned this stand. 
+>                1502 |          1       12.50       37.50 // Assigned to Saida
+> pet, but we abandoned this stand. 
+>                1503 |          1       12.50       50.00 // Assigned to Saida
+> pet, but we abandoned this stand. 
+>                1504 |          1       12.50       62.50 // Assigned to Saida
+> pet, but we abandoned this stand. 
+>                1505 |          1       12.50       75.00 // Assigned to Saida
+> pet, but we abandoned this stand. 
+>                1506 |          1       12.50       87.50 // Assigned to Saida
+> pet, but we abandoned this stand. 
+>                1507 |          1       12.50      100.00 
+>         ------------+-----------------------------------
+>               Total |          8      100.00
+>         */
+.         * 2024-04-04: checked if these pids are in our main sample - doesn't 
+> seem to be the case, so made decision to drop them.
+.         drop if _merge==2
+(8 observations deleted)
+
+.         drop _merge
+
+.         gen ss_rid = rid
+
+.         label var ss_rid "Screening survey RID"
+
+.         label var pid "PID"
+
+.         
+.         
+.         * HW Nov 8 2024: Checked PID Characteristics and found no mentioning 
+> of the two pids
+.         * Also confirmed in the main sample the two 
+. 
+.         
+. /*----------------------------------------------------*/
+.    /* [>   3.  Save data    <] */ 
+. /*----------------------------------------------------*/
+.         order rid ss_rid pid stand
+
+.         keep pid ss_dem_*
+
+.         save "$temp/06_screening_dem_vars_with_pid.dta", replace
+file ~/Dropbox/Labor Discipline/07. Data/3. Main Study
+    3.0/ld_replication/data/temp/06_screening_dem_vars_with_pid.dta saved
+
+. 
+. 
+. /*----------------------------------------------------*/
+.    /* [>   4.  Do the same for 04_screening_makevar    <] */ 
+. /*----------------------------------------------------*/        
+. 
+.         use "$temp/04_screening_makevar.dta", clear
+
+.         keep if eligible == 1
+(687 observations deleted)
+
+.         merge 1:1 rid using "$temp/master_pid_list.dta"
+(variable rid was int, now float to accommodate using data's values)
+(variable stand was int, now float to accommodate using data's values)
+(label stand_lab already defined)
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                            12
+        from master                         4  (_merge==1)
+        from using                          8  (_merge==2)
+
+    Matched                             1,059  (_merge==3)
+    -----------------------------------------
+
+.         drop if pid == . // _merge==1 
+(4 observations deleted)
+
+.         drop if _merge==2
+(8 observations deleted)
+
+.         drop _merge
+
+.         gen ss_rid = rid
+
+.         label var ss_rid "Screening survey RID"
+
+.         label var pid "PID"
+
+.         order rid ss_rid pid stand 
+
+.         save "$temp/07_screening_makevar_with_pid.dta", replace
+file ~/Dropbox/Labor Discipline/07. Data/3. Main Study
+    3.0/ld_replication/data/temp/07_screening_makevar_with_pid.dta saved
+
+.         
+. . 
+. 
+.                 ****
+.                 **## 2.  Baseline
+.                 ****
+. 
+.                 * Last Edited by HW Dec 10 2024
+. 
+.                 * Input dataset:        01_baseline_named.dta
+.                 * Output dataset:
+.                 * 05_baseline_makevar.dta       (Baseline Panel Data)
+.                 * 05_baseline_cov.dta           (PID level baseline data, use
+> d as covs in regression)
+. 
+.                 * Note: keep only surveys conducted at stand AND phone survey
+> s that're completed
+. 
+. 
+.                 * Clean raw data, manually fixes errors
+.                 * Manual corrections made by field team
+.                 * HW assumes everything is correct (Except fixing spot time a
+> ssociated with two deviceids in Feb 2025)
+.                 include "$code/1_2_baseline/1_baseline_cleaning.do"
+
+. **************************************************
+. *Project: LD 
+. *Purpose: Baseline Cleaning  
+. *Author: Supraja
+. *Last modified: 2024-03-27 (YS)
+. **************************************************
+.                 
+. /*----------------------------------------------------*/
+.    /* [>   1.  Open data    <] */ 
+. /*----------------------------------------------------*/
+. 
+. 
+.         use "$raw/01_baseline_named.dta", clear
+
+.         
+. /*----------------------------------------------------*/
+.    /* [>   2.  Clean data    <] */ 
+. /*----------------------------------------------------*/
+. 
+.         format date %td
+
+. 
+.         * Convert time to numeric 
+.         foreach x in bs_time_found bs_time_left_stand {
+  2.                 forval i=1/7{
+  3.                 cap confirm string variable `x'_`i'
+  4.                         if !_rc{
+  5.                                 ren `x'_`i' `x'_`i'_str 
+  6.                                 gen double `x'_`i' = clock(`x'_`i'_str, "h
+> ms")
+  7.                                 format `x'_`i'  %tcHH:MM:SS
+  8.                                 drop `x'_`i'_str
+  9.                                 }
+ 10.                 }
+ 11.         }
+(7,195 missing values generated)
+(10,100 missing values generated)
+(11,013 missing values generated)
+(11,322 missing values generated)
+(11,338 missing values generated)
+(11,424 missing values generated)
+(11,450 missing values generated)
+(8,941 missing values generated)
+(10,820 missing values generated)
+(11,283 missing values generated)
+(11,392 missing values generated)
+(11,435 missing values generated)
+(11,460 missing values generated)
+(11,479 missing values generated)
+
+. 
+.         *Entry errors
+.         //Correcting for errors on 03-03-2022
+.         *Correcting for completion status
+.         replace check_completion=0 if pid==102 & key=="uuid:f3505687-ad89-495
+> f-8dad-c217a6245774"
+(0 real changes made)
+
+.         replace check_completion=0 if pid==317 & key=="uuid:6170da7a-8deb-49e
+> 3-b085-9a2b1189f36f"
+(0 real changes made)
+
+.         
+.         //Correcting for errors on 04-03-2022
+.         *Coding for work type others
+.         replace bs_work_type_1 = 15 if bs_work_type_others_1=="Metro water wo
+> rk"
+(7 real changes made)
+
+.         replace bs_work_type_1 = 15 if bs_work_type_others_1=="Metro water co
+> nnection work"
+(5 real changes made)
+
+.         replace bs_work_type_2 = 15 if bs_work_type_others_2=="Metro water co
+> nnection work"
+(3 real changes made)
+
+.         
+.         replace launchset = 1 if date==td(03mar2022)
+(37 real changes made)
+
+.         
+.         *Dropping for wrongly entered observation
+.         drop if pid==518 & key=="uuid:d2cc8ce4-dc1b-41ee-be7e-df80323944b1" 
+(1 observation deleted)
+
+.         drop if pid==518 & key=="uuid:ef083577-5b25-4be7-8599-66a45ec1e141"
+(1 observation deleted)
+
+.         
+.         //Correcting for errors on 05-03-2022
+. 
+.         //Error on 07-03-2022
+.         
+.         *Correcting for prefill issues
+.         replace bs_section_complete_1=1 if key=="uuid:5baf3524-7154-4208-b1fd
+> -72086f318f1b" & pid==317
+(1 real change made)
+
+.         forvalues i=3/5{
+  2.         replace bs_work_`i'=. if pid==317 & date==td(07mar2022) &key=="uui
+> d:45a537e6-e38b-4c8d-84dc-c7085ae34954"
+  3.         replace bs_attend_sr_`i' =. if pid==317 & date==td(07mar2022) &key
+> =="uuid:45a537e6-e38b-4c8d-84dc-c7085ae34954"
+  4.         replace bs_section_complete_`i' =. if pid==317 & date==td(07mar202
+> 2) &key=="uuid:45a537e6-e38b-4c8d-84dc-c7085ae34954"
+  5.         }
+(1 real change made, 1 to missing)
+(1 real change made, 1 to missing)
+(1 real change made, 1 to missing)
+(1 real change made, 1 to missing)
+(1 real change made, 1 to missing)
+(1 real change made, 1 to missing)
+(1 real change made, 1 to missing)
+(1 real change made, 1 to missing)
+(1 real change made, 1 to missing)
+
+.         
+.         //Error on 08-03-2022
+.         drop if pid==341 & date==td(08mar2022) & key=="uuid:6af84d0a-d1c8-491
+> 0-bcc8-3fe3921c1906" //wrongly taken survey
+(1 observation deleted)
+
+.         
+.         //Error on 10-03-2022
+.                 replace pid=137 if pid==124 & key=="uuid:66508368-c3f4-4c7e-8
+> 818-5cedb1c33c83" & date==td(10mar2022)
+(1 real change made)
+
+.                 replace pid =313 if date ==td(04mar2022) & key=="uuid:ee0e55a
+> c-7e5b-4a37-900c-770e0f13c639"
+(0 real changes made)
+
+.                 
+.                 drop if key == "uuid:66508368-c3f4-4c7e-8818-5cedb1c33c83" | 
+> key=="uuid:1b75df9a-6a0b-46e6-b251-daeb37d4793e" | key=="uuid:d58d06e2-dada-4
+> 643-afb9-12427a00f900" |key=="uuid:1353fd21-e905-408c-974e-172dcd21b624" | ke
+> y=="uuid:9cf695b8-c540-4f0d-8bcf-444192e0722d" |  key=="uuid:516c7506-785b-48
+> a4-9545-0b076c8765c9" | key=="uuid:f98287a1-77ac-4e31-acc6-76c5adafb5e5"
+(7 observations deleted)
+
+.         
+.         //17-03-2022
+.         *Correcting for missing launchsets
+.         replace launchset = 1 if pid>100 & pid<=152
+(0 real changes made)
+
+.         replace launchset = 2 if pid>152 & pid<=197
+(23 real changes made)
+
+.         replace launchset = 3 if pid==198 | pid==199 | (pid>=2101 & pid<=2151
+> )
+(0 real changes made)
+
+.         replace launchset = 1 if pid>200 & pid<=247
+(0 real changes made)
+
+.         replace launchset = 2 if pid>=248 & pid<=279
+(5 real changes made)
+
+.         replace launchset = 1 if pid>300 & pid<=340
+(0 real changes made)
+
+.         replace launchset = 2 if pid>=341 & pid<=360
+(21 real changes made)
+
+.         replace launchset = 1 if pid>400 & pid<=445
+(0 real changes made)
+
+.         replace launchset = 2 if pid>=446 & pid<=465
+(9 real changes made)
+
+.         replace launchset = 1 if pid>500 & pid<=550
+(0 real changes made)
+
+.         replace launchset = 2 if pid>=551 & pid<=581
+(10 real changes made)
+
+.         
+.         //23-03-2022
+.         *Correcting for wrongly entered date
+.         replace date=td(23mar2022) if date==td(24mar2022) & key=="uuid:21fb4d
+> 85-90b3-491d-baab-2e83a5daca6a" & pid==2144
+(1 real change made)
+
+.         
+.         //for the 10th march duplicatesit mostly looks like a recall error co
+> rrected
+.         
+.         //Dropping duplicate pid
+.         drop if pid==2129 & key=="uuid:7e80758c-319c-4d6a-9d54-be1938968a70"
+(1 observation deleted)
+
+. 
+.         //Dropping duplicate pid, 31-03-2022
+.         replace pid=808 if date==td(31mar2022) & key=="uuid:757216e7-3947-427
+> 9-a089-e5aafc551d3d"
+(1 real change made)
+
+.         
+.         //Cleaning for stand 998 values, 31-03-2022
+.         replace stand=7 if p0_998 =="701" | p0_998 =="702" | p0_998 =="709" |
+>  p0_998 =="MMDA" | p0_998 =="Mmda"
+(32 real changes made)
+
+.         replace p0_998="" if p0_998 =="701" | p0_998 =="702" | p0_998 =="709"
+>  | p0_998 =="MMDA" | p0_998 =="Mmda"
+(32 real changes made)
+
+.         replace stand=6 if p0_998 =="Korattur"
+(40 real changes made)
+
+.         replace p0_998="" if p0_998 =="Korattur"
+(40 real changes made)
+
+.         replace stand=8 if p0_998 =="Porur"
+(38 real changes made)
+
+.         replace p0_998="" if p0_998 =="Porur"
+(38 real changes made)
+
+.         replace stand=9 if p0_998 =="T v k" | p0_998 =="T vk" | p0_998 =="Thi
+> ruvika Nagar" | p0_998 =="Thiruvika nagar" | p0_998 =="Tv k" | p0_998 =="Tvk"
+>  | p0_998 =="Tvk nagar"
+(28 real changes made)
+
+.         replace p0_998 ="" if p0_998 =="T v k" | p0_998 =="T vk" | p0_998 =="
+> Thiruvika Nagar" | p0_998 =="Thiruvika nagar" | p0_998 =="Tv k" | p0_998 =="T
+> vk" | p0_998 =="Tvk nagar"
+(28 real changes made)
+
+.         
+.         //Launchset cleaning 02-04-2022
+.         replace launchset=4 if launchset==. & date>=td(31mar2022) & pid>=600 
+> & pid<1000
+(451 real changes made)
+
+.         
+.         //Duplicate pid and wrongly entered pid correction, 02-04-2022
+.         drop if pid==846 & date==td(02apr2022) & key=="uuid:7a311cbf-fb21-4ca
+> d-b177-a0a6eb4a6d07"
+(1 observation deleted)
+
+.         drop if pid==853 & date==td(02apr2022) & key=="uuid:8ca8f999-13b9-4de
+> 1-afec-3e1b46a0a85f"
+(1 observation deleted)
+
+.         drop if pid==855 & date==td(02apr2022) & key=="uuid:7ba9a23c-aa6a-4b8
+> 7-88f3-06dfcf794996"
+(1 observation deleted)
+
+.         drop if pid==857 & date==td(01apr2022) & key=="uuid:071c7c8c-f60c-49d
+> 9-9ecc-bc170320158f"
+(1 observation deleted)
+
+.         
+.         //Wrongly entered date, 04-04-2022
+.         replace date=td(04apr2022) if date==td(05apr2022) & interviewer=="40.
+>  Anupriya" & key=="uuid:df3ee4f3-a309-418d-a403-9ab5a06147c0"
+(1 real change made)
+
+. 
+.         //Wrongly entered stand
+.         //replace stand=6 if stand==8 & interviewer=="36. Diwakar"
+.         
+.         //Wrongly entered completion
+.         replace check_completion=0 if check_completion==1 & date==td(06apr202
+> 2) & key=="uuid:b36f6119-16b0-44f6-a5a5-be4d2b6de0ca"
+(1 real change made)
+
+.         replace check_completion=0 if check_completion==1 & date==td(06apr202
+> 2) & pid==913
+(2 real changes made)
+
+.         
+.         //Duplicate pid correction, 07-04-2022
+.         drop if pid==669 & bs_sttime=="8:20:47 AM" & date==td(07apr2022) & ke
+> y=="uuid:08e1f14e-498f-4ff5-8171-345b60168c93"
+(1 observation deleted)
+
+.         
+.         //Wrong stand correction
+.         replace stand=6 if pid>600 & pid<700 & stand==8
+(7 real changes made)
+
+.         
+.         //Wrong PID entry
+.         replace pid=813 if pid==865 & date==td(11apr2022) & & interviewer=="4
+> 0. Anupriya" & key=="uuid:6b73181a-a886-4832-98c7-cb889f21aac1"
+(1 real change made)
+
+.         
+.         // Option other is already in main list
+.         replace check_reason_inc_onspot = 1 if key == "uuid:de830119-268f-459
+> b-a539-0e916fe40878"
+(1 real change made)
+
+.         
+.         //12-05-22 cleaning stand name for 1005 & 1023
+.         replace stand = 10 if pid == 1005 & date == td(12may2022)
+(1 real change made)
+
+.         replace stand = 10 if pid == 1023 & date == td(12may2022)
+(1 real change made)
+
+.         
+.         // 16-05-22 (LC) wrong earnings
+.         replace bs_earn_1 = 850 if key == "uuid:d9588873-563c-4595-be09-37c1a
+> 4d4ca55"
+(1 real change made)
+
+.         
+.         //19-05-22 cleaning stand name for 1060 & 1020
+.         replace stand = 10 if pid == 1060 & date == td(19may2022)
+(1 real change made)
+
+.         replace stand = 10 if pid == 1020 & date == td(19may2022)
+(1 real change made)
+
+.         
+.         //21-05-22 cleaning batch for 1049 - launchset 6 - CHECK IF THIS IS C
+> ORRECT
+.         //replace batch = 1 if pid == 1049 & launchset == 6
+.         
+.         //26-05-22 cleaning stand name for 1114
+.         replace stand = 11 if pid == 1114 & date == td(26may2022)
+(1 real change made)
+
+.         
+.         //10-06-22 cleaning stand name for all PIDs today & yesterday
+.         replace stand = 12 if pid >= 1202 & pid <= 1289
+(304 real changes made)
+
+.         replace stand = 13 if pid >= 1301 & pid <= 1362
+(194 real changes made)
+
+.         
+.         //11-06-22 - LC: 1344 was entered twice : spotted in person in the AM
+> , and then phone call in the PM
+.         // Temporarily replace 1344 as attended and mode == 1 in the phone ca
+> ll, and dropping in person survey
+.         replace mode = 1 if key == "uuid:cd61f1d0-985c-4fe8-bb21-9aaf672ec959
+> "
+(1 real change made)
+
+.         replace spot_time = "7:40:50 AM" if key == "uuid:cd61f1d0-985c-4fe8-b
+> b21-9aaf672ec959"
+(1 real change made)
+
+.         drop if key == "uuid:a2f2e8bd-ad1d-451a-9976-53def80193c4"
+(1 observation deleted)
+
+.         
+.         //13-06-22
+.         drop if key == "uuid:dc75918e-242b-461c-82d0-83ec1c02a2e6" // 1337 sp
+> otted twice
+(1 observation deleted)
+
+.         drop if key == "uuid:dcbae4f9-c6e2-4938-ada6-2b9f6c3046bc" // 1252 wa
+> s called twice, the second time all recalls were already 
+(1 observation deleted)
+
+.         
+.         // 15-06-22
+.         replace stand = 12 if pid == 1201
+(1 real change made)
+
+.         
+.         //01-07-22 (temporarily dropping the duplicate obs) -NL
+.         drop if key =="uuid:3a500340-328a-4123-9419-2335af21fb1f"
+(1 observation deleted)
+
+.         drop if key =="uuid:c361b4a0-e5c4-4f9c-9d7a-fcf750aa8218" // 1751
+(1 observation deleted)
+
+.         drop if key =="uuid:c649da4a-578b-4ce8-bf9f-f2c59110a290" // 1559
+(1 observation deleted)
+
+.         **** TEMP DROP!
+.         drop if key == "uuid:f47798c9-7c09-48a5-800c-c61363fc48ee" // 1357 en
+> tered twice, but probably two different PIDs?
+(1 observation deleted)
+
+.         drop if key == "uuid:cd61f1d0-985c-4fe8-bb21-9aaf672ec959" // 1344 en
+> tered twice, one in person one on the phone --> think how to deal with it?
+(1 observation deleted)
+
+.         
+.         // 16-06-22
+.         replace stand = 12 if inlist(key, "uuid:dfb23bbb-8d9a-4b65-bc55-ef213
+> fa745e2", ///
+>                                                                           "uu
+> id:ddcf57cb-d0f8-485a-94f7-c6a1493cc498", ///
+>                                                                           "uu
+> id:5308973c-8709-4055-a614-55501c883075", ///
+>                                                                           "uu
+> id:818bc323-dee9-48d7-9a1c-479f0d16d523", ///
+>                                                                           "uu
+> id:6b889cf6-1570-444d-9b75-ef302a19cf3e", ///
+>                                                                           "uu
+> id:8b8da41c-f71d-460d-8056-3c05f7f8fd5a", ///
+>                                                                           "uu
+> id:d5ec1c00-730f-4ef8-aa50-9dbf2794765c", ///
+>                                                                           "uu
+> id:ab1bf1a8-9d30-49db-a00a-adb3d28425d6")
+(8 real changes made)
+
+.                                                                           
+.         replace stand = 13 if inlist(key, "uuid:d715b7dc-f3f3-4b2e-b94f-c124d
+> 335e594", ///
+>                                                                           "uu
+> id:0d4e4337-e3fa-4c1d-b31d-43c6a84aceaf", ///
+>                                                                           "uu
+> id:eabe3d92-cf75-46ca-879a-085d5dd8c752", ///
+>                                                                           "uu
+> id:87a56195-3a87-4c30-b42b-c23819e9cc61", ///
+>                                                                           "uu
+> id:71f0857c-4f10-4bbd-a062-233882042655", ///
+>                                                                           "uu
+> id:9082de10-18da-4564-a187-226852443037", ///
+>                                                                           "uu
+> id:98d93ae7-c970-4d4b-b798-9b4f680318b9", ///
+>                                                                           "uu
+> id:aac97f1a-f9f9-41ce-8309-155dc6a8746e", ///
+>                                                                           "uu
+> id:10d539e4-8243-4762-b3bf-8c453c1d4fdb")
+(9 real changes made)
+
+.                                                                           
+.                                                                           
+.         //      replace launchset = 11 if inlist( pid, 1294, 1296, 4300, 4306
+> , 4312, 1293, 1299, 4302)  & date == td(16jun2022) 
+.     drop if key == "uuid:10d539e4-8243-4762-b3bf-8c453c1d4fdb" // survey ente
+> red by mistake
+(1 observation deleted)
+
+.         
+.         replace pid=1355 if key =="uuid:d4fbdf68-30e3-495e-bd41-fe410acae03d"
+>  // replacing wrongly entered pid 
+(1 real change made)
+
+.         
+.         //replace pid=1356 if key=="uuid:f47798c9-7c09-48a5-800c-c61363fc48ee
+> "
+.         // 28-06-22 - PID screened in as batch 1 and launchset 10, however th
+> ey went to native for a week-long holiday, so they took IC once they were bac
+> k and we pushed them 1 week
+.         //      replace batch = 2      if inlist(pid, 1283, 1286, 1276, 1265,
+>  1264, 1270, 1263, 1249, 1248, 1261, 1219)
+.         //      replace launchset = 11 if inlist(pid, 1283, 1286, 1276, 1265,
+>  1264, 1270, 1263, 1249, 1248, 1261, 1219)
+. 
+.         // 04-07-22 (DL) missing launchsets
+.         replace launchset = 10 if key == "uuid:71f0857c-4f10-4bbd-a062-233882
+> 042655" & launchset == . // pid == 1365
+(1 real change made)
+
+.         replace launchset = 11 if key == "uuid:eabe3d92-cf75-46ca-879a-085d5d
+> d8c752" & launchset == . // pid == 1366
+(1 real change made)
+
+.         replace launchset = 11 if key == "uuid:98d93ae7-c970-4d4b-b798-9b4f68
+> 0318b9" & launchset == . // pid == 1372 
+(1 real change made)
+
+.         replace launchset = 11 if key == "uuid:0d4e4337-e3fa-4c1d-b31d-43c6a8
+> 4aceaf" & launchset == . // pid == 1373
+(1 real change made)
+
+.         replace launchset = 11 if key == "uuid:d715b7dc-f3f3-4b2e-b94f-c124d3
+> 35e594" & launchset == . // pid == 1380
+(1 real change made)
+
+.         replace launchset = 11 if key == "uuid:aac97f1a-f9f9-41ce-8309-155dc6
+> a8746e" & launchset == . // pid == 1371
+(1 real change made)
+
+.         replace launchset = 11 if key == "uuid:9082de10-18da-4564-a187-226852
+> 443037" & launchset == . // pid == 1370
+(1 real change made)
+
+.         replace launchset = 11 if key == "uuid:87a56195-3a87-4c30-b42b-c23819
+> e9cc61" & launchset == . // pid == 1374
+(1 real change made)
+
+.         replace launchset = 13 if key == "uuid:b8a13cca-2650-4579-80d6-de8afd
+> 604ca9" & launchset == . // pid == 17319 
+(1 real change made)
+
+.         replace launchset = 13 if key == "uuid:93b3f84f-6fc1-468b-b195-a6ea10
+> 2c1b7d" & launchset == . // pid == 17321
+(1 real change made)
+
+.         
+.         //05-07-2022, (NL) correcting for wrongly entered pid
+.         replace pid=1414 if key=="uuid:eeb98f39-707d-486a-8b48-8c126209762f"
+(1 real change made)
+
+.         replace pid=1660 if key=="uuid:b53e30b8-c29b-43de-a6f0-4dedacfc5b04"
+(1 real change made)
+
+.         
+.         replace check_completion = 0 if key == "uuid:13152af5-0822-493a-b643-
+> 6ca16d814584" // 1469, call not picked up
+(1 real change made)
+
+.         
+. 
+.         
+.         gen original_spot_time = spot_time
+(5,706 missing values generated)
+
+.         generate double spot_time_1 = clock(spot_time, "hms")
+(5,706 missing values generated)
+
+.         format %tcHH:MM:SS spot_time_1
+
+.         drop spot_time 
+
+.         rename spot_time_1 spot_time
+
+.         replace spot_time = spot_time - tc(09:30) if deviceid == "35998106204
+> 1882"
+(46 real changes made)
+
+.         replace spot_time = spot_time - tc(09:30) if deviceid == "35998106205
+> 5205"
+(138 real changes made)
+
+.         
+.         replace bs_notpaid_amt_due_2 = 800 if key == "uuid:282f8e2c-682c-4e41
+> -a782-34f62d47c6e0" // pid 1531, was entered as 0
+(1 real change made)
+
+.         
+.         //06-07-22 (DL) Missing Launchsets
+.         replace launchset = 10 if key == "uuid:ddcf57cb-d0f8-485a-94f7-c6a149
+> 3cc498" & launchset == . // pid == 1296
+(1 real change made)
+
+.         replace launchset = 10 if key == "uuid:818bc323-dee9-48d7-9a1c-479f0d
+> 16d523" & launchset == . // pid == 4306
+(1 real change made)
+
+.         replace launchset = 10 if key == "uuid:6b889cf6-1570-444d-9b75-ef302a
+> 19cf3e" & launchset == . // pid == 1294
+(1 real change made)
+
+.         replace launchset = 11 if key == "uuid:5308973c-8709-4055-a614-55501c
+> 883075" & launchset == . // pid == 4300
+(1 real change made)
+
+.         replace launchset = 11 if key == "uuid:dfb23bbb-8d9a-4b65-bc55-ef213f
+> a745e2" & launchset == . // pid == 4312
+(1 real change made)
+
+.         replace launchset = 11 if key == "uuid:d5ec1c00-730f-4ef8-aa50-9dbf27
+> 94765c" & launchset == . // pid == 1299
+(1 real change made)
+
+.         replace launchset = 11 if key == "uuid:ab1bf1a8-9d30-49db-a00a-adb3d2
+> 8425d6" & launchset == . // pid == 4302
+(1 real change made)
+
+.         replace launchset = 11 if key == "uuid:8b8da41c-f71d-460d-8056-3c05f7
+> f8fd5a" & launchset == . // pid == 1293
+(1 real change made)
+
+.         replace launchset = 13 if key == "uuid:5fb85048-f088-4e9e-9005-e41389
+> f94632" & launchset == . // pid == 17318
+(1 real change made)
+
+.         
+.         //07-07-22 (DL) 
+.         //Missing Launchsets
+.         replace launchset = 13 if key == "uuid:44c6c6c9-3bd0-4e4b-b30b-871772
+> 97bace" & launchset == . // pid == 17321
+(1 real change made)
+
+.         //stand recorded as 998 but should be 16
+.         replace stand = 16 if key == "uuid:a184845f-c9d0-4036-8baa-c0f6f519b2
+> 7f" & stand == 998 // pid == 1605
+(1 real change made)
+
+.         replace stand = 16 if key == "uuid:f841ee6a-3092-4ca7-9cc9-3c851fd2e8
+> 78" & stand == 998 // pid == 1639
+(1 real change made)
+
+.         replace stand = 16 if key == "uuid:a34719a7-fb86-48cf-af64-f222a589cc
+> 46" & stand == 998 // pid == 1659
+(1 real change made)
+
+.         
+.         //08-07-22 (DL)
+.         //missing launchsets; there are 115 missing, so I thought it was bett
+> er to change by groups
+.         replace launchset = 14 if stand == 14 & batch == 3 & launchset == . 
+(31 real changes made)
+
+.         replace launchset = 14 if stand == 16 & batch == 2 & launchset == . 
+(80 real changes made)
+
+.         replace launchset = 13 if stand == 17 & batch == 1 & launchset == .
+(2 real changes made)
+
+.         replace launchset = 14 if stand == 17 & batch == 2 & launchset == . 
+(125 real changes made)
+
+.         replace launchset = 14 if stand == 18 & batch == 1 & launchset == .
+(64 real changes made)
+
+.         replace launchset = 14 if stand == 19 & batch == 1 & launchset == .
+(85 real changes made)
+
+.         replace launchset = 14 if stand == 20 & batch == 1 & launchset == .
+(85 real changes made)
+
+.         //missing stands 
+.         replace stand = 16 if key == "uuid:d69efe14-d96c-4220-ba10-f0175f08c9
+> 8b" & stand == 998 // pid == 1608
+(1 real change made)
+
+.         replace date = td(08jul2022) if key == "uuid:c76fa6af-4d77-4da7-a74f-
+> 53db88e4e2de" // (LC) pid 1719
+(1 real change made)
+
+.         
+.         //duplicates (TEMP DROP) LC
+.         drop if key == "uuid:4e3c6dbc-cf2a-4be8-947b-d54c5feb4436" // 1940 on
+>  08/07
+(1 observation deleted)
+
+.         drop if key == "uuid:dd4548f4-0114-4beb-a992-d9a83286724c" // 7704 on
+>  08/07
+(1 observation deleted)
+
+.         
+.         //11-07-22
+.         drop if key == "uuid:4e6a5fb6-cd10-4930-b899-29dc5bc8805f"  // pid 19
+> 34 called by mistake
+(1 observation deleted)
+
+.         replace stand = 16 if key == "uuid:5cf3fc77-31a6-4eaa-a4cd-afde1148fe
+> 9a" // pid 1603, was entered as 18
+(1 real change made)
+
+.         
+.         //12-07-22
+.         replace stand     = 17 if key == "uuid:8d1e9c55-b02c-477c-bf4b-63abd1
+> 43ac47" //pid 1784, was entered  as 15
+(1 real change made)
+
+.         replace launchset = 14 if key == "uuid:8d1e9c55-b02c-477c-bf4b-63abd1
+> 43ac47" & launchset == . //pid 1784
+(1 real change made)
+
+.         replace pid = 6848 if pid == 17321
+(3 real changes made)
+
+.         replace bs_earn_1 = 800 if key == "uuid:ad72bd64-788a-468e-afd8-be27e
+> bc0df55" | key == "uuid:08fb06c9-310b-47db-8f38-2cc9f2ff529a" // pid  1757 on
+>  4 and 5 /07
+(2 real changes made)
+
+.         replace bs_earn_2 = 800 if key == "uuid:ad72bd64-788a-468e-afd8-be27e
+> bc0df55" // pid  1757 on 4/07
+(1 real change made)
+
+. 
+.         // 15-07-22 (DL)
+.         //missing launchsets
+.         //replace launchset = 15 if key == "uuid:ff70a56b-94b2-4c1e-a882-dcd7
+> edbd02bc" // pid 1962
+.         //replace launchset = 15 if key == "uuid:35fbd66a-2c82-4948-9db9-8f37
+> 4928b2b9" // pid 1835
+.         //replace launchset = 15 if key == "uuid:c7a20d65-0403-47f6-870c-0420
+> 27d6e7cb" // pid 1947
+.         
+.         //dropping these observations since baseline was started one day late
+.         drop if key=="uuid:ff70a56b-94b2-4c1e-a882-dcd7edbd02bc"
+(1 observation deleted)
+
+.         drop if key=="uuid:35fbd66a-2c82-4948-9db9-8f374928b2b9"
+(1 observation deleted)
+
+.         drop if key=="uuid:c7a20d65-0403-47f6-870c-042027d6e7cb"
+(1 observation deleted)
+
+.         // 15-07-2022 (NL)
+.         replace pid=6802 if key=="uuid:a7913a40-579e-4628-853f-07e7b861c9b9" 
+> //wrongly entered PID
+(1 real change made)
+
+.         replace check_completion = 1 if key == "uuid:f664d214-c2cf-4701-99f2-
+> 247afb34c395" // PID 6828 recall mistake
+(1 real change made)
+
+.         replace stand = 17 if key == "uuid:48c1e543-6a3f-41b4-bd44-9f3263faf1
+> 2f" // PID 1783 entered as stand 15
+(1 real change made)
+
+.         //21-07-2022 (LC)
+.         drop if key == "uuid:61596666-2f7a-410b-a407-34ca72472d2b" // PID 772
+> 3 , entered same answers twice on 21/7
+(1 observation deleted)
+
+.         
+.         //22-07-2022 (Dl)
+.         // Wrong stand number
+.         replace stand = 17 if pid == 6851 & stand == 15 & batch == 3
+(1 real change made)
+
+.         // missing launchsets
+.         replace launchset = 16 if stand == 16 & batch == 3 & launchset == .
+(12 real changes made)
+
+.         replace launchset = 16 if stand == 17 & batch == 3 & launchset == .
+(33 real changes made)
+
+.         
+.         //22-07-2022 (NL)
+.         replace batch =1 if pid==515
+(1 real change made)
+
+.         replace batch =1 if pid==531
+(1 real change made)
+
+.         replace batch =2 if pid==164
+(1 real change made)
+
+.         replace batch =1 if pid==127
+(1 real change made)
+
+.         replace batch =2 if pid==174
+(1 real change made)
+
+.         replace batch =1 if pid==1303
+(1 real change made)
+
+.         replace batch =1 if pid==1536
+(1 real change made)
+
+.         replace batch =1 if pid==1441
+(1 real change made)
+
+.         replace batch =2 if pid==6837
+(1 real change made)
+
+.         replace batch =1 if pid==1934
+(1 real change made)
+
+.         replace batch = 2 if pid == 1683 
+(5 real changes made)
+
+.         replace batch = 2 if pid == 1940 
+(8 real changes made)
+
+.         
+.         //02-08-22, dropping duplicate observation (NL)
+.         drop if key=="uuid:63509f59-e6da-45bc-80c7-f34dcb882efa"
+(1 observation deleted)
+
+.         replace batch = 3 if key == "uuid:00831de7-5e8d-43e1-904d-a1288f5f08a
+> 9"
+(1 real change made)
+
+.         replace batch = 3 if key == "uuid:00831de7-5e8d-43e1-904d-a1288f5f08a
+> 9"
+(0 real changes made)
+
+.         
+.         drop if inlist(stand, ${droplist}) // defined in master.do
+(5,114 observations deleted)
+
+.         label var launchset "Launch Set"
+
+. 
+. /*----------------------------------------------------*/
+.    /* [>   4.  Save data    <] */ 
+. /*----------------------------------------------------*/
+.         
+.         // drop irrelevant variables (2024-03-26)
+.         drop subscriberid devicephonenum username caseid text_audit duration 
+> note* starttime endtime stand_name_prefill
+
+. 
+.         order stand pid date interviewer 
+
+.         sort stand pid date 
+
+.         * isid pid date 
+.                 * will not be the case as incomplete surveys are re-attempted
+>  on the phone, so there can be multiple entries for a pid-day
+.         save "$temp/02_baseline_cleaned.dta", replace
+file ~/Dropbox/Labor Discipline/07. Data/3. Main Study
+    3.0/ld_replication/data/temp/02_baseline_cleaned.dta saved
+
+. 
+.         tab check_completion, m 
+
+   Z0. Has the survey been |
+                completed? |      Freq.     Percent        Cum.
+---------------------------+-----------------------------------
+                        No |        366        5.74        5.74
+                       Yes |      5,992       93.93       99.67
+999. Survey was incomplete |         21        0.33      100.00
+---------------------------+-----------------------------------
+                     Total |      6,379      100.00
+
+. 
+.         * Keep completed surveys and incomplete surveys conducted at the stan
+> d 
+.         drop if check_completion!=1 & mode==2 // still want to know that a pe
+> rson came to the stand even if they were not able to complete the survey
+(342 observations deleted)
+
+.         isid pid date 
+
+.         order stand pid date interviewer batch 
+
+.         sort stand pid date 
+
+.         save "$temp/03_baseline_completed_cleaned.dta", replace
+file ~/Dropbox/Labor Discipline/07. Data/3. Main Study
+    3.0/ld_replication/data/temp/03_baseline_completed_cleaned.dta saved
+
+. . 
+. 
+.                 * Make panel
+.                 include "$code/1_2_baseline/2_baseline_makepanel.do"
+
+. **************************************************
+. * Project: LD
+. * Purpose: Make baseline panel data
+. * Author : Supraja
+. * Notes: 08-09-2021 (LC) Generation of holiday dummy now depends on global cr
+> eated within make_dates.do
+. * Last modified: 2025-07-18 (HW)
+. **************************************************
+. 
+. 
+. *******************
+. **# 1.  Open data
+. *******************
+. 
+.         use "$temp/03_baseline_completed_cleaned.dta", clear
+
+.         isid pid date 
+
+.         
+.         
+.         drop if check_completion == 0 & mode == 2 // HW: Confirmed 0 dropped
+(0 observations deleted)
+
+.                 // this should not drop anything since we already drop at the
+>  end of 02_baseline_cleaning.do
+.                 // Important: the line below is wrong because we are dropping
+>  participants we saw at the stand and did not take survey, wrongly marking th
+> em as not attending
+.                 // This had implications for eligibility. We fixed this on 22
+> -04-2022
+.            * keep if check_completion!=0  //keeping only started/completed su
+> rveys
+.            
+. ****************************       
+. **# 2.  Generate variables
+. ****************************       
+. 
+.         * Survey attempted at stand 
+.         gen stand_survey = mode==1 //mode of survey is in person or phone
+
+.                 * note that surveys could be incomplete.. 
+.         label var stand_survey "Survey taken at the stand (may be incomplete)
+> "
+
+. 
+.                 
+.         * Fix launchset variable (HW cleaned 2024-10-15)
+.         assert launchset != .
+
+.         bys pid: ereplace launchset = max(launchset)
+(7 real changes made)
+
+.         
+.         * Based on discussion with Luisa, treat this dataset as the most accu
+> rate
+.         * HW Oct 15 2024: added stand as well
+.         preserve 
+
+.                 use "$raw/launch_prefill_pidwise_2022.dta", clear
+
+.                 isid pid 
+
+.                 keep pid launchset batch stand
+
+.                 rename launchset launchset_new
+
+.                 tempfile pid_ops
+
+.                 save `pid_ops'
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St96392.000002 saved
+    as .dta format
+
+.         restore 
+
+. 
+.         * FIXME: 17318 17319 in master not merged. All others merged. 
+.         * HW: 17318 17319 are rid's. They're in screening and are eligible. H
+> owever somehow not in master_pid_list.dta
+.         merge m:1 pid using `pid_ops' , keep(1 3 4 5) keepusing(launchset_new
+> )  update replace nogen    // 336 obs changed launchset, same as the note
+(variable pid was int, now float to accommodate using data's values)
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                             2
+        from master                         2  
+        from using                          0  
+
+    Matched                             6,035
+        not updated                     6,035  
+        missing updated                     0  
+        nonmissing conflict                 0  
+    -----------------------------------------
+
+.         merge m:1 pid using `pid_ops' , keep(1 3 4 5) keepusing(batch)       
+>    update replace nogen            // 216 obs , same as the note
+(variable batch was byte, now float to accommodate using data's values)
+(label stand_lab already defined)
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                             2
+        from master                         2  
+        from using                          0  
+
+    Matched                             6,035
+        not updated                     5,819  
+        missing updated                     0  
+        nonmissing conflict               216  
+    -----------------------------------------
+
+.         merge m:1 pid using `pid_ops' , keep(1 3 4 5) keepusing(stand)       
+>    update replace nogen            // 6 obs
+(variable stand was int, now float to accommodate using data's values)
+(label stand_lab already defined)
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                             2
+        from master                         2  
+        from using                          0  
+
+    Matched                             6,035
+        not updated                     6,029  
+        missing updated                     0  
+        nonmissing conflict                 6  
+    -----------------------------------------
+
+.         sort pid date
+
+. 
+.         * HW I drop them for now
+.         drop if pid == 17318
+(1 observation deleted)
+
+.         drop if pid == 17319
+(1 observation deleted)
+
+. 
+.         
+.         * Interview Start Time (HW added Oct 15 2024. This can be used as a p
+> roxy for spot time because interview usually start at around the same time  a
+> s arrival)
+.         * HW: Note that some start times are obvious off, sometimes by severa
+> l hours
+.         split bs_sttime , parse(":")
+variables created as string: 
+bs_sttime1  bs_sttime2  bs_sttime3
+
+.         replace bs_sttime3 = regexcapture(0) if regexmatch(bs_sttime3, "\d+")
+(5,735 real changes made)
+
+.         destring bs_sttime1 bs_sttime2 bs_sttime3 , replace
+bs_sttime1: all characters numeric; replaced as byte
+(300 missing values generated)
+bs_sttime2: all characters numeric; replaced as byte
+(300 missing values generated)
+bs_sttime3: all characters numeric; replaced as byte
+(300 missing values generated)
+
+. 
+.         gen start_time_hours = bs_sttime1 + bs_sttime2/60 + bs_sttime3/3600
+(300 missing values generated)
+
+.         label var start_time_hours "Time at which survey started"
+
+.         bys pid: egen bs_avg_start_time = mean(start_time_hours)
+(32 missing values generated)
+
+.         label var bs_avg_start_time "BL average start time"             
+
+. 
+.         drop bs_sttime1 bs_sttime2 bs_sttime3
+
+. 
+.         
+.         
+.                 
+.                 
+.         /*
+>         * Impute spot time using start time (HW added Oct 15 2024)
+>         * HW: I use the regression equation spot_time = a + b1*start_time + b
+> 2*start_time^2 + e
+>         gen start_time_hours_fixed = start_time_hours
+>         replace start_time_hours_fixed = . if ///
+>                         !mi(spot_time_hours) & abs(spot_time_hours - start_ti
+> me_hours) >= `=1/3' ///
+>                         // If spot time and start time are off by more than 2
+> 0 minutee, drop 
+>         
+>         reg spot_time_hours c.start_time_hours_fixed##c.start_time_hours_fixe
+> d
+>         predict spot_time_hours_predict
+>         gen spot_time_hours_impute = spot_time_hours
+>         replace spot_time_hours_impute = spot_time_hours_predict if mi(spot_t
+> ime_hours_impute)
+>         label var spot_time_hours_impute "Time at which participant first spo
+> tted (Imputed using interview start time)"
+>         bys pid: egen bs_avg_spot_time_impute = mean(spot_time_hours_impute)
+>         label var bs_avg_spot_time_impute "BL average spot time (Imputed usin
+> g interview start time)"           
+>         
+>         drop start_time_hours_fixed spot_time_hours_predict
+>         */
+.         
+. 
+. ****************************            
+. **#  3.  Balance the panel
+. ****************************            
+. 
+.         * Generate a tag for days that we do observe 
+.         gen bs_obs = 1
+
+.         label var bs_obs "BL day where we talk to participant - in person or 
+> phone"
+
+.         count if bs_obs == 1 // 6,037
+  6,035
+
+.                 
+. 
+.         * HW: Try make panel of maximun possible date ranges
+.         * Based on designated baseline start and end date
+.         * If some pid has surveys before or after start/end date, extend the 
+> panel to accomandate
+.         * The first/last interview of that specific pid
+.         tempfile bs_notfilled
+
+.         save `bs_notfilled' , replace
+(file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St96392.000003 not
+    found)
+file /var/folders/rj/c4rjx52d217gsm3ccfx5q20r0000gr/T//St96392.000003 saved
+    as .dta format
+
+.         
+.         
+.         collapse (mean)launchset (min) mindate=date (max) maxdate=date , by(p
+> id)
+
+.         isid pid
+
+.         gen bs_start_date = .
+(883 missing values generated)
+
+.         gen bs_end_date = .
+(883 missing values generated)
+
+.         
+.         setDates
+(4 vars, 21 obs)
+(1 observation deleted)
+22722 22749 22750 22751 22768 22872 22876 22888 22923 22942 22951 23004 23011 2
+> 3024 23025 23036 23043 23091 23107 23114
+
+.         forv i = 1/$numSetsTotal { 
+  2.             replace bs_start_date = ${baselineStartSet`i'}      if launchs
+> et == `i'
+  3.             replace bs_end_date   = ${baselineEndSet`i'}        if launchs
+> et == `i'
+  4.         }
+(156 real changes made)
+(156 real changes made)
+(107 real changes made)
+(107 real changes made)
+(44 real changes made)
+(44 real changes made)
+(57 real changes made)
+(57 real changes made)
+(29 real changes made)
+(29 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(49 real changes made)
+(49 real changes made)
+(16 real changes made)
+(16 real changes made)
+(36 real changes made)
+(36 real changes made)
+(138 real changes made)
+(138 real changes made)
+(153 real changes made)
+(153 real changes made)
+(31 real changes made)
+(31 real changes made)
+(67 real changes made)
+(67 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+
+.         
+.         gen panel_start_date    = td(1jan2022)
+
+.         replace panel_start_date = panel_start_date - 1
+(883 real changes made)
+
+.         gen panel_end_date      = td(31dec2022)
+
+.         replace panel_end_date = panel_end_date + 1
+(883 real changes made)
+
+.         
+.         gen panel_duration = panel_end_date - panel_start_date + 1
+
+.         expand panel_duration
+(323,178 observations created)
+
+.         
+.         bys pid (panel_start_date) : gen date_order = _n
+
+.         gen date = panel_start_date + date_order - 1
+
+.         gen bs_designated_survey_period = 1 if date >= bs_start_date & date <
+> = bs_end_date
+(312,495 missing values generated)
+
+.         keep pid date panel_start_date panel_end_date bs_start_date bs_end_da
+> te bs_designated_survey_period
+
+.         format %td date panel_start_date panel_end_date bs_start_date bs_end_
+> date
+
+.         
+.         merge 1:1 pid date using `bs_notfilled' , keep(1 2 3) 
+(variable date was float, now double to accommodate using data's values)
+(label rb13_7 already defined)
+(label rb13_6 already defined)
+(label rb13_5 already defined)
+(label rb13_4 already defined)
+(label rb13_3 already defined)
+(label rb13_2 already defined)
+(label rb13_1 already defined)
+(label rb11_1 already defined)
+(label rb9_1 already defined)
+(label rb12_7 already defined)
+(label rb12_6 already defined)
+(label rb12_5 already defined)
+(label rb12_4 already defined)
+(label rb12_3 already defined)
+(label rb12_2 already defined)
+(label rb12_1 already defined)
+(label rb8_a_1 already defined)
+(label rb8_1 already defined)
+(label rb7_7 already defined)
+(label rb7_6 already defined)
+(label rb7_5 already defined)
+(label rb7_4 already defined)
+(label rb7_3 already defined)
+(label rb7_2 already defined)
+(label rb7_1 already defined)
+(label rb6_a_7 already defined)
+(label rb6_a_6 already defined)
+(label rb6_a_5 already defined)
+(label rb6_a_4 already defined)
+(label rb6_a_3 already defined)
+(label rb6_a_2 already defined)
+(label rb6_a_1 already defined)
+(label rb6_1 already defined)
+(label rb4_1 already defined)
+(label rb3_1 already defined)
+(label rb2_a_1 already defined)
+(label rb2_1 already defined)
+(label rb1_c_7 already defined)
+(label rb1_c_6 already defined)
+(label rb1_c_5 already defined)
+(label rb1_c_4 already defined)
+(label rb1_c_3 already defined)
+(label rb1_c_2 already defined)
+(label rb1_c_1 already defined)
+(label rb1_b_1 already defined)
+(label rb1_a_due_1 already defined)
+(label rb1_a_1 already defined)
+(label rb1_1 already defined)
+(label za4 already defined)
+(label za3 already defined)
+(label za2 already defined)
+(label za1 already defined)
+(label z4_a already defined)
+(label z4 already defined)
+(label z0_b already defined)
+(label z0_a1 already defined)
+(label z0_a already defined)
+(label z0 already defined)
+(label pay already defined)
+(label b19 already defined)
+(label b18 already defined)
+(label p12_c already defined)
+(label p12_b already defined)
+(label p12_a already defined)
+(label p12 already defined)
+(label cov5_new already defined)
+(label cov4_new already defined)
+(label cov3_new already defined)
+(label cov2_new already defined)
+(label cov1_new already defined)
+(label cov1 already defined)
+(label p11 already defined)
+(label p10 already defined)
+(label p9 already defined)
+(label p8 already defined)
+(label name_check already defined)
+(label r7 already defined)
+(label r6_c already defined)
+(label r6_b already defined)
+(label r6_a already defined)
+(label r3 already defined)
+(label r2 already defined)
+(label r1 already defined)
+(label p6 already defined)
+(label alternate already defined)
+(label mode already defined)
+(label p1_1 already defined)
+(label p0 already defined)
+(label b18_v2 already defined)
+(label paid_filt_lab already defined)
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                       318,026
+        from master                   318,026  (_merge==1)
+        from using                          0  (_merge==2)
+
+    Matched                             6,035  (_merge==3)
+    -----------------------------------------
+
+.         // HW Oct 22:
+.         // 287 surveys took place outside of designated survey period
+.         // Among them 150 took place within 7 days after the end of bs
+.         // and 80 took place within 7 days before the start of bs
+.         
+.         // HW Oct 22:
+.         // Even if we only keep designated survey period and keep(1 3), the t
+> otal number is 11,569, up a bit from 11,595
+.         // Using the old code. Indicating that there are some pids
+.         // whoes first legal survy didn't start on the designated start date
+.         // Or the last legal survey happended before the end date (legal mean
+> s happened within the designated period)
+. 
+.         
+.         * Replace key invariant variables to be non-missing 
+.         bys pid: ereplace launchset     = max(launchset)
+(318,026 real changes made)
+
+.         bys pid: ereplace batch                 = max(batch)
+(318,026 real changes made)
+
+.         bys pid: ereplace stand                 = max(stand)
+(318,026 real changes made)
+
+. 
+.         * Day of week variable 
+.         gen dow = dow(date)
+
+.         label define dow_lab 0 "Sunday" 1 "Monday" 2 "Tuesday" 3 "Wednesday" 
+> 4 "Thursday" 5 "Friday" 6 "Saturday" , replace
+
+.         label value dow dow_lab
+
+.         label var dow "Day of week"
+
+. 
+.         
+.         * Account for days where surveyors are not in the field (Sundays, hol
+> idays). Generate holidays date
+.         * LC - need to define the holidays global
+.         * ado file that generates $holiday_list global be found in Dropbox/La
+> bor Discipline/07. Data/3. Main Study 3.0/98. Utilities/01. Programs
+.         gen holiday = 0
+
+.         foreach day in $holiday_list {
+  2.             replace holiday = 1 if date == `day'
+  3.         }
+(883 real changes made)
+(883 real changes made)
+(883 real changes made)
+(883 real changes made)
+(883 real changes made)
+(883 real changes made)
+(883 real changes made)
+(883 real changes made)
+(883 real changes made)
+(883 real changes made)
+(883 real changes made)
+(883 real changes made)
+(883 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+
+.         label var holiday  "Holiday"
+
+. 
+. 
+.         
+.         * HW Feb 2025: Try fix spot time, then merge attendance without being
+>  surveyed, then try to fix spot time again
+.         * Updating the Oct 2024 code following new spot time fixing method
+.         
+.         * HW FEB 2025 final note: Two 4 devices have been fixed in cleaning, 
+> I find 
+.         format spot_time %tCHH:MM
+
+.         gen spot_time_hours = hh(spot_time) + mm(spot_time)/60 + ss(spot_time
+> )/3600
+(320,966 missing values generated)
+
+.         label var spot_time_hours "Time at which surveyors first spotted part
+> icipants"
+
+.         count if (spot_time_hours < 5.5 | spot_time_hours > 10.5) & !mi(spot_
+> time_hours)
+  0
+
+.         assert `r(N)' == 0
+
+. 
+.         * Count if there are entries with incorrectly recorded spot time and 
+> then got corrected in the text. Should be 0 in BL.
+.         count if mi(spot_time) & !mi(spot_time_text)
+  0
+
+.         assert `r(N)' == 0
+
+.         
+.         merge 1:1 pid date using "$raw/05_attendance_check.dta", ///
+>                         keepusing(arrival_time_hours seen) nogen keep(1 3)
+(variable pid was float, now double to accommodate using data's values)
+(label stand_lab already defined)
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                       305,824
+        from master                   305,824  
+        from using                          0  
+
+    Matched                            18,237  
+    -----------------------------------------
+
+.         replace arrival_time_hours = . if !mi(spot_time_hours)
+(2,163 real changes made, 2,163 to missing)
+
+.         
+.         count if (spot_time_hours < 5.5 | spot_time_hours > 10.5) & !mi(spot_
+> time_hours)
+  0
+
+.         assert `r(N)' == 0
+
+.         replace spot_time_hours = arrival_time_hours if mi(spot_time_hours) &
+>  !mi(arrival_time_hours)
+(16,074 real changes made)
+
+.         drop arrival_time_hours
+
+.         
+. 
+.         * Attendance (in-person dates in cto are days of attendance to the st
+> and)
+.         gen attend = 0
+
+.         label var attend "Attendance at stand (not self-reported)"
+
+.         replace attend = 1 if mode == 1 | seen == 1
+(19,301 real changes made)
+
+.         replace attend = 0 if mi(attend) & dow!=0 & holiday == 0
+(0 real changes made)
+
+.         replace attend = . if dow==0 | holiday == 1
+(56,512 real changes made, 56,512 to missing)
+
+.         drop seen
+
+.         
+.         
+.         * Spot Time
+.         bys pid: egen bs_avg_spot_time = mean(spot_time_hours)
+(4,404 missing values generated)
+
+.         label var bs_avg_spot_time "BL average spot time"       
+
+. 
+. 
+. *************************************************
+. **# 4.  Fill up data for relevant days in panel
+. ************************************************* 
+. 
+. ****
+. **## Reconcile Versions
+. ****
+. 
+.         forval i = 1/7 {
+  2.                 replace bs_work_`i' = bs_main_act_work_`i' if !mi(bs_main_
+> act_work_`i')
+  3.                 replace bs_earn_`i' = bs_earn_`i' + bs_notpaid_amt_due_`i'
+>  if !mi(bs_notpaid_amt_due_`i')
+  4.                 replace bs_earn_`i' = 0 if bs_work_`i' == 0
+  5.                 
+.         }
+(3,112 real changes made)
+(5 real changes made)
+(2,413 real changes made)
+(1,162 real changes made)
+(2 real changes made)
+(977 real changes made)
+(558 real changes made)
+(0 real changes made)
+(506 real changes made)
+(333 real changes made)
+(0 real changes made)
+(336 real changes made)
+(228 real changes made)
+(0 real changes made)
+(244 real changes made)
+(141 real changes made)
+(0 real changes made)
+(157 real changes made)
+(101 real changes made)
+(0 real changes made)
+(107 real changes made)
+
+. 
+. 
+. 
+. 
+. ****
+. **## Gen blank key variables
+. ****
+. 
+.         * Numeric variables
+.         local   numericVars attend_sr work earn work_type role why_attend whe
+> nfound  howfound  ///
+>                         time_found howfound_notattend native try_work why_not
+> attend spend_day time_left_stand ///
+>                         how_found_native why_nottry firsttime_emp notpaid_amt
+> _due  paid_filt main_act_hh_chores ///
+>                         main_act_home_rest main_act_self_employed main_act_wo
+> rk main_act_sick main_act_planned_event ///
+>                         main_act_emergency main_act_travel main_act_family_ti
+> me main_act_friends_time main_act_998
+
+.         foreach var in `numericVars' {
+  2.                 gen `var' = .
+  3.                 
+.                 * Value labels
+.                 qui cap elabel list (bs_`var'_1)
+  4.                 if "`r(name)'" != "" lab val `var' `r(name)'
+  5.         }       
+(324,061 missing values generated)
+(324,061 missing values generated)
+(324,061 missing values generated)
+(324,061 missing values generated)
+(324,061 missing values generated)
+(324,061 missing values generated)
+(324,061 missing values generated)
+(324,061 missing values generated)
+(324,061 missing values generated)
+(324,061 missing values generated)
+(324,061 missing values generated)
+(324,061 missing values generated)
+(324,061 missing values generated)
+(324,061 missing values generated)
+(324,061 missing values generated)
+(324,061 missing values generated)
+(324,061 missing values generated)
+(324,061 missing values generated)
+(324,061 missing values generated)
+(324,061 missing values generated)
+(324,061 missing values generated)
+(324,061 missing values generated)
+(324,061 missing values generated)
+(324,061 missing values generated)
+(324,061 missing values generated)
+(324,061 missing values generated)
+(324,061 missing values generated)
+(324,061 missing values generated)
+(324,061 missing values generated)
+(324,061 missing values generated)
+(324,061 missing values generated)
+
+.         label var attend_sr "Attendance at stand (self-reported)"       
+
+.         label var work  "Worked"
+
+.         label var earn "Earnings"
+
+.         label var work_type "Type of work"
+
+.         label var role  "Role"
+
+.         label var why_attend "Reason for attending stand"
+
+.         label var whenfound  "When was work found?"
+
+.         label var howfound   "How was work found?"
+
+.         label var time_found "What time was work found?"
+
+.         label var howfound_notattend  "How was work found, when not at stand?
+> "
+
+.         label var native "Are they in their native?"
+
+.         label var try_work "Tried to work"
+
+.         label var why_notattend "If tried to find work, why they did not atte
+> nd stand"
+
+.         label var spend_day "How do they spend the rest of the day"
+
+.         label var time_left_stand "Time they left the stand"
+
+.         label var how_found_native "How did they find work if they are in a d
+> ifferent place"
+
+.         label var why_nottry "Why did they not try"
+
+. 
+.         label var main_act_hh_chores        "Main act - stayed home to do hou
+> sehold chores"
+
+.         label var main_act_home_rest        "Main act - stayed home to rest"
+
+.         label var main_act_self_employed    "Main act - work as self-employed
+>  / not for pay"
+
+.         label var main_act_work             "Main act - work for pay"
+
+.         label var main_act_sick             "Main act - sick/injured"
+
+.         label var main_act_planned_event    "Main act - attended a planned ev
+> ent"
+
+.         label var main_act_emergency        "Main act - emergency"
+
+.         label var main_act_travel           "Main act - traveled"
+
+.         label var main_act_family_time      "Main act - spent time with child
+> ren/family"
+
+.         label var main_act_friends_time     "Main act - spent time with frien
+> ds"
+
+.         label var main_act_998              "Main act - Other (specify)"
+
+. 
+.         
+.         
+.         * String variables
+.         * FIXME all these variables are just missing. We never pre-fill them 
+.         * FIXME HW: they are not all missing. It is expected most of them are
+>  missing because they need to choose "other" to enable the "other"'s
+.         rename rb1_b1_others_* bs_main_act_others_*
+
+.         rename d_main_activity_* bs_main_activity_*
+
+. 
+.         local   stringVars work_type_others why_attend_others  ///
+>                         howfound_notattend_others why_notattend_others ///
+>                         spend_day_others main_activity main_act_others ///
+>                         howfound_others paid_filt_others whenfound_others how
+> _found_native_others 
+
+.                         
+.         foreach var in `stringVars' {
+  2.                 
+.                 * HW: Variables with all missing are coded by Stata as . inst
+> ead of as ""
+.                 * The lines below fixes this
+.                 tostring bs_`var'_* , replace
+  3.                 foreach i of varlist bs_`var'_* {
+  4.                         replace `i' = "" if `i' == "."
+  5.                 }
+  6.                 
+.                 gen `var' = ""
+  7.         }       
+bs_work_type_others_1 already string; no replace
+bs_work_type_others_2 already string; no replace
+bs_work_type_others_3 already string; no replace
+bs_work_type_others_4 already string; no replace
+bs_work_type_others_5 already string; no replace
+bs_work_type_others_6 already string; no replace
+bs_work_type_others_7 already string; no replace
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(324,061 missing values generated)
+bs_why_attend_others_1 already string; no replace
+bs_why_attend_others_2 already string; no replace
+bs_why_attend_others_3 already string; no replace
+bs_why_attend_others_4 already string; no replace
+bs_why_attend_others_5 already string; no replace
+bs_why_attend_others_6 already string; no replace
+bs_why_attend_others_7 already string; no replace
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(324,061 missing values generated)
+bs_howfound_notattend_others_1 already string; no replace
+bs_howfound_notattend_others_2 already string; no replace
+bs_howfound_notattend_others_3 already string; no replace
+bs_howfound_notattend_others_4 already string; no replace
+bs_howfound_notattend_others_5 already string; no replace
+bs_howfound_notattend_others_6 already string; no replace
+bs_howfound_notattend_others_7 already string; no replace
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(324,061 missing values generated)
+bs_why_notattend_others_1 already string; no replace
+bs_why_notattend_others_2 already string; no replace
+bs_why_notattend_others_3 already string; no replace
+bs_why_notattend_others_4 was byte now str1
+bs_why_notattend_others_5 was byte now str1
+bs_why_notattend_others_6 was byte now str1
+bs_why_notattend_others_7 was byte now str1
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(324,061 real changes made)
+(324,061 real changes made)
+(324,061 real changes made)
+(324,061 real changes made)
+(324,061 missing values generated)
+bs_spend_day_others_1 already string; no replace
+bs_spend_day_others_2 already string; no replace
+bs_spend_day_others_3 already string; no replace
+bs_spend_day_others_4 already string; no replace
+bs_spend_day_others_5 already string; no replace
+bs_spend_day_others_6 already string; no replace
+bs_spend_day_others_7 already string; no replace

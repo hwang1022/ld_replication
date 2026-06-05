@@ -3,7 +3,7 @@
 *														*
 *	Master Do-File: LD									*
 *	Date Created: Oct 7 2024 by HW						*
-*	Last Modified: May 28 2026 by ST					*
+*	Last Modified: June 1 2026 by HW					*
 *														*
 *	This master do-file defines globals and programs 	*
 *	and cleans individual survey rounds					*
@@ -13,9 +13,19 @@
 *********************************************************
 *********************************************************
 
-* Notes May 2run bu8, 2026 HW:
+
+******************
+**# Update Notes
+******************
+
+* Notes May 28, 2026 HW:
 *   - We now no longer maintain support for the original data version.
-*   - Some code written with original data might still t is not guaranteed to work from now on.
+
+
+* Notes June 1, 2026 HW:
+*   - We now only support the prioritize in person version following Luisa's decision.
+
+
 
 **********************
 **# Initialize Stata
@@ -80,22 +90,11 @@
 	* Install Packages: Install packages written by Hao Wang used in the analysis
 	* Run Cleaning: cleaning of the surveys
 	* Run Analysis: Generate tables and figures in the paper and slides
-	local 	run_cleaning 				= 1
+	local 	run_cleaning 				= 0
 	local 	run_analysis 				= 0
 
-	**# The version of Data to use
-	global data_version "new" // "original" or "new" (Support for original data is deprecated as of May 28, 2026)
-	global data_version_new "prioritize_in_person" // "prioritize_date" or "prioritize_in_person". If you chose "original", this option is ignored.
 
-	* If prioritize in-person recall over recalls made on phone but on a closer date.
-	if "$data_version_new" == "prioritize_in_person" global prioritize_in_person = 1
-	if "$data_version_new" == "prioritize_date" global prioritize_in_person = 0
 
-	* The cleaning code for original data, written by Yogita's RA, is not automated
-	if `run_cleaning' == 1 & "$data_version" == "original" {
-		di as error "Cannot run cleaning with original data version. Cleaning is only available for new data versions."
-		exit
-	}
 
 	* Which Weather Data to Merge
 	global weather_data "all"
@@ -123,33 +122,15 @@
 	global final 				"$replication_dir/data/final"
 	global external 			"$replication_dir/data/external"
 
-	* The Original Dataset, last edited in July 2024
-	global original_main 				"$final/05_bs_phase1_phase2_makevar_combined_daily_weekly.dta"
-
-	* The New Dataset
-	global new_main_prioritize_date 		"$final/final_data_prioritize_date.dta"
-	global new_main_prioritize_in_person 	"$final/final_data_prioritize_in_person.dta"
-
-
-	* determine which set of dofiles to run
-	if "$data_version" == "original" {
-		global main_data "$original_main"
-		global output "$replication_dir/output/original"
-	}
-	else if "$data_version_new" == "prioritize_date" {
-		global main_data "$new_main_prioritize_date"
-		global output "$replication_dir/output/prioritize_date"
-	}
-	else if "$data_version_new" == "prioritize_in_person" {
-		global main_data "$new_main_prioritize_in_person"
-		global output "$replication_dir/output/prioritize_in_person"
-	}
+	* The Dataset
+	global main_data 	"$final/final_data_replication.dta"
+	global output 		"$replication_dir/output"
 
 	global tables 	"$output/tables"
 	global figures 	"$output/figures"
 	global stats 	"$output/stats"
 
-	di "Main data: $main_data"
+
 
 	****
 	**## List Stands Chracteristics
@@ -400,20 +381,17 @@ include "$code/2_6_labor_demand/2_phase2_act_labordemand_makevar.do"
 
 		**### Time Use
 
-		/*
 
-* Last Edited by HW in May 2025
+		* Last Edited by ST in June 2, 2025
 
-* Output: $final/lss_time_use_cleaned_hw.dta
+		* Output: $final/lss_time_use_cleaned_hw.dta
 
-* Create Stata datasets from raw data
-include "$code/3_time_use/1_time_use_renaming.do"
+		* Create Stata datasets from raw data
+		include "$code/3_time_use/1_time_use_renaming.do"
 
-* Clean Data, Make Variables
-include "$code/3_time_use/2_time_use_cleaning.do"
-include "$code/3_time_use/3_time_use_makevar.do"
-
-*/
+		* Clean Data, Make Variables
+		include "$code/3_time_use/2_time_use_cleaning.do"
+		include "$code/3_time_use/3_time_use_makevar_new.do"
 
 
 		**### Shocks Module
@@ -444,6 +422,18 @@ include "$code/3_time_use/3_time_use_makevar.do"
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 		****
 		**## 7. Weather
 		****
@@ -465,15 +455,31 @@ include "$code/3_time_use/3_time_use_makevar.do"
 
 		include "$code/7_events_calendar/1_events_calendar_cleaning.do"
 
-		******************************************
-		**# 9. Analysis Prep: Make Final Dataset
-		******************************************
+		****
+		**## 9. Incentive
+		****
+
+
+		****
+		**## 10. Stand Size and Treatment Intensity
+		****
+
+
+
+
+
+
+
+
+		********************************************
+		**# 100. Analysis Prep: Make Final Dataset
+		********************************************
 
 		* Make Daily Weekly Dataset
-		include "$code/8_analysis_prep/1_merge_main_surveys.do"
+		include "$code/100_analysis_prep/1_merge_main_surveys.do"
 
 		* Make Final Dataset
-		include "$code/8_analysis_prep/2_produce_final_dataset.do"
+		include "$code/100_analysis_prep/2_produce_final_dataset.do"
 
 
 

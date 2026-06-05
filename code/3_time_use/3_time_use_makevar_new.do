@@ -37,23 +37,25 @@
 
 	/*
 	ST: Merging phase data based on pid and date
+
+	// TODO: test that table_c works with updated data
+
 	*/
 		
-	local phase_source_data "$temp/05_phase1_phase2_makepanel.dta"
+	local phase_source_data "$temp/03_bs_phase123_makevar.dta"
 	preserve 
 		use "`phase_source_data'", clear 
-		keep pid date phase treatment stand strata 
-		drop if missing(pid date phase)
-		isid pid phase week_in date
+		keep pid date phase treatment strata stand
+		drop if missing(pid) |  missing(date) | missing(phase)
+		isid pid phase date 
 		tempfile phase_info
 		save "`phase_info'", replace 
 	restore 
 
 	merge 1:1 pid date using "`phase_info'"
-	drop if _merge==2
-	// drop _merge 
+	drop if _merge==2 // drop _merge 
 
-	keep pid date last_sleep_time_slot time_bed_hours
+	// keep pid date phase last_sleep_time_slot time_bed_hours
 	sort pid date
 	
 	save "$temp/lss_time_use_sleep.dta" , replace
