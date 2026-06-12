@@ -11,7 +11,9 @@ version 17
 clear all
 set more off
 
-local employer_job_offer_cleaned "$temp/employer_job_offer_cleaned.dta"
+
+// NOTE: using old data
+local employer_job_offer_cleaned "$raw/employer_job_offer_cleaned.dta"
 
 local outdir "$output/tables"
 capture mkdir "$output"

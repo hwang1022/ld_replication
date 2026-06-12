@@ -10,16 +10,15 @@ set more off
 
 local phase1_incentive "$temp/incentive_record_stand_clean.dta"
 
-local outdir "$output/tables"
-capture mkdir "$output"
-capture mkdir "`outdir'"
 
 use "`phase1_incentive'", clear
 
-lab var amount_allotted "Payment allocated"
+lab var amount_allotted "Payment Record: Amount Allotted"
+lab var amount_payed 	"Payment Record: Amount Paid"
 
-baltab amount_allotted ///
-	using "`outdir'/balance_test_incentive_record_only.tex", ///
-	groupvar(treatment) texcolwidth("200 pt") rowvarlabel stats(pair(p))
+iebaltab amount_allotted amount_payed, ///
+	savetex("$output/tables/balance_test_incentive_record_only.tex") replace ///
+	groupvar(treatment) texcolwidth("200 pt") rowvarlabel total ///
+	nonote addnote("* p<0.10, ** p<0.05, *** p<0.01")
 
-copy "`outdir'/balance_test_incentive_record_only.tex" "`outdir'/table_h.tex", replace
+copy "$output/tables/balance_test_incentive_record_only.tex" "$output/tables/table_h.tex", replace

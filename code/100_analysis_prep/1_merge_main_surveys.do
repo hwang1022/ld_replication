@@ -377,5 +377,5 @@
 **# 3.  Save Dataset
 **********************
 
-	save "$temp/03_bs_phase123_makevardaily_weekly.dta", replace
+	save "$temp/03_bs_phase123_makevardaily_weekly_${data_version}.dta", replace
 	

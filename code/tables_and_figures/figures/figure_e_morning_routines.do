@@ -17,12 +17,10 @@ replace bord = 5 if activities == "drop_kids"
 replace bord = 6 if activities == "wash"
 replace bord = 7 if activities == "pray"
 replace bord = 8 if activities == "shopping"
-replace bord = 9 if activities == "998"
+replace bord = 9 if activities == "oth"
 
 twoway (bar mean bord if treatment == 0, lcolor(gs12) fcolor(gs12)) || ///
-	(bar mean bord if treatment == 1, fcolor(none) lcolor(maroon)) || ///
-	(rcap lb ub bord if treatment == 0, lc(gs8)) || ///
-	(rcap lb ub bord if treatment == 1, lc(maroon)), ///
+	(bar mean bord if treatment == 1, fcolor(none) lcolor(maroon)),  /// ||
 	xlabel(1 `" "Get" "water" "' 2 `" "Cook" "breakfast" "' 3 `" "Eat" "breakfast" "' 4 `" "Help get" "kids ready" "' 5 `" "Drop kids" "at school" "' 6 "Wash/bathe" 7 `" "Temples/" "prayers" "' 8 `" "Go to the" "store/shop" "' 9 "Others", noticks labsize(small)) ///
 	xtitle("") ytitle("Percent of respondents selecting each option") legend(order(1 "Control" 2 "Treatment") pos(6) row(1))
 graph export "$output/figures/bar_morning_activities_low_att.pdf", replace

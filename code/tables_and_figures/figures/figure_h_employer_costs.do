@@ -27,7 +27,7 @@ replace worker_skill = 2 if rec_rpw_work_ == "3. Tile Worker" | rec_rpw_work_ ==
 
 twoway (hist rec_rpw_find_time_ if worker_skill == 1, lcolor(gs12) fcolor(gs12) width(1) fraction start(1) discrete) || ///
 	(hist rec_rpw_find_time_ if worker_skill == 2, fcolor(none) lcolor(maroon) width(1) lwidth(medium) fraction start(1) discrete), ///
-	xtitle("Duration", size(medium)) ytitle("Fraction of recruiter responses", size(medium)) yla(, labsize(*1.25)) ///
+	xtitle("Duration", size(medium)) ytitle("Fraction of recruiter responses", size(medium)) yscale(range(0 0.6)) yla(, labsize(*1.25)) ///
 	legend(label(1 "Unskilled") label(2 "Skilled") pos(2) ring(0) region(lcolor(black))) ///
 	xlabel(1 "<30 mins" 2 "30-90 mins" 3 ">90 mins" 4 `""Not worth" "replacing""' 5 `""Okay to delay"" work""', angle(0) labsize(medium))
 graph export "$output/figures/rec_replacement_duration.pdf", replace

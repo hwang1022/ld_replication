@@ -6,7 +6,7 @@ version 17
 clear all
 set more off
 
-local employer_activity_cleaned "$temp/employer_activity_mainstudy_cleaned.dta"
+local employer_activity_cleaned  "$final/ls_employer_activity_mainstudy_named.dta"
 
 local outdir "$output/tables"
 capture mkdir "$output"

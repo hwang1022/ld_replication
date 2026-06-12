@@ -15,6 +15,7 @@ else {
 	// Defines globals needed by table / figure code below if this is not running through main
 	global data "$analysis_code/data"
 	global final "$data/final"
+	global raw "$data/raw"
 	global temp "$data/temp"
 	global external "$data/external"
 

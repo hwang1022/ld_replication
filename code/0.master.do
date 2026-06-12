@@ -3,7 +3,7 @@
 *														*
 *	Master Do-File: LD									*
 *	Date Created: Oct 7 2024 by HW						*
-*	Last Modified: June 1 2026 by HW					*
+*	Last Modified: June 5 2026 by ST					*
 *														*
 *	This master do-file defines globals and programs 	*
 *	and cleans individual survey rounds					*
@@ -25,6 +25,9 @@
 * Notes June 1, 2026 HW:
 *   - We now only support the prioritize in person version following Luisa's decision.
 
+
+* Notes June 10, 2026 HW:
+*   - We now have two final analysis datasets: for those who updated their Launchset after Baseline, "original_launchset" version uses the Baseline results from days associated with their original baseline, while "new_launchset" version uses the Baseline results from days associated with their updated baseline.
 
 
 **********************
@@ -72,9 +75,7 @@
 	* Important Macros:
 	* run_cleaning: whether to run the cleaning dofiles
 	* run_analysis: whether to run the analysis dofiles
-	* data_version: "new" or "original" (Support for original data is deprecated as of May 28, 2026)
-	* data_version_new: "prioritize_date" or "prioritize_in_person". If you chose "original", this option is ignored.
-
+	* data_version: "original_launchset" or "new_launchset"
 	* weather_data: whether to merge weather data into the main analysis dataset
 
 
@@ -90,10 +91,17 @@
 	* Install Packages: Install packages written by Hao Wang used in the analysis
 	* Run Cleaning: cleaning of the surveys
 	* Run Analysis: Generate tables and figures in the paper and slides
-	local 	run_cleaning 				= 0
+	local 	run_cleaning 				= 1
 	local 	run_analysis 				= 0
 
 
+
+	**# The version of Data to use
+	global data_version "original_launchset" // "original_launchset" or "new_launchset"
+
+	* If prioritize in-person recall over recalls made on phone but on a closer date.
+	if "$data_version" == "new_launchset" global original_launchset = 0
+	if "$data_version" == "original_launchset" global original_launchset = 1
 
 
 	* Which Weather Data to Merge
@@ -123,7 +131,7 @@
 	global external 			"$replication_dir/data/external"
 
 	* The Dataset
-	global main_data 	"$final/final_data_replication.dta"
+	global main_data 	"$final/final_data_replication_${data_version}.dta"
 	global output 		"$replication_dir/output"
 
 	global tables 	"$output/tables"
@@ -503,11 +511,30 @@ include "$code/2_6_labor_demand/2_phase2_act_labordemand_makevar.do"
 		include "$code/5_employer/01_clean_v2.do"
 		include "$code/5_employer/01_clean_v3.do"
 		include "$code/5_employer/02_append_data.do"
+		
+		**# 10.1 Employer Activtiy Survey
+		
+		* Input:
+			* employer_activity_mainstudy_named.dta
+		* Output:
+			* ls_employer_activity_mainstudy_named.dta
+		include "$code/5_employer/03_employer_activity.do"
+		
+		
+		
+		*************************
+		**# 11. Treatment intensity
+		*************************
+
+		* Last Edited by ST June, 8, 2026
+		include "$code/8_treatment_intensity/0_stand_strength_master.do"
+
+		
 
 		use "$main_data", clear
 	}
 
-
+if $run_analysis == 1 {
 		**************
 		**# Analysis
 		**************
@@ -517,5 +544,6 @@ include "$code/2_6_labor_demand/2_phase2_act_labordemand_makevar.do"
 		// 	include "$code/analysis/ld_replication.do"
 		* <UPDATE> ST: Include new analysis code
 		do "$code/tables_and_figures/2_analysis.do"
-// }
+	}
+
 

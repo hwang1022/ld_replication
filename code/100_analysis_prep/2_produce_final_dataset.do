@@ -7,7 +7,7 @@
 **************************************************
 **************************************************
 
-	use "$temp/03_bs_phase123_makevardaily_weekly.dta", clear
+	use "$temp/03_bs_phase123_makevardaily_weekly_${data_version}.dta", clear
 	
 
 	
@@ -239,4 +239,4 @@
 ****************************
 	
 	merge m:1 pid using "$temp/00_mainstudy_master.dta", keep(3) keepusing(pid) nogen 
-	save "$final/final_data_$data_version_new.dta", replace
+	save "$main_data", replace

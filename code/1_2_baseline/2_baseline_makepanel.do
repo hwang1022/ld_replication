@@ -57,6 +57,10 @@
 	drop if pid == 17318
 	drop if pid == 17319
 
+	if "$data_version" == "new_launchset" {
+		drop launchset
+		rename launchset_new launchset
+	}
 	
 	* Interview Start Time (HW added Oct 15 2024. This can be used as a proxy for spot time because interview usually start at around the same time  as arrival)
 	* HW: Note that some start times are obvious off, sometimes by several hours

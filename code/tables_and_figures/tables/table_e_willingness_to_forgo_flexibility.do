@@ -57,8 +57,11 @@ estadd scalar y_mean = r(mean)
 estadd local strata "Yes", replace
 estadd local stand "Yes", replace
 
+label var treat "Treat"
+label var treatXpost_attendloo_b25 "Treat $\times$ Post shock"
+
 esttab using "`outdir'/flex_fixed_choice_attendloo_b25.tex", se(3) replace keep(treat treatXpost_attendloo_b25) ///
-	stats(y_mean N, labels("Control mean" "N: worker-question")) l nonotes ///
+	stats(y_mean N, labels("Control mean" "N: worker-question")) label nonotes ///
 	cells(b(fmt(a3)) se(fmt(3) par) p(fmt(3) par([ ]))) nostar collabels(none) nonum ///
 	mtitles("\shortstack{Contract\\ Job}" "\shortstack{Fixed choice\\ No Weight}" ///
 		"\shortstack{Fixed choice\\ Weighted}" "\shortstack{Fixed choice\\ Weighted}" ///

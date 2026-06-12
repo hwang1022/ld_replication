@@ -4,19 +4,15 @@
 * hao_working_folder/nov_paper/nov_paper_analysis.do lines 392-453.
 ************************************************************
 
-clear all
-set more off
-
 local final_data_w_shocks "$final/final_data_w_shocks.dta"
-
 local outdir "$output/tables"
 
-capture mkdir "$output"
-capture mkdir "`outdir'"
 
 use "`final_data_w_shocks'", clear
 
-bysort pid date: gen uniqpid = _n == 1
+keep if phase == 0
+sort pid date 
+by pid: gen uniqpid = _n == 1
 keep if uniqpid == 1
 
 local balance_vars ss_dem_age ss_dem_educ_noschool bs_dem_has_family bs_dem_stand_yrs bs_dem_job_yrs bs_sum_attend bs_sum_work bs_avg_wage bs_sum_wage
@@ -42,20 +38,20 @@ matrix colnames `pvalue_v' = `balance_vars'
 local i = 0
 foreach var in `balance_vars' {
     local ++i
-    ttest `var' if phase == 0 & uniqpid == 1, by(treatment)
+    ttest `var', by(treatment)
     matrix `control_b'[1, `i'] = r(mu_1)
     matrix `control_v'[`i', `i'] = r(sd_1)^2
     matrix `treatment_b'[1, `i'] = r(mu_2)
     matrix `treatment_v'[`i', `i'] = r(sd_2)^2
 
-    reg `var' treatment i.stand i.strata if phase == 0 & uniqpid == 1, r
+    reg `var' treatment i.stand i.strata if phase == 0, r
     local t = _b[treatment] / _se[treatment]
     matrix `pvalue_b'[1, `i'] = 2 * ttail(e(df_r), abs(`t'))
 }
 
-count if treatment == 1 & phase == 0 & uniqpid == 1
+count if treatment == 1 
 local n_t = r(N)
-count if treatment == 0 & phase == 0 & uniqpid == 1
+count if treatment == 0 
 local n_c = r(N)
 
 local verified_tex "`outdir'/baseline_treatment_control_balance3col.tex"

@@ -14,31 +14,21 @@ capture mkdir "`outdir'"
 
 use "`shocks_table2'", clear
 
-capture confirm variable treat
-if _rc {
-	gen treat = treatment
-}
-
-capture confirm variable standid
-if _rc {
-	egen standid = group(stand)
-}
-
-capture confirm variable treatXfirstwk_attendloo_b25
-if _rc {
-	gen treatXfirstwk_attendloo_b25 = treat * firstwk_attendloo_b25
-}
+// Note: as part of the cleaning, the cog_going_without_thinking scale was compressed to be in 0-1 from 1-4
+// generate a variable in case the unscaled version is preferred
+gen cog_going_without_thinking_u = (cog_going_without_thinking * 4) + 1
+local cog_variable cog_going_without_thinking_u 
 
 eststo clear
 
-eststo: reg cog_going_without_thinking treat i.standid i.strata if phase == 2, clu(pid)
-sum cog_going_without_thinking if treat == 0 & e(sample)
+eststo: reg `cog_variable' treat i.standid i.strata if phase == 2, clu(pid)
+sum `cog_variable' if treat == 0 & e(sample)
 estadd scalar y_mean = r(mean)
 
-eststo: reg cog_going_without_thinking treat treatXpost_attendloo_b25 post_attendloo_b25 ///
+eststo: reg `cog_variable' treat treatXpost_attendloo_b25 post_attendloo_b25 ///
 	treatXfirstwk_attendloo_b25 firstwk_attendloo_b25 i.standid i.strata ///
 	if phase == 2, clu(pid)
-sum cog_going_without_thinking if treat == 0 & e(sample)
+sum `cog_variable' if treat == 0 & e(sample)
 estadd scalar y_mean = r(mean)
 
 label var treat "Treat"

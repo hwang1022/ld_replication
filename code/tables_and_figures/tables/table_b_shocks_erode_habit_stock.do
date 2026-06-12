@@ -38,8 +38,8 @@ matrix pval[1,2] = r(table)[4,2]
 estadd matrix pval
 
 * Column 3
-wildbootstrap regress attend_nadj treat treatXpost_attendloo_b25 post_attendloo_b25 attend_week bl_attend bl_earn bl_modalwage week_in_dm i.standid i.strata i.calendar_week if phase==2 & firstwk_attendloo_b25==0, cluster(standid)
-boottest {treat} {treatXpost_attendloo_b25}
+reg attend_nadj treat treatXpost_attendloo_b25 post_attendloo_b25 attend_week bl_attend bl_earn miss_bl_earn bl_modalwage week_in_dm i.standid i.strata i.calendar_week if phase==2 & firstwk_attendloo_b25==0, vce(cluster standid)
+boottest {treat} {treatXpost_attendloo_b25}, seed(123) reps(2048) boottype(wild) nograph
 matrix pval = J(1,2,.)
 matrix colnames pval = treat treatXpost_attendloo_b25
 matrix pval[1,1] = r(p_1)
@@ -51,7 +51,8 @@ estadd local weekin  "Yes", replace
 estadd matrix pval
 
 * Column 4
-wildbootstrap regress attend_nadj treat treatXpost_attendloo_b25 post_attendloo_b25 attend_week bl_attend bl_earn miss_bl_earn bl_modalwage treatXweek_in_dm week_in_dm i.standid i.strata i.calendar_week if phase==2 & firstwk_attendloo_b25==0, cluster(standid)
+reg attend_nadj treat treatXpost_attendloo_b25 post_attendloo_b25 attend_week bl_attend bl_earn miss_bl_earn bl_modalwage treatXweek_in_dm week_in_dm i.standid i.strata i.calendar_week if phase==2 & firstwk_attendloo_b25==0, vce(cluster standid)
+boottest {treat} {treatXpost_attendloo_b25} {treatXweek_in_dm}, seed(123) reps(2048) boottype(wild) nograph
 matrix pval = J(1,3,.)
 matrix colnames pval = treat treatXpost_attendloo_b25 treatXweek_in_dm
 matrix pval[1,1] = r(p_1)
@@ -64,7 +65,7 @@ estadd local weekin  "Yes", replace
 estadd matrix pval
 
 * Column 5
-wildbootstrap regress attend_nadj treat treatXattendloo25_post1 treatXattendloo25_post2p attendloo25_post1 attendloo25_post2p week_in_dm attend_week bl_attend bl_earn miss_bl_earn bl_modalwage i.standid i.strata i.calendar_week if phase==2 & firstwk_attendloo_b25==0, cluster(standid)
+reg attend_nadj treat treatXattendloo25_post1 treatXattendloo25_post2p attendloo25_post1 attendloo25_post2p week_in_dm attend_week bl_attend bl_earn miss_bl_earn bl_modalwage i.standid i.strata i.calendar_week if phase==2 & firstwk_attendloo_b25==0, vce(cluster standid)
 boottest {treat} {treatXattendloo25_post1} {treatXattendloo25_post2p}, seed(123) reps(2048) boottype(wild) nograph
 matrix pval = J(1,3,.)
 matrix colnames pval = treat treatXattendloo25_post1 treatXattendloo25_post2p
