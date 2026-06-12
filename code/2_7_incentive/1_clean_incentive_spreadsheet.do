@@ -16,7 +16,7 @@
 **## Stand 1. ADAMBAKKAM
 ****
 
-	import excel "$raw/(PRLS) Phase 1 Incentive Consolidation New format.xlsx" , firstrow sheet("ADAMBAKKAM") clear
+	import excel "$external/(PRLS) Phase 1 Incentive Consolidation New format.xlsx" , firstrow sheet("ADAMBAKKAM") clear
 	
 	drop AF
 	rename PID pid
@@ -50,7 +50,7 @@
 **## Stand 2. AVADI
 ****	
 	
-	import excel "$raw/(PRLS) Phase 1 Incentive Consolidation New format.xlsx" , firstrow sheet("AVADI") clear
+	import excel "$external/(PRLS) Phase 1 Incentive Consolidation New format.xlsx" , firstrow sheet("AVADI") clear
 	
 	drop AF
 	rename PID pid
@@ -84,7 +84,7 @@
 **## Stand 3. Ayanavram
 ****	
 	
-	import excel "$raw/(PRLS) Phase 1 Incentive Consolidation New format.xlsx" , firstrow sheet("Ayanavram") clear
+	import excel "$external/(PRLS) Phase 1 Incentive Consolidation New format.xlsx" , firstrow sheet("Ayanavram") clear
 	drop if mi(PID)
 	
 	drop AF
@@ -124,7 +124,7 @@
 **## Stand 5. MKB NAGAR
 ****	
 	
-	import excel "$raw/(PRLS) Phase 1 Incentive Consolidation New format.xlsx" , firstrow sheet("MKB NAGAR") clear
+	import excel "$external/(PRLS) Phase 1 Incentive Consolidation New format.xlsx" , firstrow sheet("MKB NAGAR") clear
 	drop if mi(PID)
 	
 	drop AF
@@ -163,7 +163,7 @@
 **## Stand 6. KORATTUR
 ****	
 	
-	import excel "$raw/(PRLS) Phase 1 Incentive Consolidation New format.xlsx" , firstrow sheet("KORATTUR") clear
+	import excel "$external/(PRLS) Phase 1 Incentive Consolidation New format.xlsx" , firstrow sheet("KORATTUR") clear
 	drop if mi(PID)
 	
 	drop AF
@@ -200,7 +200,7 @@
 **## Stand 13. THIRUVANMIYUR
 ****	
 	
-	import excel "$raw/(PRLS) Phase 1 Incentive Consolidation New format.xlsx" , firstrow sheet("THIRUVANMIYUR") clear
+	import excel "$external/(PRLS) Phase 1 Incentive Consolidation New format.xlsx" , firstrow sheet("THIRUVANMIYUR") clear
 	drop if mi(PID)
 	
 	drop AV AW AX AY AZ BA BB
@@ -241,7 +241,7 @@
 **## Stand 15. VELACHERY
 ****	
 	
-	import excel "$raw/(PRLS) Phase 1 Incentive Consolidation New format.xlsx" , firstrow sheet("VELACHERY") clear
+	import excel "$external/(PRLS) Phase 1 Incentive Consolidation New format.xlsx" , firstrow sheet("VELACHERY") clear
 	drop if mi(PID)
 	
 	drop AZ BA BB
@@ -284,7 +284,7 @@
 **## Stand 16. GUDUVANCHERY
 ****	
 	
-	import excel "$raw/(PRLS) Phase 1 Incentive Consolidation New format.xlsx" , firstrow sheet("GUDUVANCHERY") clear
+	import excel "$external/(PRLS) Phase 1 Incentive Consolidation New format.xlsx" , firstrow sheet("GUDUVANCHERY") clear
 	drop if mi(PID)
 	
 	drop Week10Allotted-CY
@@ -329,7 +329,7 @@
 **## Stand 17. PADAPPAI
 ****	
 	
-	import excel "$raw/(PRLS) Phase 1 Incentive Consolidation New format.xlsx" , firstrow sheet("PADAPPAI") clear
+	import excel "$external/(PRLS) Phase 1 Incentive Consolidation New format.xlsx" , firstrow sheet("PADAPPAI") clear
 	drop if mi(PID)
 	
 	drop AF
@@ -365,7 +365,7 @@
 **## Stand 18. IYAPPANTHANGAL
 ****	
 	
-	import excel "$raw/(PRLS) Phase 1 Incentive Consolidation New format.xlsx" , firstrow sheet("IYAPPANTHANGAL") clear
+	import excel "$external/(PRLS) Phase 1 Incentive Consolidation New format.xlsx" , firstrow sheet("IYAPPANTHANGAL") clear
 	drop if mi(PID)
 	
 	drop Week8Allotted-BB
@@ -401,7 +401,7 @@
 **## Stand 20. PAMMAL
 ****	
 	
-	import excel "$raw/(PRLS) Phase 1 Incentive Consolidation New format.xlsx" , firstrow sheet("PAMMAL") clear
+	import excel "$external/(PRLS) Phase 1 Incentive Consolidation New format.xlsx" , firstrow sheet("PAMMAL") clear
 	drop if mi(PID)
 	
 	drop Week8Allotted-BB
