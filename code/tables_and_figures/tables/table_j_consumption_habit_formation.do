@@ -9,7 +9,7 @@ clear all
 set more off
 
 local final_data_w_shocks "$final/final_data_w_shocks.dta"
-local phase1_incentive "$temp/incentive_record_stand_clean.dta"
+local phase1_incentive "$final/incentive_record_stand_clean.dta"
 
 local outdir "$output/tables"
 local outfile "`outdir'/iv_com_weekly_attend_nop1attendance_originaldata.tex"

@@ -8,7 +8,7 @@ version 17
 clear all
 set more off
 
-local phase1_incentive "$temp/incentive_record_stand_clean.dta"
+local phase1_incentive "$final/incentive_record_stand_clean.dta"
 
 
 use "`phase1_incentive'", clear

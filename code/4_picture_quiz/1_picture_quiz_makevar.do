@@ -53,7 +53,7 @@
 **# Save Data
 ***************
 
-	save "$temp/02_picture_quiz_makevar.dta" , replace
+	save "$final/02_picture_quiz_makevar.dta" , replace
 	
 	
 	

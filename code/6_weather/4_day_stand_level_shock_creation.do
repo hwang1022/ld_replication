@@ -12,7 +12,7 @@
 **# 1. Call Data
 ******************
 
-	use "$final/weather_day_stand_level.dta" , clear
+	use "$temp/weather_day_stand_level.dta" , clear
 	xtset stand date
 
 	rename mean_apparent_temp 				mean_at

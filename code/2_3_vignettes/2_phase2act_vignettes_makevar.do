@@ -208,6 +208,6 @@
 
 	keep pid-e_unique_employers_job_given
 
-	save "$temp/03a_phase2act_vignettes_makevar_hw.dta", replace
+	save "$final/03a_phase2act_vignettes_makevar_hw.dta", replace
 
 

@@ -20,7 +20,7 @@
 		use "$temp/01d_phase2act_labordemand_cleaned_completed_v2.dta", clear
 		generating
 		labelling
-		save "$temp/02d_phase2act_labordemand_makevar_v2.dta", replace
+		save "$final/02d_phase2act_labordemand_makevar_v2.dta", replace
 	
 	end
 	

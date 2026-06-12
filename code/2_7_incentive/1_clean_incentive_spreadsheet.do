@@ -478,5 +478,5 @@
 	gen amount_payed = amount_allotted 
 	replace amount_payed = 0 if inlist(paid,"No", "Missing Data")
 
-	keep pid treatment week_in amount_allotted amount_payed 
-	save "$temp/incentive_record_stand_clean" , replace
+	keep pid treatment week_in amount_allotted amount_payed
+	save "$final/incentive_record_stand_clean" , replace

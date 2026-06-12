@@ -305,7 +305,7 @@
 	lab var invited_post		"DiD Indicator"
 	
 	
-	save "$$temp/03_shock_module_panel_invited_hw.dta" , replace
+	save "$temp/03_shock_module_panel_invited_hw.dta" , replace
 	
 	
 	
@@ -314,7 +314,7 @@
 ************************************************************************************
 
 
-	use "$$temp/02_shock_module_cleaned_hw.dta" , clear
+	use "$temp/02_shock_module_cleaned_hw.dta" , clear
 
 	
 ****
@@ -544,7 +544,7 @@
 	lab var happened_post		"Happened Event DiD Indicator"
 	
 	
-	save "$$temp/03_shock_module_panel_happened_hw.dta" , replace
+	save "$temp/03_shock_module_panel_happened_hw.dta" , replace
 	
 	
 	
@@ -556,7 +556,7 @@
 **# Both Kinds of Events
 **************************
 
-	use "$$temp/02_shock_module_cleaned_merged_hw.dta" , clear
+	use "$temp/02_shock_module_cleaned_merged_hw.dta" , clear
 
 ****
 **## Make Panel
@@ -617,7 +617,7 @@
 	}
 	
 	
-	save "temp.dta" , replace
+	save "$temp/temp_shock_module.dta" , replace
 	
 	
 	
@@ -703,7 +703,7 @@
 
 
 	* No restriction
-	use "temp.dta" , clear
+	use "$temp/temp_shock_module.dta" , clear
 	gen_panel ""
 	tempfile event_happening
 	save `event_happening' , replace
@@ -713,7 +713,7 @@
 	
 	* n days or more
 	forval j = 2/10 {
-		use "temp.dta" , clear
+		use "$temp/temp_shock_module.dta" , clear
 		gen_panel "& event_expand_days >= `j'"
 		rename event_happening event_happening_`j'd
 		rename post_first_event post_first_event_`j'd
@@ -725,7 +725,7 @@
 	
 	* Pressure level 1 or more
 	forval j = 1/5 {
-		use "temp.dta" , clear
+		use "$temp/temp_shock_module.dta" , clear
 		gen_panel "& event_pressure >= `j'"
 		rename event_happening event_happening_`j'p
 		rename post_first_event post_first_event_`j'p
@@ -756,7 +756,7 @@
 
 	
 	
-	save  "$$temp/03_shock_module_panel_merged_hw.dta" , replace // Here merged means invite and happen are considered to have the same level of exogenity
+	save  "$temp/03_shock_module_panel_merged_hw.dta" , replace // Here merged means invite and happen are considered to have the same level of exogenity
 	
 	
 	
@@ -765,14 +765,14 @@
 **# Save Final Dataset
 ************************
 	
-	use "$$temp/03_shock_module_panel_invited_hw.dta" , clear
+	use "$temp/03_shock_module_panel_invited_hw.dta" , clear
 	gen __INVITED__________ = .
 	order __INVITED__________ , before(invited_order)
 	
 	
 	gen __Happened__________ = .
-	merge 1:1 	pid date using "$$temp/03_shock_module_panel_happened_hw.dta" , ///
+	merge 1:1 	pid date using "$temp/03_shock_module_panel_happened_hw.dta" , ///
 				keepusing(happened_order happened_type happened_duration happened_status happened_post) ///
 				nogen
 				
-	save  "$$final/03_shock_module_panel_hw.dta" , replace // Here invite and happen listed alongside eachother, seen as different kinds of events
+	save  "$final/03_shock_module_panel_hw.dta" , replace // Here invite and happen listed alongside eachother, seen as different kinds of events

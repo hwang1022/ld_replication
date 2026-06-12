@@ -3,7 +3,7 @@
 *														*
 *	Master Do-File: LD									*
 *	Date Created: Oct 7 2024 by HW						*
-*	Last Modified: June 5 2026 by ST					*
+*	Last Modified: June 12 2026							*
 *														*
 *	This master do-file defines globals and programs 	*
 *	and cleans individual survey rounds					*
@@ -28,6 +28,12 @@
 
 * Notes June 10, 2026 HW:
 *   - We now have two final analysis datasets: for those who updated their Launchset after Baseline, "original_launchset" version uses the Baseline results from days associated with their original baseline, while "new_launchset" version uses the Baseline results from days associated with their updated baseline.
+
+
+* Notes June 12, 2026:
+*   - Cleaning code for all Extra Surveys and External Data is now run from this master dofile (added: shock module, labor demand cleaning, flex test reshape, incentive PID-level makevar; moved: stand size and treatment intensity now run before the final dataset is produced).
+*   - Added merge_* globals (see Define Macros) controlling which Extra Surveys and External Data are merged into the main analysis dataset in 2_produce_final_dataset.do.
+*   - Each survey module's final dataset is now saved in $final (flex test, JFP, job list, networks, vignettes, picture quiz, shock module, time use, incentive record, stand size). Intermediate files remain in $temp.
 
 
 **********************
@@ -77,6 +83,7 @@
 	* run_analysis: whether to run the analysis dofiles
 	* data_version: "original_launchset" or "new_launchset"
 	* weather_data: whether to merge weather data into the main analysis dataset
+	* merge_*: whether to merge each Extra Survey / External Data into the main analysis dataset
 
 
 
@@ -111,7 +118,30 @@
 	* "raw": Merge raw weather data at stand-date-level. This includes mean apparent temperature, mean apparent temperature during recruitment hours, max apparent temperature, max apparent temperature during recruitment hours, cumulative precipitation, precipitation during recruitment hours, and maximum weather code (the worst weather during the period) and weather code during recruitment hours.
 	* "percentile": Merge weather data at stand-date-level, but in addition to the raw weather data, include indicators for whether each weather variable falls in the top 85, 90, 95, 99% of values across all stand-date combinations of the calendar year.
 	* "all": Merge weather data at stand-date-level, but in addition to the raw weather data and percentile indicators, include rolling averages and lags of weather variables.
-	
+
+
+	* Which Extra Surveys and External Data to Merge into the Main Analysis Dataset
+	* Each global controls one merge in 2_produce_final_dataset.do: 1 = merge, 0 = do not merge.
+	* Defaults reproduce the dataset as it was before these globals were introduced
+	* (job list, vignettes, and calendar events merged; everything else not merged).
+	global merge_flexibility 		= 0 	// Flex test choices (wide), 1:1 on PID and Date
+	global merge_jfp 				= 0 	// Job finding probability expectations, 1:1 on PID and Date
+	global merge_joblist 			= 1 	// Job list (contract choice, jl_* vars), 1:1 on PID and Date
+	global merge_networks 			= 0 	// Networks survey (ntwks_* vars), 1:1 on PID and Date
+	global merge_vignettes 			= 1 	// Vignettes (automaticity and morning routine vars), 1:1 on PID and Date
+	global merge_odd_jobs 			= 0 	// Odd jobs module (raw, not properly cleaned, oj_* vars), m:1 on PID and Date
+	global merge_picture_quiz 		= 0 	// Picture quiz, aggregated to PID level (pq_* vars), m:1 on PID
+	global merge_shocks 			= 0 	// Shock module PID x Day panel, 1:1 on PID and Date
+	global merge_time_use 			= 0 	// Time use module (time_* vars), 1:1 on PID and Date
+	global merge_calevents 			= 1 	// Festivals / calendar events (calevent* vars), m:1 on Date
+	global merge_stand_intensity 	= 0 	// Stand size and treatment intensity, m:1 on Stand
+	global merge_incentive 			= 0 	// Phase 1 incentive payments, aggregated to PID level, m:1 on PID
+	* Notes:
+	* - Weather data is controlled by the weather_data global above.
+	* - Labor Demand cannot be merged: its makevar dofile requires files not included in this package.
+	* - The Wives survey is not included in the replication package.
+	* - The Employer surveys are at the employer level and cannot be merged into the participant-level dataset.
+
 	****
 	**## Directories
 	****
@@ -312,7 +342,12 @@
 		include "$code/2_1_flexibility/2_phase2_act_flextest_cleaning_v2.do"
 
 		/* [> Make variables, drop variables not needed in analysis <] */
+		* Output: $final/05c_phase2act_flextest_combined.dta (wide, PID x Date level)
 		include "$code/2_1_flexibility/3_phase2_act_flextest_makevar.do"
+
+		/* [> Reshape to long format (one row per choice question) <] */
+		* Output: $temp/05d_phase2act_flextest_reshaped.dta
+		include "$code/2_1_flexibility/4_phase2_act_flextest_reshape.do"
 
 
 
@@ -325,6 +360,7 @@
 		include "$code/2_2_job_finding_probability/1_recall_cleaning.do"
 
 		* Make variables
+		* Output: $final/02_jfp_makevar_v2.dta (PID x Date level)
 		include "$code/2_2_job_finding_probability/2_recall_makevar.do"
 
 
@@ -338,6 +374,7 @@
 		include "$code/2_3_vignettes/1_phase2_act_vignettes_cleaning.do"
 
 		/* [> Make variables <] */
+		* Output: $final/03a_phase2act_vignettes_makevar_hw.dta (PID x Date level)
 		include "$code/2_3_vignettes/2_phase2act_vignettes_makevar.do"
 
 
@@ -346,6 +383,7 @@
 		* <FIXME> LC 4/21 returns an error --> need to install elabel
 		* Last Edited by HW in May 2025
 
+		* Output: $final/01_networks_cleaned.dta (PID x Date level)
 		include "$code/2_4_networks/1_networks_cleaning.do"
 
 
@@ -365,12 +403,26 @@
 		/* [> Make variables, drop variables not needed in analysis <] */
 		* FIXME PENDING HAO SEEMS TO BE IN THE MIDDLE OF CLEAN UP
 		* FIXME YS made some changes on 08-20-2024 - still need to understand the variables from the earlier versions of this test.
+		* Output: $final/04b_phase2act_joblist_combined_makevar.dta (v1 and v2 combined)
+		* Note that the main dataset merges in the v2-only file $temp/03b_phase2act_joblist_cleaned_completed_v2.dta.
 		include "$code/2_5_job_list/3_phase2_act_joblist_combined_makevar.do"
 
-		/*
-include "$code/2_6_labor_demand/1_phase2_act_labordemand_cleaning.do"
-include "$code/2_6_labor_demand/2_phase2_act_labordemand_makevar.do"
-*/
+
+
+		**### Labor Demand
+
+		* A Phase 2 activity: participants were required to attend the stand on an announced date,
+		* testing whether labor demand responds differentially to treated workers.
+
+		/* [> Clean raw data, save completed surveys <] */
+		include "$code/2_6_labor_demand/1_phase2_act_labordemand_cleaning.do"
+
+		/* [> Make variables <] */
+		* FIXME The makevar dofile requires files not included in the replication package
+		* (04_phase2_makepanel_for_tests_launchset1-3.dta and 05_phase2_makevar.dta from the
+		* old project folder), so it remains commented out and the Labor Demand data
+		* cannot be produced or merged into the main analysis dataset.
+		// include "$code/2_6_labor_demand/2_phase2_act_labordemand_makevar.do"
 
 
 
@@ -383,7 +435,14 @@ include "$code/2_6_labor_demand/2_phase2_act_labordemand_makevar.do"
 
 		**## Phase 1 Incentive Payment
 
+		* Input: 	(PRLS) Phase 1 Incentive Consolidation New format.xlsx (one sheet per stand)
+		* Output: 	$final/incentive_record_stand_clean.dta (PID x Week level)
+
 		include "$code/2_7_incentive/1_clean_incentive_spreadsheet.do"
+
+		* PID-level higher/lower-than-median payment indicators for the control group
+		* (note: table_j_consumption_habit_formation.do re-derives these directly)
+		include "$code/2_7_incentive/2_incentive_makevar.do"
 
 
 
@@ -392,23 +451,35 @@ include "$code/2_6_labor_demand/2_phase2_act_labordemand_makevar.do"
 
 		* Last Edited by ST in June 2, 2025
 
-		* Output: $final/lss_time_use_cleaned_hw.dta
+		* Output: $final/lss_time_use_cleaned_hw.dta (PID x Date level)
 
 		* Create Stata datasets from raw data
 		include "$code/3_time_use/1_time_use_renaming.do"
 
 		* Clean Data, Make Variables
 		include "$code/3_time_use/2_time_use_cleaning.do"
-		include "$code/3_time_use/3_time_use_makevar_new.do"
+
+		* Note: 3_time_use/3_time_use_makevar_new.do (sleep variables and phase info) requires
+		* 03_bs_phase123_makevar.dta and is therefore run in the Analysis Prep section below.
 
 
 		**### Shocks Module
 
 		* Last Edited by HW in Oct 2024
 
-		* Manual corrections based on LC's code
-		* Cleaning of varaibles
-		// Shocks module not included in replication package
+		* Input: 	lss_shock_module_v1.dta and lss_shock_module_v2.dta (raw SurveyCTO exports, PII removed)
+		* Output:
+		* $final/03_shock_module_panel_hw.dta 			(PID x Day panel; invited and happened events listed separately)
+		* $temp/03_shock_module_panel_merged_hw.dta 	(PID x Day panel; invited and happened events pooled; this is the file merged into the main analysis dataset)
+
+		* Rename raw variables
+		include "$code/9_shock_module/1_sm_naming_hw.do"
+
+		* Manual corrections based on LC's code, cleaning of variables
+		include "$code/9_shock_module/2_sm_cleaning_hw.do"
+
+		* Make PID x Day panel
+		include "$code/9_shock_module/3_sm_makepanel_hw.do"
 
 
 		**### Wives survey
@@ -420,12 +491,15 @@ include "$code/2_6_labor_demand/2_phase2_act_labordemand_makevar.do"
 
 		* Last Edited by HW in May 2025
 
+		* Output: $final/02_picture_quiz_makevar.dta (PID x Quiz level)
 		include "$code/4_picture_quiz/1_picture_quiz_makevar.do"
 
 
 		**### Odd jobs module
 
-		* FIXME PENDING TO ADD
+		* FIXME PENDING TO ADD - the module has not been properly cleaned.
+		* The raw file $raw/01b_odd_jobs_named.dta can be merged into the main analysis
+		* dataset directly by setting merge_odd_jobs to 1 (see 2_produce_final_dataset.do).
 
 
 
@@ -467,14 +541,21 @@ include "$code/2_6_labor_demand/2_phase2_act_labordemand_makevar.do"
 		**## 9. Incentive
 		****
 
+		* See "Phase 1 Incentive Payment" under section 6 (Other surveys) above.
+
 
 		****
 		**## 10. Stand Size and Treatment Intensity
 		****
 
+		* Last Edited by ST June, 8, 2026
 
+		* Output:
+		* $final/stand_size_intensity.dta 				(Stand level; counts everyone assigned to treatment)
+		* $final/stand_size_intensity_studysample.dta 	(Stand level; counts only the treated in the main study sample)
 
-
+		* Runs before the final dataset is produced so it can be merged in (see merge_stand_intensity).
+		include "$code/8_treatment_intensity/0_stand_strength_master.do"
 
 
 
@@ -486,14 +567,22 @@ include "$code/2_6_labor_demand/2_phase2_act_labordemand_makevar.do"
 		* Make Daily Weekly Dataset
 		include "$code/100_analysis_prep/1_merge_main_surveys.do"
 
+		* Time Use sleep dataset
+		* (run here because it needs 03_bs_phase123_makevar.dta, created by the step above)
+		* Output: $temp/lss_time_use_sleep.dta
+		include "$code/3_time_use/3_time_use_makevar_new.do"
+
 		* Make Final Dataset
 		include "$code/100_analysis_prep/2_produce_final_dataset.do"
 
 
 
 		*************************
-		**# 10. Employer Survey
+		**# 11. Employer Survey
 		*************************
+
+		* Note: the Employer surveys are at the employer/recruiter level
+		* and are not merged into the participant-level main analysis dataset.
 
 		* Last Edited by HW May 8 2025
 
@@ -512,24 +601,15 @@ include "$code/2_6_labor_demand/2_phase2_act_labordemand_makevar.do"
 		include "$code/5_employer/01_clean_v3.do"
 		include "$code/5_employer/02_append_data.do"
 		
-		**# 10.1 Employer Activtiy Survey
+		**# 11.1 Employer Activtiy Survey
 		
 		* Input:
 			* employer_activity_mainstudy_named.dta
 		* Output:
 			* ls_employer_activity_mainstudy_named.dta
 		include "$code/5_employer/03_employer_activity.do"
-		
-		
-		
-		*************************
-		**# 11. Treatment intensity
-		*************************
 
-		* Last Edited by ST June, 8, 2026
-		include "$code/8_treatment_intensity/0_stand_strength_master.do"
 
-		
 
 		use "$main_data", clear
 	}

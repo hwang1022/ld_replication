@@ -5,7 +5,7 @@
 * Last modified: 2026-04-14 (HW)
 **************************************************
 
-use "$temp/05c_phase2act_flextest_combined.dta", clear
+use "$final/05c_phase2act_flextest_combined.dta", clear
 
 egen flex_num_obs = rownonmiss(fixed_choice_q1 fixed_choice_q2)
 reshape long fixed_choice_q, i(pid date) j(question_num)

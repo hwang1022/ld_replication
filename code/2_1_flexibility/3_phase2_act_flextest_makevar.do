@@ -101,7 +101,7 @@
 	use "$temp/04c_phase2act_flextest_makevar_tmp_v2.dta", clear
 	append using "$temp/04c_phase2act_flextest_makevar_tmp_v1.dta"
 
-	save "$temp/05c_phase2act_flextest_combined.dta" , replace
+	save "$final/05c_phase2act_flextest_combined.dta" , replace
 	
 	
 

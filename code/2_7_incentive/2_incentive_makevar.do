@@ -1,5 +1,5 @@
 	
-    use "$temp/incentive_record_stand_clean" , clear
+    use "$final/incentive_record_stand_clean" , clear
 
     keep if treatment == 0
         

@@ -6,7 +6,7 @@ version 17
 clear all
 set more off
 
-local stand_size_studysample "$temp/stand_size_intensity_studysample.dta"
+local stand_size_studysample "$final/stand_size_intensity_studysample.dta"
 
 local tables "$output/tables"
 local verified_tex "`tables'/stand_size_tex_compact_studysample.tex"

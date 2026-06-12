@@ -112,4 +112,4 @@
 	order stand num_treatment correction_factor raw_stand_size_exp corrected_stand_size_exp raw_stand_size_lin corrected_stand_size_lin num_rid final_stand_size_exp final_stand_size_lin treat_intensity_exp treat_intensity_lin higher_treat_intensity_exp higher_final_stand_size_exp
 
 
-	save "$temp/stand_size_intensity_studysample.dta" , replace 
+	save "$final/stand_size_intensity_studysample.dta" , replace

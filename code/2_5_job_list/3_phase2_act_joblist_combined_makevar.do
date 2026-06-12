@@ -72,4 +72,4 @@
    /* [>   4.  Save data    <] */ 
 /*----------------------------------------------------*/
 
-	save "$temp/04b_phase2act_joblist_combined_makevar.dta", replace
+	save "$final/04b_phase2act_joblist_combined_makevar.dta", replace

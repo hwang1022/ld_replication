@@ -8,7 +8,7 @@
 **************************************************
 **************************************************
 
-	use "$temp/lss_time_use_cleaned_hw.dta", clear
+	use "$final/lss_time_use_cleaned_hw.dta", clear
 	isid pid date
 
 	egen num_activities_530_600 = rowtotal(time_activity_adj_1_1 time_activity_adj_2_1 time_activity_adj_3_1 time_activity_adj_4_1 time_activity_adj_5_1 time_activity_adj_6_1 time_activity_adj_7_1 time_activity_adj_8_1 time_activity_adj_9_1 time_activity_adj_10_1 time_activity_adj_11_1 time_activity_adj_12_1 time_activity_adj_13_1 time_activity_adj_14_1)

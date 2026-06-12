@@ -85,4 +85,4 @@
 	replace max_weather_code = 999 if max_weather_code == -999
 	replace max_weather_code_recruit = 999 if max_weather_code_recruit == -999
 
-	save "$final/weather_day_stand_level.dta", replace
+	save "$temp/weather_day_stand_level.dta", replace

@@ -3,7 +3,7 @@
 *	Project: LD Main Study
 *	Purpose: Construct fulloutcomes 
 *	Author: HW, based on Daryl
-*	Last modified: Nov 14, 2024
+*	Last modified: June 12, 2026 (merge_* globals for Extra Surveys and External Data)
 **************************************************
 **************************************************
 
@@ -44,105 +44,127 @@
 **# 4.  Phase 2 Activities and Others
 ***************************************	
 
+* Note (June 12, 2026): each merge below is controlled by a merge_* global defined in 0.master.do.
+* Set the corresponding global to 1 to add the survey to the main analysis dataset.
+
 ****
 **## Flexibility
 ****
-	
-	* HW: Outdated as of May 2025. Replaced by the one-line code below
-	/*
-	preserve
-		use pid flex_question flex_ann_date flex_version fixed_choice_q first_day second_day ///
-			using "$temp/06c_phase2act_flextest_combined_makevar.dta" , clear
-		drop if mi(fixed_choice_q)
-		rename flex_ann_date date
-		
-		reshape wide fixed_choice_q, i(pid) j(flex_question)
-		egen flex_num_obs = rownonmiss(fixed_choice_q1 fixed_choice_q2)
-		
-		tempfile flex
-		save `flex' , replace
-	restore
-	
-	gen __7_PII_ACT_FLEX________ = .
-	merge 1:1 pid date using `flex', keep(1 3) nogen
-	*/
 
-		/*
-	merge 1:1 pid date using "$temp/05c_phase2act_flextest_combined.dta" , keep(1 3) nogen
-*/
-****	
+	* HW: Outdated as of May 2025. Replaced by the one-line merge below (wide file, one row per PID)
+	if $merge_flexibility == 1 {
+		gen __7_FLEX________ = .
+		merge 1:1 pid date using "$final/05c_phase2act_flextest_combined.dta" , keep(1 3) nogen
+	}
+
+****
 **## Job Finding Probability
-****	
-	/*
-	gen __7_JFP________ = .
-	merge 1:1 pid date 	using "$temp/02_jfp_makevar_v2.dta", keep(1 3)  nogen
-	*/
-	
-	
-****	
+****
+
+	if $merge_jfp == 1 {
+		gen __7_JFP________ = .
+		merge 1:1 pid date 	using "$final/02_jfp_makevar_v2.dta", keep(1 3)  nogen
+	}
+
+
+****
 **## Job List
-****	
-	
-	gen __7_JOB_LIST________ = .
-	merge 1:1 pid date 	using "$temp/03b_phase2act_joblist_cleaned_completed_v2.dta", ///
-						keepusing(jl_*) keep(1 3)  nogen
-	
+****
+
+	* Note: this merges the v2-only cleaned file, not the combined v1+v2 file
+	* ($final/04b_phase2act_joblist_combined_makevar.dta), following the original code.
+	if $merge_joblist == 1 {
+		gen __7_JOB_LIST________ = .
+		merge 1:1 pid date 	using "$temp/03b_phase2act_joblist_cleaned_completed_v2.dta", ///
+							keepusing(jl_*) keep(1 3)  nogen
+	}
+
+****
+**## Networks
+****
+
+	if $merge_networks == 1 {
+		gen __7_NETWORKS________ = .
+		merge 1:1 pid date using "$final/01_networks_cleaned.dta", keep(1 3) nogen
+	}
+
 ****
 **## Picture Quiz
-****		
-	/*
-	gen __7_MULTI_QUIZ________ = .
-	merge m:1 pid date using "$temp/02_picture_quiz_makevar.dta", keep(1 3) nogen
-	*/
+****
+
+	* The picture quiz is at PID x Quiz level (a participant can appear in many quizzes),
+	* so it is first aggregated to PID level and then merged m:1 on PID.
+	if $merge_picture_quiz == 1 {
+		preserve
+			use "$final/02_picture_quiz_makevar.dta", clear
+			collapse (mean) pq_recognized (count) pq_num_quiz = pq_recognized, by(pid)
+			lab var pq_recognized 	"Share of Picture Quizzes in Which Participant Was Recognized"
+			lab var pq_num_quiz 	"Number of Picture Quiz Appearances"
+			tempfile picture_quiz
+			save `picture_quiz' , replace
+		restore
+
+		gen __7_MULTI_QUIZ________ = .
+		merge m:1 pid using `picture_quiz', keep(1 3) nogen
+	}
 
 ****
 **## Shocks
-****	
-	/*
-	gen __7_SHOCKS________ = .
-	merge 1:1 pid date using "$temp/03_shock_module_panel_merged_hw.dta", keep(1 3)  nogen
-	*/
+****
+
+	* Note: this merges the pooled (invited + happened events) PID x Day panel.
+	* The module's final dataset, with invited and happened events listed separately,
+	* is $final/03_shock_module_panel_hw.dta.
+	if $merge_shocks == 1 {
+		gen __7_SHOCKS________ = .
+		merge 1:1 pid date using "$temp/03_shock_module_panel_merged_hw.dta", keep(1 3)  nogen
+	}
 
 ****
 **## Timeuse (HW Checked Jan 23 2025)
-****	
-	
-/*
-	gen __8_MULTI_TIMEUSE________ = .
-	merge 1:1 pid date using "$temp/lss_time_use_cleaned_hw.dta" , keep(1 3) nogen
-	*/
-	
-	
+****
+
+	if $merge_time_use == 1 {
+		gen __8_MULTI_TIMEUSE________ = .
+		merge 1:1 pid date using "$final/lss_time_use_cleaned_hw.dta" , keep(1 3) nogen
+	}
+
+
 ****
 **## Vignettes
-****	
-	
-	
-	gen __9_SINGLE_VGNTTE________ = .
-	merge 1:1 pid date using "$temp/03a_phase2act_vignettes_makevar_hw.dta", keep(1 3) keepusing(r_reg_morning_act_* r_morning_alarm cog_going_without_thinking) nogen
-	
-	
-		
-		
-	/*	
+****
+
+	if $merge_vignettes == 1 {
+		gen __9_SINGLE_VGNTTE________ = .
+		merge 1:1 pid date using "$final/03a_phase2act_vignettes_makevar_hw.dta", keep(1 3) keepusing(r_reg_morning_act_* r_morning_alarm cog_going_without_thinking) nogen
+	}
+
+
+
+
 ****
 **## Wives
-****	
-	
+****
+
+	* The Wives survey is not included in the replication package, so there is no merge global for it.
+	/*
 	gen __10_SINGLE_WIVES________ = .
 	merge m:1 pid date using "$temp/03-wife-survey-cleaned.dta", keep(1 3) keepusing(wife_*) nogen
-	
+	*/
+
 ****
 **## Odd Jobs
-****	
-	
-	gen __11_SINGLE_ODD________ = .
-	merge m:1 pid date using "$temp/01b_odd_jobs_named.dta", keep(1 3) keepusing(sat_survey-act_unpaid_mins) nogen
-	foreach i of varlist sat_survey-act_unpaid_mins {
-		rename `i' oj_`i'
+****
+
+	* FIXME the odd jobs module has not been properly cleaned; this merges the raw survey file.
+	if $merge_odd_jobs == 1 {
+		gen __11_SINGLE_ODD________ = .
+		merge m:1 pid date using "$raw/01b_odd_jobs_named.dta", keep(1 3) keepusing(sat_survey-act_unpaid_mins) nogen
+		foreach i of varlist sat_survey-act_unpaid_mins {
+			rename `i' oj_`i'
+		}
 	}
-	*/
-	
+
 
 *********************
 **# Calendar Events
@@ -182,7 +204,9 @@
 	restore
 	*/
 
-	merge m:1 date using "$final/calevents_clean.dta", keep(1 3) nogen
+	if $merge_calevents == 1 {
+		merge m:1 date using "$final/calevents_clean.dta", keep(1 3) nogen
+	}
 
 
 *************
@@ -207,7 +231,41 @@
 		* "raw": Merge raw weather data at stand-date-level. This includes mean apparent temperature, mean apparent temperature during recruitment hours, max apparent temperature, max apparent temperature during recruitment hours, cumulative precipitation, precipitation during recruitment hours, and maximum weather code (the worst weather during the period) and weather code during recruitment hours.
 		* "percentile": Merge weather data at stand-date-level, but in addition to the raw weather data, include indicators for whether each weather variable falls in the top 85, 90, 95, 99% of values across all stand-date combinations of the calendar year.
 		* "all": Merge weather data at stand-date-level, but in addition to the raw weather data and percentile indicators, include rolling averages and lags of weather variables.
-	
+
+
+******************************************
+**# Stand Size and Treatment Intensity
+******************************************
+
+	* Stand-level estimated stand size and treatment intensity (assigned-treatment version).
+	* The study-sample version is in $final/stand_size_intensity_studysample.dta.
+	if $merge_stand_intensity == 1 {
+		gen __STAND_INTENSITY________ = .
+		merge m:1 stand using "$final/stand_size_intensity.dta", keep(1 3) nogen
+	}
+
+
+***********************************
+**# Phase 1 Incentive Payment
+***********************************
+
+	* The payment record is at PID x Week level, so it is first aggregated to PID level
+	* (mean allotted and paid amounts over the first 7 weeks of Phase 1) and merged m:1 on PID.
+	if $merge_incentive == 1 {
+		preserve
+			use "$final/incentive_record_stand_clean.dta", clear
+			collapse 	(mean) incentive_amount_allotted_mean = amount_allotted ///
+						incentive_amount_payed_mean = amount_payed, by(pid)
+			lab var incentive_amount_allotted_mean 	"Mean Weekly Phase 1 Incentive Allotted"
+			lab var incentive_amount_payed_mean 	"Mean Weekly Phase 1 Incentive Paid"
+			tempfile incentive
+			save `incentive' , replace
+		restore
+
+		gen __INCENTIVE________ = .
+		merge m:1 pid using `incentive', keep(1 3) nogen
+	}
+
 
 *********************************
 **# Final Cleaning and Labeling

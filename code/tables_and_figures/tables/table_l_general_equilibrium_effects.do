@@ -8,8 +8,8 @@ clear all
 set more off
 
 local final_data_w_shocks "$final/final_data_w_shocks.dta"
-local stand_size_intensity "$temp/stand_size_intensity.dta"
-local stand_size_studysample "$temp/stand_size_intensity_studysample.dta"
+local stand_size_intensity "$final/stand_size_intensity.dta"
+local stand_size_studysample "$final/stand_size_intensity_studysample.dta"
 
 local outdir "$output/tables"
 local outfile "`outdir'/com_weekly_attend_b8_attend_work1_frag2_faq_higher_treat_intensity_exp_originaldata.tex"

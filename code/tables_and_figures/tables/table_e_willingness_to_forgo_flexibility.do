@@ -9,7 +9,7 @@ clear all
 set more off
 
 local shocks_table2 "$temp/shocks_dataset_table2.dta"
-local flex_wide "$temp/05c_phase2act_flextest_combined.dta"
+local flex_wide "$final/05c_phase2act_flextest_combined.dta"
 
 local outdir "$output/tables"
 capture mkdir "$output"
