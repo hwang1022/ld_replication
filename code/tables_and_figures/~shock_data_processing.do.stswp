@@ -19,9 +19,9 @@ set seed 42
 
 local final_data_w_shocks "$final/final_data_w_shocks.dta"
 
-local shocks_prediction_original 	"$temp/shocks_dataset_prediction_originaldata.dta"
+local shocks_prediction_original "$temp/shocks_dataset_prediction_originaldata.dta"
 local shocks_prediction_altspec 	"$temp/shocks_dataset_prediction_originaldata_altspec.dta"
-local shocks_prediction_baseline 	"$temp/shocks_dataset_prediction_originaldata_baseline.dta"
+local shocks_prediction_baseline "$temp/shocks_dataset_prediction_originaldata_baseline.dta"
 local shocks_prediction_predicted 	"$temp/shocks_dataset_prediction_originaldata_predicted.dta"
 local shocks_prediction_phase1 		"$temp/shocks_dataset_prediction_phase1.dta"
 local shocks_table2 				"$temp/shocks_dataset_table2.dta"

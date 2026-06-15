@@ -3,7 +3,7 @@
 *														*
 *	Master Do-File: LD									*
 *	Date Created: Oct 7 2024 by HW						*
-*	Last Modified: June 12 2026							*
+*	Last Modified: June 15 2026							*
 *														*
 *	This master do-file defines globals and programs 	*
 *	and cleans individual survey rounds					*
@@ -34,6 +34,15 @@
 *   - Cleaning code for all Extra Surveys and External Data is now run from this master dofile (added: shock module, labor demand cleaning, flex test reshape, incentive PID-level makevar; moved: stand size and treatment intensity now run before the final dataset is produced).
 *   - Added merge_* globals (see Define Macros) controlling which Extra Surveys and External Data are merged into the main analysis dataset in 2_produce_final_dataset.do.
 *   - Each survey module's final dataset is now saved in $final (flex test, JFP, job list, networks, vignettes, picture quiz, shock module, time use, incentive record, stand size). Intermediate files remain in $temp.
+
+
+
+* Notes June 15, 2026:
+* 	- Now we no longer create two versions of the final dataset (one for those who updated their Launchset after Baseline, one for those who didn't). Instead we now create a single final dataset with variables for both versions (the defualt is original Launchset, the variables using new Launchset are suffixed with "_newls").
+*   - Each Extra Survey / External Data module is now cleaned only when its merge_* global is 1
+*     (weather only when weather_data is not "none"/""). Previously every module was cleaned on
+*     every run regardless of whether it was merged into the final dataset, which was inefficient.
+
 
 
 **********************
@@ -161,7 +170,10 @@
 	global external 			"$replication_dir/data/external"
 
 	* The Dataset
-	global main_data 	"$final/final_data_replication_${data_version}.dta"
+	// June 15 ST: Changing this to keep code running for now
+	//global main_data 	"$final/final_data_replication_${data_version}.dta"
+	global main_data 	"$final/final_data_replication.dta"
+
 	global output 		"$replication_dir/output"
 
 	global tables 	"$output/tables"
@@ -336,18 +348,22 @@
 		* Survey Tools Name: lss_p2_flexibility_act
 		* There are two versions of the questionnaire, Stands 1-6 and Stands 13-20, hence two do files per step below.
 
-		/* [> Clean raw data, save completed surveys <] */
-		* manual corrections made by field team
-		include "$code/2_1_flexibility/1_phase2_act_flextest_cleaning_v1.do"
-		include "$code/2_1_flexibility/2_phase2_act_flextest_cleaning_v2.do"
+		* Only clean when this module is merged into the final dataset (see merge_flexibility in Define Macros)
+		if $merge_flexibility == 1 {
 
-		/* [> Make variables, drop variables not needed in analysis <] */
-		* Output: $final/05c_phase2act_flextest_combined.dta (wide, PID x Date level)
-		include "$code/2_1_flexibility/3_phase2_act_flextest_makevar.do"
+			/* [> Clean raw data, save completed surveys <] */
+			* manual corrections made by field team
+			include "$code/2_1_flexibility/1_phase2_act_flextest_cleaning_v1.do"
+			include "$code/2_1_flexibility/2_phase2_act_flextest_cleaning_v2.do"
 
-		/* [> Reshape to long format (one row per choice question) <] */
-		* Output: $temp/05d_phase2act_flextest_reshaped.dta
-		include "$code/2_1_flexibility/4_phase2_act_flextest_reshape.do"
+			/* [> Make variables, drop variables not needed in analysis <] */
+			* Output: $final/05c_phase2act_flextest_combined.dta (wide, PID x Date level)
+			include "$code/2_1_flexibility/3_phase2_act_flextest_makevar.do"
+
+			/* [> Reshape to long format (one row per choice question) <] */
+			* Output: $temp/05d_phase2act_flextest_reshaped.dta
+			include "$code/2_1_flexibility/4_phase2_act_flextest_reshape.do"
+		}
 
 
 
@@ -356,12 +372,16 @@
 		* Last Edited by HW in May 2025 (Only cleaned expectation, not recall)
 		* Survey Tools Name: lss_jfp_recall_survey
 
-		* Clean raw data, save completed surveys
-		include "$code/2_2_job_finding_probability/1_recall_cleaning.do"
+		* Only clean when this module is merged into the final dataset (see merge_jfp in Define Macros)
+		if $merge_jfp == 1 {
 
-		* Make variables
-		* Output: $final/02_jfp_makevar_v2.dta (PID x Date level)
-		include "$code/2_2_job_finding_probability/2_recall_makevar.do"
+			* Clean raw data, save completed surveys
+			include "$code/2_2_job_finding_probability/1_recall_cleaning.do"
+
+			* Make variables
+			* Output: $final/02_jfp_makevar_v2.dta (PID x Date level)
+			include "$code/2_2_job_finding_probability/2_recall_makevar.do"
+		}
 
 
 
@@ -370,12 +390,16 @@
 
 		* Last Edited by HW in Feb 2025
 
-		/* [> Clean raw data, save completed surveys <] */
-		include "$code/2_3_vignettes/1_phase2_act_vignettes_cleaning.do"
+		* Only clean when this module is merged into the final dataset (see merge_vignettes in Define Macros)
+		if $merge_vignettes == 1 {
 
-		/* [> Make variables <] */
-		* Output: $final/03a_phase2act_vignettes_makevar_hw.dta (PID x Date level)
-		include "$code/2_3_vignettes/2_phase2act_vignettes_makevar.do"
+			/* [> Clean raw data, save completed surveys <] */
+			include "$code/2_3_vignettes/1_phase2_act_vignettes_cleaning.do"
+
+			/* [> Make variables <] */
+			* Output: $final/03a_phase2act_vignettes_makevar_hw.dta (PID x Date level)
+			include "$code/2_3_vignettes/2_phase2act_vignettes_makevar.do"
+		}
 
 
 
@@ -383,8 +407,11 @@
 		* <FIXME> LC 4/21 returns an error --> need to install elabel
 		* Last Edited by HW in May 2025
 
-		* Output: $final/01_networks_cleaned.dta (PID x Date level)
-		include "$code/2_4_networks/1_networks_cleaning.do"
+		* Only clean when this module is merged into the final dataset (see merge_networks in Define Macros)
+		if $merge_networks == 1 {
+			* Output: $final/01_networks_cleaned.dta (PID x Date level)
+			include "$code/2_4_networks/1_networks_cleaning.do"
+		}
 
 
 
@@ -394,18 +421,22 @@
 
 		* Survey Tools Name: ls_p2_contract_activity
 
-		/* [> Clean raw data, save completed surveys <] */
-		* manual corrections made by field team
-		* FIXME PENDING HAO TO CLEAN UP
-		include "$code/2_5_job_list/1_phase2_act_joblist_cleaning_v1.do"
-		include "$code/2_5_job_list/2_phase2_act_joblist_cleaning_v2.do"
+		* Only clean when this module is merged into the final dataset (see merge_joblist in Define Macros)
+		if $merge_joblist == 1 {
 
-		/* [> Make variables, drop variables not needed in analysis <] */
-		* FIXME PENDING HAO SEEMS TO BE IN THE MIDDLE OF CLEAN UP
-		* FIXME YS made some changes on 08-20-2024 - still need to understand the variables from the earlier versions of this test.
-		* Output: $final/04b_phase2act_joblist_combined_makevar.dta (v1 and v2 combined)
-		* Note that the main dataset merges in the v2-only file $temp/03b_phase2act_joblist_cleaned_completed_v2.dta.
-		include "$code/2_5_job_list/3_phase2_act_joblist_combined_makevar.do"
+			/* [> Clean raw data, save completed surveys <] */
+			* manual corrections made by field team
+			* FIXME PENDING HAO TO CLEAN UP
+			include "$code/2_5_job_list/1_phase2_act_joblist_cleaning_v1.do"
+			include "$code/2_5_job_list/2_phase2_act_joblist_cleaning_v2.do"
+
+			/* [> Make variables, drop variables not needed in analysis <] */
+			* FIXME PENDING HAO SEEMS TO BE IN THE MIDDLE OF CLEAN UP
+			* FIXME YS made some changes on 08-20-2024 - still need to understand the variables from the earlier versions of this test.
+			* Output: $final/04b_phase2act_joblist_combined_makevar.dta (v1 and v2 combined)
+			* Note that the main dataset merges in the v2-only file $temp/03b_phase2act_joblist_cleaned_completed_v2.dta.
+			include "$code/2_5_job_list/3_phase2_act_joblist_combined_makevar.do"
+		}
 
 
 
@@ -438,11 +469,15 @@
 		* Input: 	(PRLS) Phase 1 Incentive Consolidation New format.xlsx (one sheet per stand)
 		* Output: 	$final/incentive_record_stand_clean.dta (PID x Week level)
 
-		include "$code/2_7_incentive/1_clean_incentive_spreadsheet.do"
+		* Only clean when this module is merged into the final dataset (see merge_incentive in Define Macros)
+		if $merge_incentive == 1 {
 
-		* PID-level higher/lower-than-median payment indicators for the control group
-		* (note: table_j_consumption_habit_formation.do re-derives these directly)
-		include "$code/2_7_incentive/2_incentive_makevar.do"
+			include "$code/2_7_incentive/1_clean_incentive_spreadsheet.do"
+
+			* PID-level higher/lower-than-median payment indicators for the control group
+			* (note: table_j_consumption_habit_formation.do re-derives these directly)
+			include "$code/2_7_incentive/2_incentive_makevar.do"
+		}
 
 
 
@@ -453,11 +488,15 @@
 
 		* Output: $final/lss_time_use_cleaned_hw.dta (PID x Date level)
 
-		* Create Stata datasets from raw data
-		include "$code/3_time_use/1_time_use_renaming.do"
+		* Only clean when this module is merged into the final dataset (see merge_time_use in Define Macros)
+		if $merge_time_use == 1 {
 
-		* Clean Data, Make Variables
-		include "$code/3_time_use/2_time_use_cleaning.do"
+			* Create Stata datasets from raw data
+			include "$code/3_time_use/1_time_use_renaming.do"
+
+			* Clean Data, Make Variables
+			include "$code/3_time_use/2_time_use_cleaning.do"
+		}
 
 		* Note: 3_time_use/3_time_use_makevar_new.do (sleep variables and phase info) requires
 		* 03_bs_phase123_makevar.dta and is therefore run in the Analysis Prep section below.
@@ -472,14 +511,18 @@
 		* $final/03_shock_module_panel_hw.dta 			(PID x Day panel; invited and happened events listed separately)
 		* $temp/03_shock_module_panel_merged_hw.dta 	(PID x Day panel; invited and happened events pooled; this is the file merged into the main analysis dataset)
 
-		* Rename raw variables
-		include "$code/9_shock_module/1_sm_naming_hw.do"
+		* Only clean when this module is merged into the final dataset (see merge_shocks in Define Macros)
+		if $merge_shocks == 1 {
 
-		* Manual corrections based on LC's code, cleaning of variables
-		include "$code/9_shock_module/2_sm_cleaning_hw.do"
+			* Rename raw variables
+			include "$code/9_shock_module/1_sm_naming_hw.do"
 
-		* Make PID x Day panel
-		include "$code/9_shock_module/3_sm_makepanel_hw.do"
+			* Manual corrections based on LC's code, cleaning of variables
+			include "$code/9_shock_module/2_sm_cleaning_hw.do"
+
+			* Make PID x Day panel
+			include "$code/9_shock_module/3_sm_makepanel_hw.do"
+		}
 
 
 		**### Wives survey
@@ -491,8 +534,11 @@
 
 		* Last Edited by HW in May 2025
 
-		* Output: $final/02_picture_quiz_makevar.dta (PID x Quiz level)
-		include "$code/4_picture_quiz/1_picture_quiz_makevar.do"
+		* Only clean when this module is merged into the final dataset (see merge_picture_quiz in Define Macros)
+		if $merge_picture_quiz == 1 {
+			* Output: $final/02_picture_quiz_makevar.dta (PID x Quiz level)
+			include "$code/4_picture_quiz/1_picture_quiz_makevar.do"
+		}
 
 
 		**### Odd jobs module
@@ -526,16 +572,22 @@
 		// The script is currently commented out as the data is already downloaded.
 		// To re-run the script, uncomment the line above. Make sure you have the Python packages needed (e.g., openmeteo_requests, pandas, etc).
 
-		include "$code/6_weather/2_data_creation.do"
-		include "$code/6_weather/3_day_stand_level_creation.do"
-		include "$code/6_weather/4_day_stand_level_shock_creation.do"
+		* Only clean when weather data is merged into the final dataset (see weather_data in Define Macros)
+		if !inlist("$weather_data", "none", "") {
+			include "$code/6_weather/2_data_creation.do"
+			include "$code/6_weather/3_day_stand_level_creation.do"
+			include "$code/6_weather/4_day_stand_level_shock_creation.do"
+		}
 
 
 		****
 		**## 8. Events Calendar
 		****
 
-		include "$code/7_events_calendar/1_events_calendar_cleaning.do"
+		* Only clean when this data is merged into the final dataset (see merge_calevents in Define Macros)
+		if $merge_calevents == 1 {
+			include "$code/7_events_calendar/1_events_calendar_cleaning.do"
+		}
 
 		****
 		**## 9. Incentive
@@ -555,7 +607,10 @@
 		* $final/stand_size_intensity_studysample.dta 	(Stand level; counts only the treated in the main study sample)
 
 		* Runs before the final dataset is produced so it can be merged in (see merge_stand_intensity).
-		include "$code/8_treatment_intensity/0_stand_strength_master.do"
+		* Only clean when this data is merged into the final dataset (see merge_stand_intensity in Define Macros)
+		if $merge_stand_intensity == 1 {
+			include "$code/8_treatment_intensity/0_stand_strength_master.do"
+		}
 
 
 
@@ -570,7 +625,11 @@
 		* Time Use sleep dataset
 		* (run here because it needs 03_bs_phase123_makevar.dta, created by the step above)
 		* Output: $temp/lss_time_use_sleep.dta
-		include "$code/3_time_use/3_time_use_makevar_new.do"
+		* Only run when the time use module is cleaned/merged (see merge_time_use in Define Macros);
+		* it depends on lss_time_use_cleaned_hw.dta produced by the gated Time Use cleaning above.
+		if $merge_time_use == 1 {
+			include "$code/3_time_use/3_time_use_makevar_new.do"
+		}
 
 		* Make Final Dataset
 		include "$code/100_analysis_prep/2_produce_final_dataset.do"
@@ -614,7 +673,7 @@
 		use "$main_data", clear
 	}
 
-if $run_analysis == 1 {
+if `run_analysis' == 1 {
 		**************
 		**# Analysis
 		**************
